@@ -6,12 +6,12 @@ import 'package:injectable/injectable.dart';
 @injectable
 class FirebaseAiRepository {
   FirebaseAiRepository({required FirebaseAiService aiService})
-    : _aiService = aiService;
+    : _firebaseAiService = aiService;
 
-  final FirebaseAiService _aiService;
+  final FirebaseAiService _firebaseAiService;
 
   Future<Result<ExpenseModel>> sendImageToAi(String file) async {
-    final result = await _aiService.sendImageToAi(file);
+    final result = await _firebaseAiService.sendImageToAi(file);
     switch (result) {
       case Ok():
         return Result.ok(result.value);
