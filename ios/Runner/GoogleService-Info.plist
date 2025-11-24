@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCy6qtrymVzz3wyB5yfdgvvM1_2xqpDSBs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>600685208630</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.dev.luisgustavo.firebaseAiTesting</string>
+	<key>PROJECT_ID</key>
+	<string>firebase-ai-testing</string>
+	<key>STORAGE_BUCKET</key>
+	<string>firebase-ai-testing.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:600685208630:ios:56d61a6ea1c2480162a497</string>
+</dict>
+</plist>

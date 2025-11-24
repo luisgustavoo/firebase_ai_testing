@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "600685208630",
+    "project_id": "firebase-ai-testing",
+    "storage_bucket": "firebase-ai-testing.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600685208630:android:f25f95a896c7d52762a497",
+        "android_client_info": {
+          "package_name": "br.dev.luisgustavo.firebase_ai_testing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjATpLqE2u09AMJ4wtH_bYu9xnI9kItl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
