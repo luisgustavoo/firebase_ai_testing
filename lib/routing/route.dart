@@ -7,6 +7,7 @@ import 'package:firebase_ai_testing/ui/camera_preview/widget/camera_preview_scre
 import 'package:firebase_ai_testing/ui/category/category.dart';
 import 'package:firebase_ai_testing/ui/expense/widget/expense_screen.dart';
 import 'package:firebase_ai_testing/ui/home/home.dart';
+import 'package:firebase_ai_testing/ui/transaction/transaction.dart';
 import 'package:go_router/go_router.dart';
 
 class Router {
@@ -56,6 +57,20 @@ class Router {
         path: Routes.categories,
         builder: (context, state) {
           return CategoriesScreen(viewModel: getIt());
+        },
+      ),
+      GoRoute(
+        name: Routes.transactions,
+        path: Routes.transactions,
+        builder: (context, state) {
+          return TransactionsScreen(viewModel: getIt());
+        },
+      ),
+      GoRoute(
+        name: Routes.addTransaction,
+        path: Routes.addTransaction,
+        builder: (context, state) {
+          return AddTransactionScreen(viewModel: getIt());
         },
       ),
     ],

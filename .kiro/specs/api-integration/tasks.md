@@ -388,7 +388,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Close dialog on success
   - _Requirements: 5.1, 5.2, 5.3, 5.5, 6.1, 6.5, 11.7_
 
-- [ ] 25. Implement Transactions screen
+- [x] 25. Implement Transactions screen
   - Create TransactionsScreen widget
   - Add AppBar with "Transactions" title and filter button
   - Add filter chips (All, Income, Expense)
@@ -402,7 +402,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Implement pull-to-refresh
   - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6, 9.7, 9.8, 11.4, 11.5, 11.6_
 
-- [ ] 26. Implement Add Transaction screen
+- [x] 26. Implement Add Transaction screen
   - Create AddTransactionScreen widget
   - Add amount TextField with numeric keyboard
   - Add description TextField

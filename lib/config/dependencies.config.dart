@@ -30,6 +30,7 @@ import '../ui/category/view_models/category_view_model.dart' as _i277;
 import '../ui/core/themes/theme_provider.dart' as _i899;
 import '../ui/home/view_models/home_viewmodel.dart' as _i152;
 import '../ui/splash/view_models/splash_view_model.dart' as _i37;
+import '../ui/transaction/view_models/add_transaction_view_model.dart' as _i180;
 import '../ui/transaction/view_models/transaction_view_model.dart' as _i712;
 import 'dependencies.dart' as _i372;
 
@@ -105,6 +106,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i897.CameraPreviewViewModel(
         firebaseAiRepository: gh<_i507.FirebaseAiRepository>(),
       )..init(),
+    );
+    gh.factoryAsync<_i180.AddTransactionViewModel>(
+      () async => _i180.AddTransactionViewModel(
+        await getAsync<_i717.TransactionRepository>(),
+        await getAsync<_i136.CategoryRepository>(),
+      ),
     );
     gh.factoryAsync<_i37.SplashViewModel>(
       () async => _i37.SplashViewModel(

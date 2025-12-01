@@ -47,10 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
         context.pushNamed(Routes.categories);
         break;
       case 2:
-        // Navigate to transactions (TODO)
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Transações - Em breve')),
-        );
+        // Navigate to transactions
+        context.pushNamed(Routes.transactions);
         break;
     }
   }
@@ -202,12 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: FilledButton.icon(
                 onPressed: () {
-                  // TODO(feature): Navigate to add transaction screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Adicionar Transação - Em breve'),
-                    ),
-                  );
+                  context.pushNamed(Routes.addTransaction);
                 },
                 icon: const Icon(Icons.add),
                 label: const Text('Nova Transação'),
@@ -253,12 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () {
-                // TODO(feature): Navigate to transactions screen
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Ver Todas - Em breve'),
-                  ),
-                );
+                context.pushNamed(Routes.transactions);
               },
               child: const Text('Ver Todas'),
             ),
