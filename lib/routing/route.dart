@@ -30,7 +30,7 @@ class Router {
         name: Routes.expense,
         path: Routes.expense,
         builder: (context, state) {
-          final expenseModel = state.extra as ExpenseModel;
+          final expenseModel = state.extra! as ExpenseModel;
           return ExpenseScreen(expenseModel: expenseModel);
         },
       ),

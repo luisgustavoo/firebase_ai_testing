@@ -65,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'firebase-ai-testing.firebasestorage.app',
     iosBundleId: 'br.dev.luisgustavo.firebaseAiTesting',
   );
-
 }

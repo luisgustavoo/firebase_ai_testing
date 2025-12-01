@@ -4,9 +4,8 @@
 
 import 'dart:async';
 
+import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter/foundation.dart';
-
-import 'result.dart';
 
 typedef CommandAction0<T> = Future<Result<T>> Function();
 typedef CommandAction1<T, A> = Future<Result<T>> Function(A);
@@ -41,7 +40,7 @@ abstract class Command<T> extends ChangeNotifier {
   bool get completed => _result is Ok;
 
   /// Get last action result
-  Result? get result => _result;
+  Result<T>? get result => _result;
 
   /// Clear last action result
   void clearResult() {
@@ -53,7 +52,9 @@ abstract class Command<T> extends ChangeNotifier {
   Future<void> _execute(CommandAction0<T> action) async {
     // Ensure the action can't launch multiple times.
     // e.g. avoid multiple taps on button
-    if (_running) return;
+    if (_running) {
+      return;
+    }
 
     // Notify listeners.
     // e.g. button shows loading state

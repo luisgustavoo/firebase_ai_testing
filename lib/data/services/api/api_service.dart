@@ -1,0 +1,236 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
+
+/// Exception thrown when an API request fails
+class ApiException implements Exception {
+  ApiException(this.message, {this.statusCode});
+
+  final int? statusCode;
+  final String message;
+
+  @override
+  String toString() => 'ApiException: $message (status: $statusCode)';
+}
+
+/// Service that wraps REST API endpoints and exposes asynchronous response objects.
+/// This is a stateless service that only handles HTTP communication.
+/// According to Flutter architecture guidelines, services wrap external APIs
+/// and expose Future/Stream objects.
+@lazySingleton
+class ApiService {
+  ApiService(this._tokenStorage, this._httpClient);
+
+  static const String _baseUrl = 'http://localhost:8080';
+  static const Duration _timeout = Duration(seconds: 30);
+
+  final TokenStorageService _tokenStorage;
+  final http.Client _httpClient;
+
+  /// Current authentication token for requests
+  String? authToken;
+
+  /// Initialize the service by loading the stored token
+  @postConstruct
+  Future<void> init() async {
+    authToken = await _tokenStorage.getToken();
+  }
+
+  /// Build headers for requests
+  Map<String, String> _buildHeaders({Map<String, String>? additionalHeaders}) {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    // Add Bearer token if available
+    if (authToken != null && authToken!.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $authToken';
+    }
+
+    // Add any additional headers
+    if (additionalHeaders != null) {
+      headers.addAll(additionalHeaders);
+    }
+
+    return headers;
+  }
+
+  /// Build full URL from path
+  String _buildUrl(String path) {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    return '$_baseUrl$path';
+  }
+
+  /// Handle HTTP response and throw appropriate exceptions
+  dynamic _handleResponse(http.Response response) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (response.body.isEmpty) {
+        return null;
+      }
+      try {
+        return json.decode(response.body);
+      } catch (e) {
+        throw ApiException(
+          'Failed to parse response: $e',
+          statusCode: response.statusCode,
+        );
+      }
+    }
+
+    // Handle error responses
+    String errorMessage;
+    try {
+      final errorBody = json.decode(response.body) as Map<String, dynamic>;
+      errorMessage =
+          (errorBody['message'] as String?) ??
+          (errorBody['error'] as String?) ??
+          'Unknown error';
+    } on FormatException {
+      errorMessage = response.body.isNotEmpty ? response.body : 'Unknown error';
+    }
+
+    throw ApiException(
+      _mapErrorMessage(response.statusCode, errorMessage),
+      statusCode: response.statusCode,
+    );
+  }
+
+  /// Map HTTP status codes to user-friendly error messages
+  String _mapErrorMessage(int statusCode, String? serverMessage) {
+    switch (statusCode) {
+      case 400:
+        return serverMessage ?? 'Dados inválidos';
+      case 401:
+        return 'Sessão expirada. Faça login novamente';
+      case 403:
+        return 'Você não tem permissão para esta ação';
+      case 404:
+        return 'Recurso não encontrado';
+      case 500:
+        return 'Erro no servidor. Tente novamente mais tarde';
+      default:
+        return serverMessage ?? 'Erro desconhecido';
+    }
+  }
+
+  /// Perform GET request
+  Future<dynamic> get(
+    String path, {
+    Map<String, dynamic>? queryParams,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final uri = Uri.parse(_buildUrl(path));
+      final uriWithParams = queryParams != null
+          ? uri.replace(
+              queryParameters: queryParams.map(
+                (key, value) => MapEntry(key, value.toString()),
+              ),
+            )
+          : uri;
+
+      final response = await _httpClient
+          .get(
+            uriWithParams,
+            headers: _buildHeaders(additionalHeaders: headers),
+          )
+          .timeout(_timeout);
+
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw ApiException('Tempo esgotado. Verifique sua conexão');
+    } on SocketException {
+      throw ApiException('Sem conexão com a internet');
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException('Erro de rede: $e');
+    }
+  }
+
+  /// Perform POST request
+  Future<dynamic> post(
+    String path, {
+    dynamic body,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final response = await _httpClient
+          .post(
+            Uri.parse(_buildUrl(path)),
+            headers: _buildHeaders(additionalHeaders: headers),
+            body: body != null ? json.encode(body) : null,
+          )
+          .timeout(_timeout);
+
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw ApiException('Tempo esgotado. Verifique sua conexão');
+    } on SocketException {
+      throw ApiException('Sem conexão com a internet');
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException('Erro de rede: $e');
+    }
+  }
+
+  /// Perform PUT request
+  Future<dynamic> put(
+    String path, {
+    dynamic body,
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final response = await _httpClient
+          .put(
+            Uri.parse(_buildUrl(path)),
+            headers: _buildHeaders(additionalHeaders: headers),
+            body: body != null ? json.encode(body) : null,
+          )
+          .timeout(_timeout);
+
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw ApiException('Tempo esgotado. Verifique sua conexão');
+    } on SocketException {
+      throw ApiException('Sem conexão com a internet');
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException('Erro de rede: $e');
+    }
+  }
+
+  /// Perform DELETE request
+  Future<dynamic> delete(
+    String path, {
+    Map<String, String>? headers,
+  }) async {
+    try {
+      final response = await _httpClient
+          .delete(
+            Uri.parse(_buildUrl(path)),
+            headers: _buildHeaders(additionalHeaders: headers),
+          )
+          .timeout(_timeout);
+
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw ApiException('Tempo esgotado. Verifique sua conexão');
+    } on SocketException {
+      throw ApiException('Sem conexão com a internet');
+    } on ApiException {
+      rethrow;
+    } catch (e) {
+      throw ApiException('Erro de rede: $e');
+    }
+  }
+}

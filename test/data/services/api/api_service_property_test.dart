@@ -1,0 +1,227 @@
+import 'package:firebase_ai_testing/data/services/api/api_service.dart';
+import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+
+void main() {
+  group('ApiService Property Tests', () {
+    late ApiService apiService;
+    late TokenStorageService tokenStorage;
+
+    setUp(() {
+      FlutterSecureStorage.setMockInitialValues({});
+      const secureStorage = FlutterSecureStorage();
+      tokenStorage = TokenStorageService(secureStorage);
+    });
+
+    /// **Feature: api-integration, Property 26: Authenticated requests include Bearer token**
+    /// **Validates: Requirements 10.5, 12.2**
+    ///
+    /// For any authenticated API request, the Authorization header should contain "Bearer {token}".
+    test('Property 26: Authenticated requests include Bearer token', () async {
+      // Test with multiple different tokens to verify the property holds
+      final testTokens = [
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.test',
+        'simple_token_123',
+        'very_long_token_${'x' * 500}',
+        r'token-with-special-chars-!@#$%^&*()',
+      ];
+
+      for (final token in testTokens) {
+        // Track if the Authorization header was checked
+        var headerChecked = false;
+
+        // Create a mock HTTP client that verifies the Authorization header
+        final mockClient = MockClient((request) async {
+          headerChecked = true;
+
+          // Property: Authorization header must be present
+          expect(
+            request.headers.containsKey('Authorization'),
+            isTrue,
+            reason:
+                'Authorization header must be present for authenticated requests',
+          );
+
+          // Property: Authorization header must contain "Bearer {token}"
+          final authHeader = request.headers['Authorization'];
+          expect(
+            authHeader,
+            equals('Bearer $token'),
+            reason: 'Authorization header must be "Bearer $token"',
+          );
+
+          // Return a successful response
+          return http.Response('{"success": true}', 200);
+        });
+
+        // Create API service with the mock
+        apiService = ApiService(tokenStorage, mockClient);
+        await apiService.init();
+
+        // Set the authentication token
+        apiService.authToken = token;
+
+        // Test all HTTP methods to ensure they all include the token
+        await apiService.get('/test');
+        expect(
+          headerChecked,
+          isTrue,
+          reason: 'GET request should include token',
+        );
+
+        headerChecked = false;
+        await apiService.post('/test', body: {'data': 'test'});
+        expect(
+          headerChecked,
+          isTrue,
+          reason: 'POST request should include token',
+        );
+
+        headerChecked = false;
+        await apiService.put('/test', body: {'data': 'test'});
+        expect(
+          headerChecked,
+          isTrue,
+          reason: 'PUT request should include token',
+        );
+
+        headerChecked = false;
+        await apiService.delete('/test');
+        expect(
+          headerChecked,
+          isTrue,
+          reason: 'DELETE request should include token',
+        );
+      }
+    });
+
+    /// Property: Requests without token should not include Authorization header
+    test(
+      'Property: Requests without token do not include Authorization header',
+      () async {
+        var headerChecked = false;
+
+        final mockClient = MockClient((request) async {
+          headerChecked = true;
+
+          // Property: Authorization header should not be present when no token is set
+          expect(
+            request.headers.containsKey('Authorization'),
+            isFalse,
+            reason: 'Authorization header should not be present without token',
+          );
+
+          return http.Response('{"success": true}', 200);
+        });
+
+        apiService = ApiService(tokenStorage, mockClient);
+        await apiService.init();
+
+        // Don't set any token
+        await apiService.get('/test');
+        expect(headerChecked, isTrue);
+      },
+    );
+
+    /// Property: Empty token should not include Authorization header
+    test(
+      'Property: Empty token does not include Authorization header',
+      () async {
+        var headerChecked = false;
+
+        final mockClient = MockClient((request) async {
+          headerChecked = true;
+
+          // Property: Authorization header should not be present for empty token
+          expect(
+            request.headers.containsKey('Authorization'),
+            isFalse,
+            reason:
+                'Authorization header should not be present for empty token',
+          );
+
+          return http.Response('{"success": true}', 200);
+        });
+
+        apiService = ApiService(tokenStorage, mockClient);
+        await apiService.init();
+
+        // Set empty token
+        apiService.authToken = '';
+
+        await apiService.get('/test');
+        expect(headerChecked, isTrue);
+      },
+    );
+
+    /// Property: Token changes are reflected in subsequent requests
+    test(
+      'Property: Token changes are reflected in subsequent requests',
+      () async {
+        final tokens = ['token1', 'token2', 'token3'];
+        var requestCount = 0;
+
+        final mockClient = MockClient((request) async {
+          final expectedToken = tokens[requestCount];
+          requestCount++;
+
+          // Property: Each request should have the current token
+          final authHeader = request.headers['Authorization'];
+          expect(
+            authHeader,
+            equals('Bearer $expectedToken'),
+            reason: 'Request should use the most recently set token',
+          );
+
+          return http.Response('{"success": true}', 200);
+        });
+
+        apiService = ApiService(tokenStorage, mockClient);
+        await apiService.init();
+
+        // Make requests with different tokens
+        for (final token in tokens) {
+          apiService.authToken = token;
+          await apiService.get('/test');
+        }
+
+        expect(requestCount, equals(tokens.length));
+      },
+    );
+
+    /// Property: Token persisted in storage is loaded on init
+    test('Property: Token persisted in storage is loaded on init', () async {
+      const testToken = 'persisted_token_123';
+
+      // Save token to storage
+      await tokenStorage.saveToken(testToken);
+
+      var headerChecked = false;
+
+      final mockClient = MockClient((request) async {
+        headerChecked = true;
+
+        // Property: Persisted token should be used automatically
+        final authHeader = request.headers['Authorization'];
+        expect(
+          authHeader,
+          equals('Bearer $testToken'),
+          reason: 'Persisted token should be loaded and used',
+        );
+
+        return http.Response('{"success": true}', 200);
+      });
+
+      // Create new API service (simulating app restart)
+      apiService = ApiService(tokenStorage, mockClient);
+      await apiService.init(); // This should load the token
+
+      // Make request without explicitly setting token
+      await apiService.get('/test');
+      expect(headerChecked, isTrue);
+    });
+  });
+}

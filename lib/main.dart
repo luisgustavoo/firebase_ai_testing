@@ -15,10 +15,10 @@ Future<void> main() async {
     providerWeb: ReCaptchaV3Provider(kWebRecaptchaSiteKey),
     providerAndroid: kReleaseMode
         ? const AndroidPlayIntegrityProvider()
-        : AndroidDebugProvider(),
+        : const AndroidDebugProvider(),
     providerApple: kReleaseMode
         ? const AppleDeviceCheckProvider()
-        : AppleDebugProvider(),
+        : const AppleDebugProvider(),
   );
 
   configureDependencies();

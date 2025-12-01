@@ -30,7 +30,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
     widget._viewModel.sendImageToAi.addListener(_listener);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final cameras = await availableCameras();
-      _initializeCameraController(cameras[0]);
+      await _initializeCameraController(cameras[0]);
     });
   }
 
@@ -42,7 +42,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final CameraController? cameraController = controller;
+    final cameraController = controller;
     if (cameraController == null || !cameraController.value.isInitialized) {
       return;
     }
@@ -74,7 +74,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
   Future<void> _initializeCameraController(
     CameraDescription cameraDescription,
   ) async {
-    final CameraController cameraController = CameraController(
+    final cameraController = CameraController(
       cameraDescription,
       ResolutionPreset.medium,
       enableAudio: false,
@@ -136,7 +136,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
   }
 
   Widget _cameraPreviewWidget() {
-    final CameraController? cameraController = controller;
+    final cameraController = controller;
     if (cameraController == null || !cameraController.value.isInitialized) {
       return const CircularProgressIndicator();
     }
@@ -155,7 +155,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
   }
 
   Widget _captureControlRowWidget() {
-    final CameraController? cameraController = controller;
+    final cameraController = controller;
     return IconButton(
       icon: const Icon(
         Icons.camera_alt,
@@ -170,7 +170,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
   }
 
   void _onTakePictureButtonPressed() {
-    _takePicture().then((XFile? file) {
+    _takePicture().then((file) {
       if (mounted) {
         setState(() {
           imageFile = file;
@@ -184,7 +184,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
   }
 
   Future<XFile?> _takePicture() async {
-    final CameraController? cameraController = controller;
+    final cameraController = controller;
     if (cameraController == null || !cameraController.value.isInitialized) {
       _showInSnackBar('Error: select a camera first.');
       return null;
@@ -193,7 +193,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
       return null;
     }
     try {
-      final XFile file = await cameraController.takePicture();
+      final file = await cameraController.takePicture();
       return file;
     } on CameraException catch (e) {
       _showCameraException(e);
@@ -209,7 +209,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
         children: <Widget>[
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(1.0),
+              padding: const EdgeInsets.all(1),
               child: Center(child: _cameraPreviewWidget()),
             ),
           ),

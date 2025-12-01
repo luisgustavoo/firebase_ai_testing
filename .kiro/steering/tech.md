@@ -1,78 +1,52 @@
-# Technology Stack
+---
+inclusion: always
+---
 
-## Framework & Language
+# Tech Stack
 
-- Flutter SDK ^3.9.2
-- Dart language
-- Multi-platform: Android and iOS
+**Framework:** Flutter (SDK ^3.9.2)  
+**Language:** Dart  
+**Platforms:** Android, iOS
 
 ## Core Dependencies
 
-### Firebase
-- `firebase_core` - Firebase initialization
-- `firebase_ai` - AI/ML capabilities
-- `firebase_app_check` - Backend security (Play Integrity/Device Check)
+- `firebase_core` ^4.2.1 - Firebase initialization
+- `firebase_ai` ^3.6.0 - Gemini AI integration with function calling
+- `firebase_app_check` ^0.4.1+2 - Backend security
+- `camera` ^0.11.3 - Camera access for receipt capture
+- `go_router` ^17.0.0 - Declarative routing
+- `get_it` ^9.1.0 + `injectable` ^2.6.0 - Dependency injection
+- `freezed` ^3.2.3 + `freezed_annotation` ^3.1.0 - Immutable models
+- `json_serializable` ^6.11.2 - JSON serialization
+- `http` ^1.2.2 - HTTP client
 
-### Architecture & State Management
-- `get_it` + `injectable` - Dependency injection with code generation
-- `go_router` - Declarative routing
-- `ChangeNotifier` - State management for ViewModels
+## Code Generation Tools
 
-### Code Generation
-- `freezed` + `freezed_annotation` - Immutable models and unions
-- `json_serializable` - JSON serialization
-- `injectable_generator` - DI code generation
-- `build_runner` - Code generation orchestration
-
-### Platform Features
-- `camera` - Native camera integration
+- `build_runner` ^2.10.4
+- `injectable_generator` ^2.9.1
+- `freezed` + `json_serializable`
 
 ## Common Commands
 
-### Setup
 ```bash
 # Install dependencies
 flutter pub get
 
 # Generate code (DI, models, serialization)
 flutter pub run build_runner build --delete-conflicting-outputs
-```
 
-### Development
-```bash
 # Run app
 flutter run
 
 # Run on specific device
 flutter run -d <device-id>
 
-# Hot reload is automatic during development
+# Clean build
+flutter clean && flutter pub get
 ```
 
-### Code Generation
-```bash
-# Watch mode for continuous generation
-flutter pub run build_runner watch --delete-conflicting-outputs
-
-# Clean and rebuild
-flutter pub run build_runner clean
-flutter pub run build_runner build --delete-conflicting-outputs
-```
-
-### Linting
-```bash
-# Analyze code
-flutter analyze
-```
-
-## Build Configuration
-
-- Linter: `flutter_lints` package
-- Formatter: Preserves trailing commas (see `analysis_options.yaml`)
-- Firebase config generated via FlutterFire CLI
-
-## Platform-Specific Files
+## Firebase Configuration
 
 - Android: `android/app/google-services.json`
 - iOS: `ios/Runner/GoogleService-Info.plist`
-- Generated options: `lib/firebase_options.dart`
+- Generated options: `lib/firebase_options.dart` (FlutterFire CLI)

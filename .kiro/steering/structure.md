@@ -1,89 +1,72 @@
-# Project Structure
+---
+inclusion: always
+---
 
-## Architecture Pattern
-
-Clean architecture with separation of concerns:
-- **UI Layer**: Screens and ViewModels
-- **Data Layer**: Repositories and Services
-- **Utils**: Shared utilities and patterns
+# Project Structure & Architecture
 
 ## Folder Organization
 
 ```
 lib/
-├── config/              # App configuration
-│   ├── dependencies.dart           # DI setup (get_it + injectable)
-│   └── dependencies.config.dart    # Generated DI code
-│
-├── data/                # Data layer
-│   ├── repositories/               # Repository pattern (business logic)
-│   └── services/                   # External service integrations
-│       └── model/                  # Data models (freezed + json_serializable)
-│
-├── routing/             # Navigation
-│   ├── route.dart                  # GoRouter configuration
-│   └── routes.dart                 # Route constants
-│
-├── ui/                  # Presentation layer
+├── main.dart                    # App entry point, Firebase & DI initialization
+├── firebase_options.dart        # Generated Firebase config (FlutterFire CLI)
+├── config/                      # Dependency injection setup
+│   ├── dependencies.dart        # GetIt configuration with @InjectableInit
+│   └── dependencies.config.dart # Generated DI code
+├── routing/                     # go_router configuration
+├── data/                        # Data layer
+│   ├── services/                # External service integrations
+│   │   ├── firebase_ai_service.dart
+│   │   └── model/               # Service-specific models
+│   └── repositories/            # Repository pattern implementations
+├── ui/                          # Presentation layer
 │   ├── camera_preview/
-│   │   ├── view_models/           # Screen state management
-│   │   └── widget/                # Screen widgets
+│   │   ├── view_models/         # ChangeNotifier-based ViewModels
+│   │   └── widget/              # Screen widgets
 │   ├── expense/
 │   └── home/
-│
-├── utils/               # Shared utilities
-│   ├── command.dart               # Command pattern for async actions
-│   └── result.dart                # Result type for error handling
-│
-├── firebase_options.dart          # Generated Firebase config
-└── main.dart                      # App entry point
+└── utils/                       # Shared utilities
+    ├── command.dart             # Command pattern for async operations
+    └── result.dart              # Result type for error handling
 ```
 
-## Key Conventions
+## Architecture Patterns
 
-### Dependency Injection
-- Use `@injectable` for services and repositories
-- Use `@lazySingleton` for ViewModels
-- Use `@postConstruct` for initialization logic
-- Access dependencies via `getIt()` from `config/dependencies.dart`
+**Layered Architecture:**
+- **UI Layer:** Widgets + ViewModels (ChangeNotifier)
+- **Data Layer:** Repositories → Services → External APIs/Firebase
+- **Dependency Injection:** Injectable + GetIt with code generation
 
-### State Management
-- ViewModels extend `ChangeNotifier`
-- Use `Command0` and `Command1` for async actions with loading/error states
-- ViewModels injected into screens via constructor
+**Key Conventions:**
 
-### Routing
-- Declarative routing with `go_router`
-- Route definitions in `routing/route.dart`
-- Route constants in `routing/routes.dart`
-- Pass complex data via `state.extra`
+1. **Dependency Injection:**
+   - Use `@lazySingleton` for services and repositories
+   - Use `@postConstruct` or `@PostConstruct()` for initialization logic
+   - Register dependencies via `configureDependencies()` in main.dart
 
-### Data Models
-- Use `@freezed` for immutable models
-- Include JSON serialization with `fromJson`/`toJson`
-- Models in `data/services/model/` directory
-- Generate with `part` directives for `.freezed.dart` and `.g.dart`
+2. **ViewModels:**
+   - Extend `ChangeNotifier`
+   - Use `Command` pattern from `utils/command.dart` for async operations
+   - Inject repositories via constructor
+   - Call `notifyListeners()` after state changes
 
-### Error Handling
-- Use `Result<T>` type (sealed class with `Ok` and `Error` variants)
-- Pattern match with switch statements
-- Propagate errors through repository → service layers
+3. **Models:**
+   - Use `@freezed` for immutable data classes
+   - Include `fromJson`/`toJson` for serialization
+   - Generate with: `part 'filename.freezed.dart'` and `part 'filename.g.dart'`
 
-### Code Generation
-- Run `build_runner` after modifying:
-  - `@Injectable` annotations
-  - `@freezed` models
-  - `@JsonSerializable` classes
-- Generated files use `.config.dart`, `.freezed.dart`, `.g.dart` suffixes
+4. **Error Handling:**
+   - Use `Result<T>` type from `utils/result.dart`
+   - Pattern match with `Ok()` and `Error()` cases
 
-### File Naming
-- Screens: `*_screen.dart`
-- ViewModels: `*_view_model.dart`
-- Models: `*_model.dart`
-- Services: `*_service.dart`
-- Repositories: `*_repository.dart`
+5. **Firebase AI Integration:**
+   - Configure `GenerativeModel` with system instructions
+   - Use `FunctionDeclaration` for AI function calling
+   - Handle function calls in service layer before returning final response
 
-### Firebase Integration
-- Initialize in `main.dart` before `runApp()`
-- Configure App Check with platform-specific providers
-- Use debug providers in debug mode, production providers in release
+## Code Generation
+
+Always run after modifying:
+- `@Injectable` annotations → `flutter pub run build_runner build --delete-conflicting-outputs`
+- `@freezed` models → same command
+- `@JsonSerializable` classes → same command

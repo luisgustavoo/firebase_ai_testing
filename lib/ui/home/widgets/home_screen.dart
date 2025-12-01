@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
               onPressed: () {
                 context.pushNamed(Routes.cameraPreview);
               },
-              child: Text('Abrir Camera'),
+              child: const Text('Abrir Camera'),
             ),
           ],
         ),

@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_ai_testing/data/services/model/expense_model.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:injectable/injectable.dart';
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class FirebaseAiService {
@@ -28,13 +29,7 @@ class FirebaseAiService {
               FunctionDeclaration(
                 'get_user_categories',
                 'Obtém as categorias de despesas cadastradas pelo usuário. Use esta função quando precisar saber quais categorias estão disponíveis para classificar uma despesa.',
-                parameters: {
-                  'userId': Schema(
-                    SchemaType.string,
-                    description: 'ID do usuário',
-                    enumValues: [_userId],
-                  ),
-                },
+                parameters: {},
               ),
             ]),
           ],
@@ -65,8 +60,8 @@ class FirebaseAiService {
 
   Future<Result<ExpenseModel>> sendImageToAi(String file) async {
     try {
-      final prompt = TextPart(
-        "Colete os dados da despesa conforme orientação dada previamente. Busque as categorias do usuário.",
+      const prompt = TextPart(
+        'Colete os dados da despesa conforme orientação dada previamente. Busque as categorias do usuário.',
       );
 
       final image = await File(file).readAsBytes();
@@ -111,8 +106,9 @@ class FirebaseAiService {
       log(response.text!);
       final expenseModel = ExpenseModel.fromJson(
         jsonDecode(
-          response.text!.replaceAll('```json', '').replaceAll('```', ''),
-        ),
+              response.text!.replaceAll('```json', '').replaceAll('```', ''),
+            )
+            as Map<String, dynamic>,
       );
       return Result.ok(expenseModel);
     } on Exception catch (e) {

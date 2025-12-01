@@ -14,7 +14,7 @@ _ExpenseModel _$ExpenseModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['data'] as String),
       valor: (json['valor'] as num?)?.toDouble(),
       categoria: json['categoria'] as String?,
-      metodoPagamento: json['metodoPagamento'] as String?,
+      metodoPagamento: json['metodo_pagamento'] as String?,
     );
 
 Map<String, dynamic> _$ExpenseModelToJson(_ExpenseModel instance) =>
@@ -23,5 +23,5 @@ Map<String, dynamic> _$ExpenseModelToJson(_ExpenseModel instance) =>
       'data': instance.data?.toIso8601String(),
       'valor': instance.valor,
       'categoria': instance.categoria,
-      'metodoPagamento': instance.metodoPagamento,
+      'metodo_pagamento': instance.metodoPagamento,
     };

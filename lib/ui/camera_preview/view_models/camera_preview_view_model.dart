@@ -26,7 +26,7 @@ class CameraPreviewViewModel extends ChangeNotifier {
       case Ok():
         expenseModel = result.value;
         notifyListeners();
-        return Result.ok(null);
+        return const Result.ok(null);
       case Error():
         log('Erro ao analisar imagem');
         return Result.error(result.error);

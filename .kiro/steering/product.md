@@ -1,14 +1,16 @@
+---
+inclusion: always
+---
+
 # Product Overview
 
-Firebase AI Testing is a proof-of-concept Flutter mobile application that demonstrates Firebase AI integration with camera functionality for expense tracking.
+Firebase AI Testing is a proof-of-concept Flutter mobile app that demonstrates Firebase AI integration for expense tracking. The app captures receipt images via camera, uses Firebase Gemini AI to extract expense data (establishment, date, amount, category, payment method), and integrates with a backend API for user category management.
 
-## Core Features
+**Key Features:**
+- Camera integration for receipt capture
+- AI-powered expense data extraction using Firebase Gemini
+- Function calling to fetch user-specific expense categories
+- Firebase App Check for backend security
+- Multi-platform support (Android/iOS)
 
-- Camera capture and preview for receipt/expense images
-- Firebase AI integration for image analysis and expense extraction
-- Expense data extraction (establishment, date, amount, category, payment method)
-- Multi-platform support (Android and iOS)
-
-## Purpose
-
-This is a POC project to test and validate Firebase AI capabilities, Firebase App Check security, and camera integration patterns in a Flutter mobile context.
+**Target Use Case:** Personal expense management through receipt scanning and automated data extraction.
