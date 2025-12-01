@@ -9,7 +9,14 @@ This implementation follows Flutter's official architecture guidelines (https://
 - **ViewModel Layer**: Validates user input, manages UI state, calls repositories
 - **UI Layer**: Displays data, captures user input, observes ViewModels
 
-**Important**: Input validation is done in the ViewModel layer, NOT in Repository or Service layers.
+**Important Notes**:
+- Input validation is done in the ViewModel layer, NOT in Repository or Service layers
+- **Command Pattern**: ViewModels use Commands to manage async operations. Commands automatically handle:
+  - `command.running`: Loading state (replaces manual `isLoading`)
+  - `command.error`: Error state (replaces manual `error` property)
+  - `command.completed`: Success state
+  - `command.clearResult()`: Clear error/result state
+- ViewModels should NOT manually manage `isLoading` or `error` properties - use Commands instead
 
 ---
 
@@ -202,7 +209,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Implement loginCommand using Command pattern with input validation
   - Implement logoutCommand using Command pattern
   - Call notifyListeners after state changes
-  - Handle errors and update error state
+  - Note: Loading and error states are managed by Commands (command.running, command.error)
   - Validate user input (name, email, password) before calling repository
   - _Requirements: 1.3, 1.4, 2.4, 10.3_
 
@@ -226,13 +233,12 @@ This implementation follows Flutter's official architecture guidelines (https://
 - [x] 13. Implement CategoryViewModel
   - Create CategoryViewModel extending ChangeNotifier
   - Add categories list property
-  - Add isLoading and error properties
+  - Note: Loading and error states are managed by Commands (command.running, command.error)
   - Implement loadCategoriesCommand using Command pattern
   - Implement createCategoryCommand using Command pattern
   - Implement updateCategoryCommand using Command pattern
   - Implement deleteCategoryCommand using Command pattern
   - Call notifyListeners after state changes
-  - Handle loading and error states
   - _Requirements: 4.2, 4.4, 4.5, 5.4, 6.4, 7.3_
 
 - [x] 13.1 Write property test for CategoryViewModel
@@ -245,8 +251,8 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Test createCategory adds to categories list
   - Test updateCategory modifies category in list
   - Test deleteCategory removes from list
-  - Test loading state during operations
-  - Test error state on failures
+  - Test loading state via command.running
+  - Test error state via command.error
   - Test notifyListeners is called
   - _Requirements: 4.2, 4.4, 5.4, 6.4, 7.3_
 
@@ -255,14 +261,13 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Add transactions list property
   - Add pagination metadata property
   - Add filter property (TransactionType?)
-  - Add isLoading and error properties
+  - Note: Loading and error states are managed by Commands (command.running, command.error)
   - Add hasMore getter (based on pagination.hasNext)
   - Implement createTransactionCommand using Command pattern
   - Implement loadTransactionsCommand using Command pattern
   - Implement loadMoreCommand for pagination
   - Implement setFilter method to change filter
   - Call notifyListeners after state changes
-  - Handle loading and error states
   - _Requirements: 8.7, 9.2, 9.4, 9.5, 9.8_
 
 - [x] 14.1 Write property test for TransactionViewModel
@@ -276,14 +281,15 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Test loadMore appends to list
   - Test setFilter reloads with filter
   - Test hasMore based on pagination
-  - Test loading state during operations
+  - Test loading state via command.running
+  - Test error state via command.error
   - Test notifyListeners is called
   - _Requirements: 8.7, 9.2, 9.4, 9.5, 9.8_
 
-- [ ] 15. Checkpoint - Ensure all ViewModel tests pass
+- [x] 15. Checkpoint - Ensure all ViewModel tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 16. Configure dependency injection
+- [x] 16. Configure dependency injection
   - Register TokenStorageService as singleton in GetIt
   - Register ApiService as singleton in GetIt
   - Register AuthRepository as singleton in GetIt
