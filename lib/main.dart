@@ -21,7 +21,7 @@ Future<void> main() async {
         : const AppleDebugProvider(),
   );
 
-  configureDependencies();
+  await configureDependencies();
 
   runApp(const MainApp());
 }
@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: Router.router,
+      routerConfig: Router.router(getIt()),
     );
   }
 }

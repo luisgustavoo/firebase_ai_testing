@@ -1,6 +1,6 @@
 import 'package:firebase_ai_testing/data/repositories/transaction_repository.dart';
-import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_api.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_response/transactions_response.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/trasnaction_pagination_metadata/pagination_metadata.dart';
 import 'package:firebase_ai_testing/domain/mappers/transaction_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
@@ -77,25 +77,28 @@ class TransactionViewModel extends ChangeNotifier {
     );
 
     return switch (result) {
-      Ok(:final value) => _handleLoadSuccess(
-        value.transactions,
-        value.pagination,
-      ),
+      Ok(:final value) => _handleLoadSuccess(value),
       Error(:final error) => Result.error(error),
     };
   }
 
   /// Handle successful transaction load
-  Result<void> _handleLoadSuccess(
-    List<dynamic> transactionApis,
-    PaginationMetadata pagination,
-  ) {
+  Result<void> _handleLoadSuccess(TransactionsResponse response) {
     // Convert API models to domain models
-    _transactions = transactionApis
-        .cast<TransactionApiModel>()
+    _transactions = response.transactions
         .map(TransactionMapper.toDomain)
         .toList();
-    _pagination = pagination;
+
+    // Extract pagination metadata from response
+    _pagination = PaginationMetadata(
+      page: response.page,
+      pageSize: response.pageSize,
+      total: response.total,
+      totalPages: response.totalPages,
+      hasNext: response.hasNext,
+      hasPrevious: response.hasPrevious,
+    );
+
     notifyListeners();
     return const Result.ok(null);
   }
@@ -118,26 +121,30 @@ class TransactionViewModel extends ChangeNotifier {
     );
 
     return switch (result) {
-      Ok(:final value) => _handleLoadMoreSuccess(
-        value.transactions,
-        value.pagination,
-      ),
+      Ok(:final value) => _handleLoadMoreSuccess(value),
       Error(:final error) => Result.error(error),
     };
   }
 
   /// Handle successful load more
-  Result<void> _handleLoadMoreSuccess(
-    List<dynamic> transactionApis,
-    PaginationMetadata pagination,
-  ) {
+  Result<void> _handleLoadMoreSuccess(TransactionsResponse response) {
     // Convert API models to domain models and append to existing list
-    final newTransactions = transactionApis
-        .cast<TransactionApiModel>()
+    final newTransactions = response.transactions
         .map(TransactionMapper.toDomain)
         .toList();
+
     _transactions = [..._transactions, ...newTransactions];
-    _pagination = pagination;
+
+    // Extract pagination metadata from response
+    _pagination = PaginationMetadata(
+      page: response.page,
+      pageSize: response.pageSize,
+      total: response.total,
+      totalPages: response.totalPages,
+      hasNext: response.hasNext,
+      hasPrevious: response.hasPrevious,
+    );
+
     notifyListeners();
     return const Result.ok(null);
   }

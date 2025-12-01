@@ -114,8 +114,6 @@ void main() {
         await tester.pump();
 
         // Find the Form widget and validate it
-        final formState = tester.state<FormState>(find.byType(Form));
-        formState.validate();
         await tester.pump();
 
         // Verify validation error is displayed
@@ -168,8 +166,6 @@ void main() {
           await tester.pump();
 
           // Trigger validation
-          final formState = tester.state<FormState>(find.byType(Form));
-          formState.validate();
           await tester.pump();
 
           // Verify expected error is displayed

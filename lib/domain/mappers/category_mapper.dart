@@ -8,10 +8,8 @@ class CategoryMapper {
       id: api.id,
       userId: api.userId,
       description: api.description,
-      isDefault: api.isDefault,
-      createdAt: api.createdAt,
-      updatedAt: api.updatedAt,
       icon: api.icon,
+      createdAt: api.createdAt,
     );
   }
 
@@ -21,10 +19,8 @@ class CategoryMapper {
       id: domain.id,
       userId: domain.userId,
       description: domain.description,
-      isDefault: domain.isDefault,
-      createdAt: domain.createdAt,
-      updatedAt: domain.updatedAt,
       icon: domain.icon,
+      createdAt: domain.createdAt,
     );
   }
 }

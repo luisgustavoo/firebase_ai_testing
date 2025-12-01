@@ -9,8 +9,8 @@ abstract class User with _$User {
     required String name,
     required String email,
     required UserStatus status,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _User;
 }
 

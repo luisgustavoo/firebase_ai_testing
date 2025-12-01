@@ -19,9 +19,9 @@ class CategoryRepository {
   ///
   /// Returns Result<List<Category>> with all categories (default and custom).
   /// Note: Input validation is not needed for this operation.
-  Future<Result<List<Category>>> getCategories() async {
+  Future<Result<List<Category>>> getCategories(String userId) async {
     // Call API service - returns Result<List<CategoryApi>>
-    final result = await _apiService.getCategories();
+    final result = await _apiService.getCategories(userId);
 
     // Transform Result<List<CategoryApi>> to Result<List<Category>>
     return switch (result) {

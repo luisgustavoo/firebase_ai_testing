@@ -34,14 +34,14 @@ class FirebaseAiService {
   /// Set by repository layer to provide transaction history to AI
   TransactionProvider? transactionProvider;
 
-  @PostConstruct()
+  @postConstruct
   void init() {
     _model =
         FirebaseAI.googleAI(
           appCheck: FirebaseAppCheck.instance,
           useLimitedUseAppCheckTokens: true,
         ).generativeModel(
-          model: 'gemini-2.0-flash-exp',
+          model: 'gemini-3-pro-preview',
           tools: [
             Tool.functionDeclarations([
               FunctionDeclaration(

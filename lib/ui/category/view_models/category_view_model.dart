@@ -1,4 +1,5 @@
 import 'package:firebase_ai_testing/data/repositories/category_repository.dart';
+import 'package:firebase_ai_testing/data/repositories/user_repository.dart';
 import 'package:firebase_ai_testing/domain/models/category.dart';
 import 'package:firebase_ai_testing/utils/command.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
@@ -12,9 +13,13 @@ import 'package:injectable/injectable.dart';
 /// Uses Command pattern for async operations with loading/error states.
 @injectable
 class CategoryViewModel extends ChangeNotifier {
-  CategoryViewModel(this._categoryRepository);
+  CategoryViewModel(
+    this._categoryRepository,
+    this._userRepository,
+  );
 
   final CategoryRepository _categoryRepository;
+  final UserRepository _userRepository;
 
   List<Category> _categories = [];
 
@@ -34,7 +39,18 @@ class CategoryViewModel extends ChangeNotifier {
   ///
   /// Fetches categories from repository and updates the list.
   Future<Result<void>> _loadCategories() async {
-    final result = await _categoryRepository.getCategories();
+    final result = await _userRepository.getUser();
+
+    switch (result) {
+      case Ok(:final value):
+        return _loadCategoriesForUser(value.id);
+      case Error(:final error):
+        return Result.error(error);
+    }
+  }
+
+  Future<Result<void>> _loadCategoriesForUser(String userId) async {
+    final result = await _categoryRepository.getCategories(userId);
 
     return switch (result) {
       Ok(:final value) => _handleLoadSuccess(value),

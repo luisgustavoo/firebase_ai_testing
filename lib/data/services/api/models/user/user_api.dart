@@ -10,8 +10,8 @@ abstract class UserApiModel with _$UserApiModel {
     required String name,
     required String email,
     required String status,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _UserApiModel;
 
   factory UserApiModel.fromJson(Map<String, dynamic> json) =>

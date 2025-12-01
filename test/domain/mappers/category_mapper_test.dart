@@ -8,15 +8,13 @@ void main() {
     final testDate = DateTime(2024, 1, 15, 10, 30);
 
     group('toDomain', () {
-      test('converts CategoryApi to Category with icon', () {
+      test('converts CategoryApi to Category', () {
         final categoryApi = CategoryApiModel(
           id: 'cat-123',
           userId: 'user-123',
           description: 'Food & Dining',
-          isDefault: false,
-          createdAt: testDate,
-          updatedAt: testDate,
           icon: '🍔',
+          createdAt: testDate,
         );
 
         final category = CategoryMapper.toDomain(categoryApi);
@@ -24,57 +22,35 @@ void main() {
         expect(category.id, 'cat-123');
         expect(category.userId, 'user-123');
         expect(category.description, 'Food & Dining');
-        expect(category.isDefault, false);
-        expect(category.createdAt, testDate);
-        expect(category.updatedAt, testDate);
         expect(category.icon, '🍔');
+        expect(category.createdAt, testDate);
       });
 
-      test('converts CategoryApi to Category without icon', () {
+      test('converts CategoryApi with different icon', () {
         final categoryApi = CategoryApiModel(
           id: 'cat-456',
           userId: 'user-123',
           description: 'Transportation',
-          isDefault: true,
+          icon: '🚗',
           createdAt: testDate,
-          updatedAt: testDate,
-          // icon: null,
         );
 
         final category = CategoryMapper.toDomain(categoryApi);
 
         expect(category.id, 'cat-456');
         expect(category.description, 'Transportation');
-        expect(category.isDefault, true);
-        expect(category.icon, null);
-      });
-
-      test('converts default category correctly', () {
-        final categoryApi = CategoryApiModel(
-          id: 'cat-default',
-          userId: 'system',
-          description: 'Default Category',
-          isDefault: true,
-          createdAt: testDate,
-          updatedAt: testDate,
-        );
-
-        final category = CategoryMapper.toDomain(categoryApi);
-
-        expect(category.isDefault, true);
+        expect(category.icon, '🚗');
       });
     });
 
     group('toApi', () {
-      test('converts Category to CategoryApi with icon', () {
+      test('converts Category to CategoryApi', () {
         final category = Category(
           id: 'cat-123',
           userId: 'user-123',
           description: 'Food & Dining',
-          isDefault: false,
-          createdAt: testDate,
-          updatedAt: testDate,
           icon: '🍔',
+          createdAt: testDate,
         );
 
         final categoryApi = CategoryMapper.toApi(category);
@@ -82,38 +58,19 @@ void main() {
         expect(categoryApi.id, 'cat-123');
         expect(categoryApi.userId, 'user-123');
         expect(categoryApi.description, 'Food & Dining');
-        expect(categoryApi.isDefault, false);
-        expect(categoryApi.createdAt, testDate);
-        expect(categoryApi.updatedAt, testDate);
         expect(categoryApi.icon, '🍔');
-      });
-
-      test('converts Category to CategoryApi without icon', () {
-        final category = Category(
-          id: 'cat-456',
-          userId: 'user-123',
-          description: 'Transportation',
-          isDefault: true,
-          createdAt: testDate,
-          updatedAt: testDate,
-        );
-
-        final categoryApi = CategoryMapper.toApi(category);
-
-        expect(categoryApi.icon, null);
+        expect(categoryApi.createdAt, testDate);
       });
     });
 
     group('round-trip conversion', () {
-      test('toDomain then toApi preserves data with icon', () {
+      test('toDomain then toApi preserves data', () {
         final originalApi = CategoryApiModel(
           id: 'cat-123',
           userId: 'user-123',
           description: 'Food & Dining',
-          isDefault: false,
-          createdAt: testDate,
-          updatedAt: testDate,
           icon: '🍔',
+          createdAt: testDate,
         );
 
         final domain = CategoryMapper.toDomain(originalApi);
@@ -122,26 +79,8 @@ void main() {
         expect(convertedApi.id, originalApi.id);
         expect(convertedApi.userId, originalApi.userId);
         expect(convertedApi.description, originalApi.description);
-        expect(convertedApi.isDefault, originalApi.isDefault);
-        expect(convertedApi.createdAt, originalApi.createdAt);
-        expect(convertedApi.updatedAt, originalApi.updatedAt);
         expect(convertedApi.icon, originalApi.icon);
-      });
-
-      test('toDomain then toApi preserves data without icon', () {
-        final originalApi = CategoryApiModel(
-          id: 'cat-456',
-          userId: 'user-123',
-          description: 'Transportation',
-          isDefault: true,
-          createdAt: testDate,
-          updatedAt: testDate,
-        );
-
-        final domain = CategoryMapper.toDomain(originalApi);
-        final convertedApi = CategoryMapper.toApi(domain);
-
-        expect(convertedApi.icon, null);
+        expect(convertedApi.createdAt, originalApi.createdAt);
       });
 
       test('toApi then toDomain preserves data', () {
@@ -149,10 +88,8 @@ void main() {
           id: 'cat-789',
           userId: 'user-456',
           description: 'Entertainment',
-          isDefault: false,
-          createdAt: testDate,
-          updatedAt: testDate,
           icon: '🎬',
+          createdAt: testDate,
         );
 
         final api = CategoryMapper.toApi(originalDomain);
@@ -161,10 +98,8 @@ void main() {
         expect(convertedDomain.id, originalDomain.id);
         expect(convertedDomain.userId, originalDomain.userId);
         expect(convertedDomain.description, originalDomain.description);
-        expect(convertedDomain.isDefault, originalDomain.isDefault);
-        expect(convertedDomain.createdAt, originalDomain.createdAt);
-        expect(convertedDomain.updatedAt, originalDomain.updatedAt);
         expect(convertedDomain.icon, originalDomain.icon);
+        expect(convertedDomain.createdAt, originalDomain.createdAt);
       });
     });
   });

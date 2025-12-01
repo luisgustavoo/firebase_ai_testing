@@ -9,10 +9,8 @@ abstract class CategoryApiModel with _$CategoryApiModel {
     required String id,
     required String userId,
     required String description,
-    required bool isDefault,
+    required String icon,
     required DateTime createdAt,
-    required DateTime updatedAt,
-    String? icon,
   }) = _CategoryApiModel;
 
   factory CategoryApiModel.fromJson(Map<String, dynamic> json) =>

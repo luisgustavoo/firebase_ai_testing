@@ -1,5 +1,6 @@
 import 'package:firebase_ai_testing/data/repositories/category_repository.dart';
 import 'package:firebase_ai_testing/data/repositories/transaction_repository.dart';
+import 'package:firebase_ai_testing/data/repositories/user_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
 import 'package:firebase_ai_testing/domain/models/category.dart' as domain;
 import 'package:firebase_ai_testing/utils/command.dart';
@@ -17,12 +18,14 @@ class AddTransactionViewModel extends ChangeNotifier {
   AddTransactionViewModel(
     this._transactionRepository,
     this._categoryRepository,
+    this._userRepository,
   ) {
     _loadCategories();
   }
 
   final TransactionRepository _transactionRepository;
   final CategoryRepository _categoryRepository;
+  final UserRepository _userRepository;
 
   List<domain.Category> _categories = [];
 
@@ -35,12 +38,18 @@ class AddTransactionViewModel extends ChangeNotifier {
 
   /// Load categories for dropdown
   Future<Result<void>> _loadCategories() async {
-    final result = await _categoryRepository.getCategories();
+    final result = await _userRepository.getUser();
 
-    return switch (result) {
-      Ok(:final value) => _handleCategoriesLoaded(value),
-      Error(:final error) => Result.error(error),
-    };
+    switch (result) {
+      case Ok(:final value):
+        final result = await _categoryRepository.getCategories(value.id);
+        return switch (result) {
+          Ok(:final value) => _handleCategoriesLoaded(value),
+          Error(:final error) => Result.error(error),
+        };
+      case Error(:final error):
+        return Result.error(error);
+    }
   }
 
   /// Handle successful categories load

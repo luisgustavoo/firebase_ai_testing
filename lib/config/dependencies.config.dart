@@ -36,10 +36,10 @@ import 'dependencies.dart' as _i372;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final thirdPartyModule = _$ThirdPartyModule();
     gh.lazySingleton<_i558.FlutterSecureStorage>(
@@ -53,70 +53,69 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i1020.TokenStorageService>(
       () => _i1020.TokenStorageService(gh<_i558.FlutterSecureStorage>()),
     );
-    gh.lazySingletonAsync<_i552.ApiService>(() {
-      final i = _i552.ApiService(gh<_i519.Client>());
-      return i.init().then((_) => i);
-    });
-    gh.lazySingletonAsync<_i136.CategoryRepository>(
-      () async => _i136.CategoryRepository(await getAsync<_i552.ApiService>()),
+    gh.lazySingleton<_i552.ApiService>(
+      () => _i552.ApiService(gh<_i519.Client>())..init(),
     );
-    gh.lazySingletonAsync<_i717.TransactionRepository>(
-      () async =>
-          _i717.TransactionRepository(await getAsync<_i552.ApiService>()),
+    gh.lazySingleton<_i136.CategoryRepository>(
+      () => _i136.CategoryRepository(gh<_i552.ApiService>()),
     );
-    gh.lazySingletonAsync<_i977.UserRepository>(
-      () async => _i977.UserRepository(await getAsync<_i552.ApiService>()),
+    gh.lazySingleton<_i717.TransactionRepository>(
+      () => _i717.TransactionRepository(gh<_i552.ApiService>()),
     );
-    gh.lazySingletonAsync<_i507.FirebaseAiRepository>(
-      () async => _i507.FirebaseAiRepository(
+    gh.lazySingleton<_i977.UserRepository>(
+      () => _i977.UserRepository(gh<_i552.ApiService>()),
+    );
+    gh.lazySingleton<_i507.FirebaseAiRepository>(
+      () => _i507.FirebaseAiRepository(
         gh<_i39.FirebaseAiService>(),
-        await getAsync<_i552.ApiService>(),
+        gh<_i552.ApiService>(),
       )..init(),
     );
-    gh.factoryAsync<_i152.HomeViewModel>(
-      () async => _i152.HomeViewModel(
-        userRepository: await getAsync<_i977.UserRepository>(),
+    gh.factory<_i277.CategoryViewModel>(
+      () => _i277.CategoryViewModel(
+        gh<_i136.CategoryRepository>(),
+        gh<_i977.UserRepository>(),
       ),
     );
-    gh.lazySingletonAsync<_i578.AuthRepository>(
-      () async => _i578.AuthRepository(
-        await getAsync<_i552.ApiService>(),
+    gh.factory<_i152.HomeViewModel>(
+      () => _i152.HomeViewModel(userRepository: gh<_i977.UserRepository>()),
+    );
+    await gh.lazySingletonAsync<_i578.AuthRepository>(() {
+      final i = _i578.AuthRepository(
+        gh<_i552.ApiService>(),
         gh<_i1020.TokenStorageService>(),
+      );
+      return i.init().then((_) => i);
+    }, preResolve: true);
+    gh.factory<_i337.LogoutViewModel>(
+      () => _i337.LogoutViewModel(
+        authRepository: gh<_i578.AuthRepository>(),
+        userRepository: gh<_i977.UserRepository>(),
       ),
     );
-    gh.factoryAsync<_i337.LogoutViewModel>(
-      () async => _i337.LogoutViewModel(
-        authRepository: await getAsync<_i578.AuthRepository>(),
-        userRepository: await getAsync<_i977.UserRepository>(),
+    gh.factory<_i712.TransactionViewModel>(
+      () => _i712.TransactionViewModel(gh<_i717.TransactionRepository>()),
+    );
+    gh.factory<_i180.AddTransactionViewModel>(
+      () => _i180.AddTransactionViewModel(
+        gh<_i717.TransactionRepository>(),
+        gh<_i136.CategoryRepository>(),
+        gh<_i977.UserRepository>(),
       ),
     );
-    gh.factoryAsync<_i712.TransactionViewModel>(
-      () async => _i712.TransactionViewModel(
-        await getAsync<_i717.TransactionRepository>(),
+    gh.factory<_i39.ReceiptScannerViewModel>(
+      () => _i39.ReceiptScannerViewModel(gh<_i507.FirebaseAiRepository>()),
+    );
+    gh.factory<_i934.AuthViewModel>(
+      () => _i934.AuthViewModel(
+        gh<_i578.AuthRepository>(),
+        gh<_i977.UserRepository>(),
       ),
     );
-    gh.factoryAsync<_i934.AuthViewModel>(
-      () async => _i934.AuthViewModel(await getAsync<_i578.AuthRepository>()),
-    );
-    gh.factoryAsync<_i277.CategoryViewModel>(
-      () async =>
-          _i277.CategoryViewModel(await getAsync<_i136.CategoryRepository>()),
-    );
-    gh.factoryAsync<_i180.AddTransactionViewModel>(
-      () async => _i180.AddTransactionViewModel(
-        await getAsync<_i717.TransactionRepository>(),
-        await getAsync<_i136.CategoryRepository>(),
-      ),
-    );
-    gh.factoryAsync<_i39.ReceiptScannerViewModel>(
-      () async => _i39.ReceiptScannerViewModel(
-        await getAsync<_i507.FirebaseAiRepository>(),
-      ),
-    );
-    gh.factoryAsync<_i37.SplashViewModel>(
-      () async => _i37.SplashViewModel(
-        await getAsync<_i578.AuthRepository>(),
-        await getAsync<_i977.UserRepository>(),
+    gh.factory<_i37.SplashViewModel>(
+      () => _i37.SplashViewModel(
+        gh<_i578.AuthRepository>(),
+        gh<_i977.UserRepository>(),
       ),
     );
     return this;

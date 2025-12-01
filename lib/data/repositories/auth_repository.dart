@@ -19,15 +19,23 @@ import 'package:injectable/injectable.dart';
 /// Note: User data management is handled by UserRepository.
 @lazySingleton
 class AuthRepository extends ChangeNotifier {
-  AuthRepository(this._apiService, this._tokenStorage) {
-    _setupAuthHeaderProvider();
-  }
+  AuthRepository(this._apiService, this._tokenStorage);
 
   final ApiService _apiService;
   final TokenStorageService _tokenStorage;
 
   bool? _isAuthenticated;
   String? _currentToken;
+
+  /// Initialize repository by loading stored token and setting up auth header provider
+  ///
+  /// Called automatically after dependency injection.
+  /// Token must be loaded first so it's available when provider is set up.
+  @PostConstruct(preResolve: true)
+  Future<void> init() async {
+    await _loadStoredToken();
+    _setupAuthHeaderProvider();
+  }
 
   /// Setup the auth header provider for ApiService
   void _setupAuthHeaderProvider() {
@@ -37,6 +45,22 @@ class AuthRepository extends ChangeNotifier {
       }
       return null;
     };
+  }
+
+  /// Load token from storage on initialization
+  Future<void> _loadStoredToken() async {
+    try {
+      final token = await _tokenStorage.getToken();
+      if (token != null && token.isNotEmpty) {
+        _currentToken = token;
+        _isAuthenticated = true;
+        notifyListeners();
+      }
+    } on Exception catch (e) {
+      // Ignore errors during token loading
+      // User will need to login if token loading fails
+      debugPrint('Failed to load stored token: $e');
+    }
   }
 
   /// Check if user is authenticated
@@ -147,19 +171,5 @@ class AuthRepository extends ChangeNotifier {
 
     // Notify listeners of state change
     notifyListeners();
-  }
-
-  /// Load token from storage on app startup
-  ///
-  /// Should be called when the app starts to restore authentication state.
-  /// Returns the stored token if available.
-  Future<String?> loadStoredToken() async {
-    final token = await _tokenStorage.getToken();
-    if (token != null) {
-      _currentToken = token;
-      _isAuthenticated = true;
-      notifyListeners();
-    }
-    return token;
   }
 }

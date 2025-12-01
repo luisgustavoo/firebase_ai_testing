@@ -27,17 +27,25 @@ class FirebaseAiRepository {
   final ApiService _apiService;
 
   /// Initialize repository and configure AI service providers
-  @PostConstruct()
+  @postConstruct
   void init() {
     // Configure category provider for AI
     // Returns list of category descriptions with IDs for AI to choose from
     _firebaseAiService.categoryProvider = () async {
-      final result = await _apiService.getCategories();
-      return switch (result) {
-        Ok(:final value) =>
-          value.map((c) => '${c.id}:${c.description}').toList(),
-        Error() => [],
-      };
+      final result = await _apiService.getUserProfile();
+
+      switch (result) {
+        case Ok(:final value):
+          final result = await _apiService.getCategories(value.id);
+          return switch (result) {
+            Ok(:final value) =>
+              value.map((c) => '${c.id}:${c.description}').toList(),
+            Error() => [],
+          };
+        case Error(:final error):
+          log('Error fetching user profile: $error');
+          return [];
+      }
     };
 
     // Configure transaction provider for AI
@@ -67,13 +75,21 @@ class FirebaseAiRepository {
   ///
   /// Returns Result<List<Category>> with domain models.
   Future<Result<List<Category>>> getCategories() async {
-    final result = await _apiService.getCategories();
-    return switch (result) {
-      Ok(:final value) => Result.ok(
-        value.map(CategoryMapper.toDomain).toList(),
-      ),
-      Error(:final error) => Result.error(error),
-    };
+    final result = await _apiService.getUserProfile();
+
+    switch (result) {
+      case Ok(:final value):
+        final result = await _apiService.getCategories(value.id);
+        return switch (result) {
+          Ok(:final value) => Result.ok(
+            value.map(CategoryMapper.toDomain).toList(),
+          ),
+          Error(:final error) => Result.error(error),
+        };
+      case Error(:final error):
+        log('Error fetching user profile: $error');
+        return Result.error(error);
+    }
   }
 
   /// Extract expense data from receipt image using AI

@@ -7,11 +7,11 @@ part 'pagination_metadata.g.dart';
 abstract class PaginationMetadata with _$PaginationMetadata {
   const factory PaginationMetadata({
     required int page,
-    required int pageSize,
+    @JsonKey(name: 'page_size') required int pageSize,
     required int total,
-    required int totalPages,
-    required bool hasNext,
-    required bool hasPrevious,
+    @JsonKey(name: 'total_pages') required int totalPages,
+    @JsonKey(name: 'has_next') required bool hasNext,
+    @JsonKey(name: 'has_previous') required bool hasPrevious,
   }) = _PaginationMetadata;
 
   factory PaginationMetadata.fromJson(Map<String, dynamic> json) =>

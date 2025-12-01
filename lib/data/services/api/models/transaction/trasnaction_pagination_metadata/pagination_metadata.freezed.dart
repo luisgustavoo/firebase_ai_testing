@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PaginationMetadata {
 
- int get page; int get pageSize; int get total; int get totalPages; bool get hasNext; bool get hasPrevious;
+ int get page;@JsonKey(name: 'page_size') int get pageSize; int get total;@JsonKey(name: 'total_pages') int get totalPages;@JsonKey(name: 'has_next') bool get hasNext;@JsonKey(name: 'has_previous') bool get hasPrevious;
 /// Create a copy of PaginationMetadata
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $PaginationMetadataCopyWith<$Res>  {
   factory $PaginationMetadataCopyWith(PaginationMetadata value, $Res Function(PaginationMetadata) _then) = _$PaginationMetadataCopyWithImpl;
 @useResult
 $Res call({
- int page, int pageSize, int total, int totalPages, bool hasNext, bool hasPrevious
+ int page,@JsonKey(name: 'page_size') int pageSize, int total,@JsonKey(name: 'total_pages') int totalPages,@JsonKey(name: 'has_next') bool hasNext,@JsonKey(name: 'has_previous') bool hasPrevious
 });
 
 
@@ -158,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int page,  int pageSize,  int total,  int totalPages,  bool hasNext,  bool hasPrevious)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int page, @JsonKey(name: 'page_size')  int pageSize,  int total, @JsonKey(name: 'total_pages')  int totalPages, @JsonKey(name: 'has_next')  bool hasNext, @JsonKey(name: 'has_previous')  bool hasPrevious)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PaginationMetadata() when $default != null:
 return $default(_that.page,_that.pageSize,_that.total,_that.totalPages,_that.hasNext,_that.hasPrevious);case _:
@@ -179,7 +179,7 @@ return $default(_that.page,_that.pageSize,_that.total,_that.totalPages,_that.has
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int page,  int pageSize,  int total,  int totalPages,  bool hasNext,  bool hasPrevious)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int page, @JsonKey(name: 'page_size')  int pageSize,  int total, @JsonKey(name: 'total_pages')  int totalPages, @JsonKey(name: 'has_next')  bool hasNext, @JsonKey(name: 'has_previous')  bool hasPrevious)  $default,) {final _that = this;
 switch (_that) {
 case _PaginationMetadata():
 return $default(_that.page,_that.pageSize,_that.total,_that.totalPages,_that.hasNext,_that.hasPrevious);case _:
@@ -199,7 +199,7 @@ return $default(_that.page,_that.pageSize,_that.total,_that.totalPages,_that.has
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int page,  int pageSize,  int total,  int totalPages,  bool hasNext,  bool hasPrevious)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int page, @JsonKey(name: 'page_size')  int pageSize,  int total, @JsonKey(name: 'total_pages')  int totalPages, @JsonKey(name: 'has_next')  bool hasNext, @JsonKey(name: 'has_previous')  bool hasPrevious)?  $default,) {final _that = this;
 switch (_that) {
 case _PaginationMetadata() when $default != null:
 return $default(_that.page,_that.pageSize,_that.total,_that.totalPages,_that.hasNext,_that.hasPrevious);case _:
@@ -214,15 +214,15 @@ return $default(_that.page,_that.pageSize,_that.total,_that.totalPages,_that.has
 @JsonSerializable()
 
 class _PaginationMetadata implements PaginationMetadata {
-  const _PaginationMetadata({required this.page, required this.pageSize, required this.total, required this.totalPages, required this.hasNext, required this.hasPrevious});
+  const _PaginationMetadata({required this.page, @JsonKey(name: 'page_size') required this.pageSize, required this.total, @JsonKey(name: 'total_pages') required this.totalPages, @JsonKey(name: 'has_next') required this.hasNext, @JsonKey(name: 'has_previous') required this.hasPrevious});
   factory _PaginationMetadata.fromJson(Map<String, dynamic> json) => _$PaginationMetadataFromJson(json);
 
 @override final  int page;
-@override final  int pageSize;
+@override@JsonKey(name: 'page_size') final  int pageSize;
 @override final  int total;
-@override final  int totalPages;
-@override final  bool hasNext;
-@override final  bool hasPrevious;
+@override@JsonKey(name: 'total_pages') final  int totalPages;
+@override@JsonKey(name: 'has_next') final  bool hasNext;
+@override@JsonKey(name: 'has_previous') final  bool hasPrevious;
 
 /// Create a copy of PaginationMetadata
 /// with the given fields replaced by the non-null parameter values.
@@ -257,7 +257,7 @@ abstract mixin class _$PaginationMetadataCopyWith<$Res> implements $PaginationMe
   factory _$PaginationMetadataCopyWith(_PaginationMetadata value, $Res Function(_PaginationMetadata) _then) = __$PaginationMetadataCopyWithImpl;
 @override @useResult
 $Res call({
- int page, int pageSize, int total, int totalPages, bool hasNext, bool hasPrevious
+ int page,@JsonKey(name: 'page_size') int pageSize, int total,@JsonKey(name: 'total_pages') int totalPages,@JsonKey(name: 'has_next') bool hasNext,@JsonKey(name: 'has_previous') bool hasPrevious
 });
 
 

@@ -37,7 +37,7 @@ typedef AuthHeaderProvider = String? Function();
 class ApiService {
   ApiService(this._httpClient);
 
-  static const String _baseUrl = 'http://localhost:8080';
+  static const String _baseUrl = 'http://192.168.0.159:8080';
   static const Duration _timeout = Duration(seconds: 30);
 
   final http.Client _httpClient;
@@ -48,7 +48,7 @@ class ApiService {
 
   /// Initialize the service by setting up the auth header provider
   @postConstruct
-  Future<void> init() async {
+  void init() {
     // Set up auth header provider to get token from storage
     authHeaderProvider = () {
       // This will be called synchronously, so we need the token to be available
@@ -288,7 +288,7 @@ class ApiService {
   /// Returns Result with token and user data as LoginResponse model
   Future<Result<LoginResponse>> loginUser(LoginRequest request) async {
     try {
-      final response = await _post('/api/users/login', body: request.toJson());
+      final response = await _post('/api/auth/login', body: request.toJson());
       final loginResponse = LoginResponse.fromJson(
         response as Map<String, dynamic>,
       );
@@ -306,7 +306,10 @@ class ApiService {
   Future<Result<UserApiModel>> getUserProfile() async {
     try {
       final response = await _get('/api/users/me');
-      final userApi = UserApiModel.fromJson(response as Map<String, dynamic>);
+      final responseData = response as Map<String, dynamic>;
+      final userApi = UserApiModel.fromJson(
+        responseData['user'] as Map<String, dynamic>,
+      );
       return Result.ok(userApi);
     } on ApiException catch (e) {
       return Result.error(e);
@@ -319,10 +322,16 @@ class ApiService {
 
   /// Get all categories for authenticated user
   /// Returns Result with list of CategoryApi models
-  Future<Result<List<CategoryApiModel>>> getCategories() async {
+  Future<Result<List<CategoryApiModel>>> getCategories(String userId) async {
     try {
-      final response = await _get('/api/categories');
-      final categoriesJson = response as List<dynamic>;
+      final response = await _get(
+        '/api/users/categories',
+        queryParams: {
+          'userId': userId,
+        },
+      );
+      final responseMap = response as Map<String, dynamic>;
+      final categoriesJson = responseMap['categories'] as List<dynamic>;
       final categories = categoriesJson
           .map(
             (json) => CategoryApiModel.fromJson(json as Map<String, dynamic>),

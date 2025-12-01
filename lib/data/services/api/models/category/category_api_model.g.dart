@@ -11,10 +11,8 @@ _CategoryApiModel _$CategoryApiModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       userId: json['user_id'] as String,
       description: json['description'] as String,
-      isDefault: json['is_default'] as bool,
+      icon: json['icon'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      icon: json['icon'] as String?,
     );
 
 Map<String, dynamic> _$CategoryApiModelToJson(_CategoryApiModel instance) =>
@@ -22,8 +20,6 @@ Map<String, dynamic> _$CategoryApiModelToJson(_CategoryApiModel instance) =>
       'id': instance.id,
       'user_id': instance.userId,
       'description': instance.description,
-      'is_default': instance.isDefault,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
       'icon': instance.icon,
+      'created_at': instance.createdAt.toIso8601String(),
     };
