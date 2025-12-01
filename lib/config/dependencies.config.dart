@@ -21,8 +21,10 @@ import '../data/repositories/transaction_repository.dart' as _i717;
 import '../data/services/api/api_service.dart' as _i552;
 import '../data/services/firebase_ai_service.dart' as _i39;
 import '../data/services/token_storage_service.dart' as _i1020;
+import '../ui/auth/view_models/auth_view_model.dart' as _i934;
 import '../ui/camera_preview/view_models/camera_preview_view_model.dart'
     as _i897;
+import '../ui/category/view_models/category_view_model.dart' as _i277;
 import 'dependencies.dart' as _i372;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -65,6 +67,13 @@ extension GetItInjectableX on _i174.GetIt {
         await getAsync<_i552.ApiService>(),
         gh<_i1020.TokenStorageService>(),
       ),
+    );
+    gh.factoryAsync<_i934.AuthViewModel>(
+      () async => _i934.AuthViewModel(await getAsync<_i578.AuthRepository>()),
+    );
+    gh.factoryAsync<_i277.CategoryViewModel>(
+      () async =>
+          _i277.CategoryViewModel(await getAsync<_i136.CategoryRepository>()),
     );
     gh.lazySingleton<_i897.CameraPreviewViewModel>(
       () => _i897.CameraPreviewViewModel(

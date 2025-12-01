@@ -223,7 +223,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Test notifyListeners is called after state changes
   - _Requirements: 1.4, 2.4_
 
-- [ ] 13. Implement CategoryViewModel
+- [x] 13. Implement CategoryViewModel
   - Create CategoryViewModel extending ChangeNotifier
   - Add categories list property
   - Add isLoading and error properties
@@ -235,12 +235,12 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Handle loading and error states
   - _Requirements: 4.2, 4.4, 4.5, 5.4, 6.4, 7.3_
 
-- [ ] 13.1 Write property test for CategoryViewModel
+- [x] 13.1 Write property test for CategoryViewModel
   - **Property 8: Loading state is shown during async operations**
   - **Property 10: UI reactively reflects data changes**
   - **Validates: Requirements 4.2, 4.5, 5.4, 6.4, 7.3**
 
-- [ ] 13.2 Write unit tests for CategoryViewModel
+- [x] 13.2 Write unit tests for CategoryViewModel
   - Test loadCategories updates categories list
   - Test createCategory adds to categories list
   - Test updateCategory modifies category in list
@@ -250,7 +250,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Test notifyListeners is called
   - _Requirements: 4.2, 4.4, 5.4, 6.4, 7.3_
 
-- [ ] 14. Implement TransactionViewModel
+- [x] 14. Implement TransactionViewModel
   - Create TransactionViewModel extending ChangeNotifier
   - Add transactions list property
   - Add pagination metadata property
@@ -265,12 +265,12 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Handle loading and error states
   - _Requirements: 8.7, 9.2, 9.4, 9.5, 9.8_
 
-- [ ] 14.1 Write property test for TransactionViewModel
+- [x] 14.1 Write property test for TransactionViewModel
   - **Property 8: Loading state is shown during async operations**
   - **Property 10: UI reactively reflects data changes**
   - **Validates: Requirements 8.7, 9.5, 9.8**
 
-- [ ] 14.2 Write unit tests for TransactionViewModel
+- [x] 14.2 Write unit tests for TransactionViewModel
   - Test createTransaction adds to list
   - Test loadTransactions populates list
   - Test loadMore appends to list
