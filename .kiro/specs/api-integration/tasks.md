@@ -74,7 +74,7 @@
   - Test enum conversions
   - _Requirements: 10.2_
 
-- [ ] 7. Implement validation utilities
+- [x] 7. Implement validation utilities
   - Create Validators class with static methods
   - Implement validateEmail (format check)
   - Implement validatePassword (min 6 chars)
@@ -85,7 +85,7 @@
   - Implement validatePaymentType (must be valid enum value)
   - _Requirements: 1.3, 5.3, 6.5, 8.2, 8.3, 8.4_
 
-- [ ] 7.1 Write property test for validation
+- [x] 7.1 Write property test for validation
   - **Property 2: Invalid registration data is rejected before API call**
   - **Property 13: Short category descriptions are rejected**
   - **Property 15: Invalid updates are prevented**
@@ -94,7 +94,7 @@
   - **Property 20: Invalid payment types are rejected**
   - **Validates: Requirements 1.3, 5.3, 6.5, 8.2, 8.3, 8.4**
 
-- [ ] 8. Implement AuthRepository
+- [-] 8. Implement AuthRepository
   - Create AuthRepository with ApiService and TokenStorageService dependencies
   - Implement register method (validate, call service, return Result<User>)
   - Implement login method (validate, call service, store token, return Result<LoginResponse>)
