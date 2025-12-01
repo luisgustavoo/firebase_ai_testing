@@ -423,14 +423,14 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Add smooth page transitions
   - _Requirements: 11.3_
 
-- [ ] 28. Implement logout functionality
+- [x] 28. Implement logout functionality
   - Add logout button in AppBar
   - Call AuthViewModel.logout
   - Clear all ViewModels state
   - Navigate to login screen
   - _Requirements: 12.4_
 
-- [ ] 29. Handle 401 errors globally
+- [x] 29. Handle 401 errors globally
   - Add global error handler in ApiService
   - On 401 error, clear token and navigate to login
   - Show "Session expired" message

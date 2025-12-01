@@ -79,7 +79,7 @@ class ApiService {
   }
 
   /// Handle HTTP response and throw appropriate exceptions
-  dynamic _handleResponse(http.Response response) {
+  Future<dynamic> _handleResponse(http.Response response) async {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.isEmpty) {
         return null;
@@ -92,6 +92,11 @@ class ApiService {
           statusCode: response.statusCode,
         );
       }
+    }
+
+    // Handle 401 Unauthorized - clear token and auth state
+    if (response.statusCode == 401) {
+      await _handle401Error();
     }
 
     // Handle error responses
@@ -110,6 +115,16 @@ class ApiService {
       _mapErrorMessage(response.statusCode, errorMessage),
       statusCode: response.statusCode,
     );
+  }
+
+  /// Handle 401 Unauthorized errors globally
+  /// Clears authentication token and state
+  Future<void> _handle401Error() async {
+    // Clear token from storage
+    await _tokenStorage.deleteToken();
+
+    // Clear token from service
+    authToken = null;
   }
 
   /// Map HTTP status codes to user-friendly error messages
@@ -153,7 +168,7 @@ class ApiService {
           )
           .timeout(_timeout);
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on TimeoutException {
       throw ApiException('Tempo esgotado. Verifique sua conexão');
     } on SocketException {
@@ -180,7 +195,7 @@ class ApiService {
           )
           .timeout(_timeout);
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on TimeoutException {
       throw ApiException('Tempo esgotado. Verifique sua conexão');
     } on SocketException {
@@ -207,7 +222,7 @@ class ApiService {
           )
           .timeout(_timeout);
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on TimeoutException {
       throw ApiException('Tempo esgotado. Verifique sua conexão');
     } on SocketException {
@@ -232,7 +247,7 @@ class ApiService {
           )
           .timeout(_timeout);
 
-      return _handleResponse(response);
+      return await _handleResponse(response);
     } on TimeoutException {
       throw ApiException('Tempo esgotado. Verifique sua conexão');
     } on SocketException {
