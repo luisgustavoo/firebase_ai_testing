@@ -50,13 +50,13 @@
   - Test date parsing and formatting
   - _Requirements: 8.5_
 
-- [ ] 5. Create domain models
+- [x] 5. Create domain models
   - Create User domain model with UserStatus enum
   - Create Category domain model
   - Create Transaction domain model with TransactionType and PaymentType enums
   - _Requirements: 10.2_
 
-- [ ] 6. Implement mappers between API and domain models
+- [x] 6. Implement mappers between API and domain models
   - Create UserMapper (toDomain, toApi)
   - Create CategoryMapper (toDomain, toApi)
   - Create TransactionMapper (toDomain, toApi, toCreateRequest)
@@ -64,11 +64,11 @@
   - Handle date formatting to ISO 8601
   - _Requirements: 8.5_
 
-- [ ] 6.1 Write property test for date formatting
+- [x] 6.1 Write property test for date formatting
   - **Property 21: Dates are formatted to ISO 8601**
   - **Validates: Requirements 8.5**
 
-- [ ] 6.2 Write unit tests for mappers
+- [x] 6.2 Write unit tests for mappers
   - Test API to domain conversion for all models
   - Test domain to API conversion for all models
   - Test enum conversions

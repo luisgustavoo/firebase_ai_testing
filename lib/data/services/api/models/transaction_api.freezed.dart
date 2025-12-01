@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionApi {
 
- String get id; String get userId; String? get categoryId; double get amount; String? get description; String get transactionType; String get paymentType; DateTime get transactionDate; DateTime get createdAt;
+ String get id; String get userId; double get amount; String get transactionType; String get paymentType; DateTime get transactionDate; DateTime get createdAt; String? get categoryId; String? get description;
 /// Create a copy of TransactionApi
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TransactionApiCopyWith<TransactionApi> get copyWith => _$TransactionApiCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,categoryId,amount,description,transactionType,paymentType,transactionDate,createdAt);
+int get hashCode => Object.hash(runtimeType,id,userId,amount,transactionType,paymentType,transactionDate,createdAt,categoryId,description);
 
 @override
 String toString() {
-  return 'TransactionApi(id: $id, userId: $userId, categoryId: $categoryId, amount: $amount, description: $description, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt)';
+  return 'TransactionApi(id: $id, userId: $userId, amount: $amount, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt, categoryId: $categoryId, description: $description)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TransactionApiCopyWith<$Res>  {
   factory $TransactionApiCopyWith(TransactionApi value, $Res Function(TransactionApi) _then) = _$TransactionApiCopyWithImpl;
 @useResult
 $Res call({
- String id, String userId, String? categoryId, double amount, String? description, String transactionType, String paymentType, DateTime transactionDate, DateTime createdAt
+ String id, String userId, double amount, String transactionType, String paymentType, DateTime transactionDate, DateTime createdAt, String? categoryId, String? description
 });
 
 
@@ -65,18 +65,18 @@ class _$TransactionApiCopyWithImpl<$Res>
 
 /// Create a copy of TransactionApi
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? categoryId = freezed,Object? amount = null,Object? description = freezed,Object? transactionType = null,Object? paymentType = null,Object? transactionDate = null,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? amount = null,Object? transactionType = null,Object? paymentType = null,Object? transactionDate = null,Object? createdAt = null,Object? categoryId = freezed,Object? description = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,transactionType: null == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
+as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as double,transactionType: null == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
 as String,paymentType: null == paymentType ? _self.paymentType : paymentType // ignore: cast_nullable_to_non_nullable
 as String,transactionDate: null == transactionDate ? _self.transactionDate : transactionDate // ignore: cast_nullable_to_non_nullable
 as DateTime,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -161,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  String? categoryId,  double amount,  String? description,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  double amount,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt,  String? categoryId,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TransactionApi() when $default != null:
-return $default(_that.id,_that.userId,_that.categoryId,_that.amount,_that.description,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt,_that.categoryId,_that.description);case _:
   return orElse();
 
 }
@@ -182,10 +182,10 @@ return $default(_that.id,_that.userId,_that.categoryId,_that.amount,_that.descri
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String? categoryId,  double amount,  String? description,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  double amount,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt,  String? categoryId,  String? description)  $default,) {final _that = this;
 switch (_that) {
 case _TransactionApi():
-return $default(_that.id,_that.userId,_that.categoryId,_that.amount,_that.description,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt,_that.categoryId,_that.description);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +202,10 @@ return $default(_that.id,_that.userId,_that.categoryId,_that.amount,_that.descri
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  String? categoryId,  double amount,  String? description,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  double amount,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt,  String? categoryId,  String? description)?  $default,) {final _that = this;
 switch (_that) {
 case _TransactionApi() when $default != null:
-return $default(_that.id,_that.userId,_that.categoryId,_that.amount,_that.description,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt);case _:
+return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt,_that.categoryId,_that.description);case _:
   return null;
 
 }
@@ -217,18 +217,18 @@ return $default(_that.id,_that.userId,_that.categoryId,_that.amount,_that.descri
 @JsonSerializable()
 
 class _TransactionApi implements TransactionApi {
-  const _TransactionApi({required this.id, required this.userId, this.categoryId, required this.amount, this.description, required this.transactionType, required this.paymentType, required this.transactionDate, required this.createdAt});
+  const _TransactionApi({required this.id, required this.userId, required this.amount, required this.transactionType, required this.paymentType, required this.transactionDate, required this.createdAt, this.categoryId, this.description});
   factory _TransactionApi.fromJson(Map<String, dynamic> json) => _$TransactionApiFromJson(json);
 
 @override final  String id;
 @override final  String userId;
-@override final  String? categoryId;
 @override final  double amount;
-@override final  String? description;
 @override final  String transactionType;
 @override final  String paymentType;
 @override final  DateTime transactionDate;
 @override final  DateTime createdAt;
+@override final  String? categoryId;
+@override final  String? description;
 
 /// Create a copy of TransactionApi
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.description, description) || other.description == description)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,categoryId,amount,description,transactionType,paymentType,transactionDate,createdAt);
+int get hashCode => Object.hash(runtimeType,id,userId,amount,transactionType,paymentType,transactionDate,createdAt,categoryId,description);
 
 @override
 String toString() {
-  return 'TransactionApi(id: $id, userId: $userId, categoryId: $categoryId, amount: $amount, description: $description, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt)';
+  return 'TransactionApi(id: $id, userId: $userId, amount: $amount, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt, categoryId: $categoryId, description: $description)';
 }
 
 
@@ -263,7 +263,7 @@ abstract mixin class _$TransactionApiCopyWith<$Res> implements $TransactionApiCo
   factory _$TransactionApiCopyWith(_TransactionApi value, $Res Function(_TransactionApi) _then) = __$TransactionApiCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String userId, String? categoryId, double amount, String? description, String transactionType, String paymentType, DateTime transactionDate, DateTime createdAt
+ String id, String userId, double amount, String transactionType, String paymentType, DateTime transactionDate, DateTime createdAt, String? categoryId, String? description
 });
 
 
@@ -280,18 +280,18 @@ class __$TransactionApiCopyWithImpl<$Res>
 
 /// Create a copy of TransactionApi
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? categoryId = freezed,Object? amount = null,Object? description = freezed,Object? transactionType = null,Object? paymentType = null,Object? transactionDate = null,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? amount = null,Object? transactionType = null,Object? paymentType = null,Object? transactionDate = null,Object? createdAt = null,Object? categoryId = freezed,Object? description = freezed,}) {
   return _then(_TransactionApi(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String?,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
-as double,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,transactionType: null == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
+as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as double,transactionType: null == transactionType ? _self.transactionType : transactionType // ignore: cast_nullable_to_non_nullable
 as String,paymentType: null == paymentType ? _self.paymentType : paymentType // ignore: cast_nullable_to_non_nullable
 as String,transactionDate: null == transactionDate ? _self.transactionDate : transactionDate // ignore: cast_nullable_to_non_nullable
 as DateTime,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
