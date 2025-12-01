@@ -14,7 +14,10 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:http/http.dart' as _i519;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../data/repositories/auth_repository.dart' as _i578;
+import '../data/repositories/category_repository.dart' as _i136;
 import '../data/repositories/firebase_ai_repository.dart' as _i507;
+import '../data/repositories/transaction_repository.dart' as _i717;
 import '../data/services/api/api_service.dart' as _i552;
 import '../data/services/firebase_ai_service.dart' as _i39;
 import '../data/services/token_storage_service.dart' as _i1020;
@@ -47,8 +50,21 @@ extension GetItInjectableX on _i174.GetIt {
       );
       return i.init().then((_) => i);
     });
+    gh.lazySingletonAsync<_i136.CategoryRepository>(
+      () async => _i136.CategoryRepository(await getAsync<_i552.ApiService>()),
+    );
+    gh.lazySingletonAsync<_i717.TransactionRepository>(
+      () async =>
+          _i717.TransactionRepository(await getAsync<_i552.ApiService>()),
+    );
     gh.factory<_i507.FirebaseAiRepository>(
       () => _i507.FirebaseAiRepository(aiService: gh<_i39.FirebaseAiService>()),
+    );
+    gh.lazySingletonAsync<_i578.AuthRepository>(
+      () async => _i578.AuthRepository(
+        await getAsync<_i552.ApiService>(),
+        gh<_i1020.TokenStorageService>(),
+      ),
     );
     gh.lazySingleton<_i897.CameraPreviewViewModel>(
       () => _i897.CameraPreviewViewModel(

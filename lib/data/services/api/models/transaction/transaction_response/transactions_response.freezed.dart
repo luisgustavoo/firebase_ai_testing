@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransactionsResponse {
 
- List<TransactionApi> get transactions; PaginationMetadata get pagination;
+ List<TransactionApiModel> get transactions; PaginationMetadata get pagination;
 /// Create a copy of TransactionsResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $TransactionsResponseCopyWith<$Res>  {
   factory $TransactionsResponseCopyWith(TransactionsResponse value, $Res Function(TransactionsResponse) _then) = _$TransactionsResponseCopyWithImpl;
 @useResult
 $Res call({
- List<TransactionApi> transactions, PaginationMetadata pagination
+ List<TransactionApiModel> transactions, PaginationMetadata pagination
 });
 
 
@@ -68,7 +68,7 @@ class _$TransactionsResponseCopyWithImpl<$Res>
 @pragma('vm:prefer-inline') @override $Res call({Object? transactions = null,Object? pagination = null,}) {
   return _then(_self.copyWith(
 transactions: null == transactions ? _self.transactions : transactions // ignore: cast_nullable_to_non_nullable
-as List<TransactionApi>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as List<TransactionApiModel>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
 as PaginationMetadata,
   ));
 }
@@ -163,7 +163,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TransactionApi> transactions,  PaginationMetadata pagination)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<TransactionApiModel> transactions,  PaginationMetadata pagination)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TransactionsResponse() when $default != null:
 return $default(_that.transactions,_that.pagination);case _:
@@ -184,7 +184,7 @@ return $default(_that.transactions,_that.pagination);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TransactionApi> transactions,  PaginationMetadata pagination)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<TransactionApiModel> transactions,  PaginationMetadata pagination)  $default,) {final _that = this;
 switch (_that) {
 case _TransactionsResponse():
 return $default(_that.transactions,_that.pagination);case _:
@@ -204,7 +204,7 @@ return $default(_that.transactions,_that.pagination);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TransactionApi> transactions,  PaginationMetadata pagination)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<TransactionApiModel> transactions,  PaginationMetadata pagination)?  $default,) {final _that = this;
 switch (_that) {
 case _TransactionsResponse() when $default != null:
 return $default(_that.transactions,_that.pagination);case _:
@@ -219,11 +219,11 @@ return $default(_that.transactions,_that.pagination);case _:
 @JsonSerializable()
 
 class _TransactionsResponse implements TransactionsResponse {
-  const _TransactionsResponse({required final  List<TransactionApi> transactions, required this.pagination}): _transactions = transactions;
+  const _TransactionsResponse({required final  List<TransactionApiModel> transactions, required this.pagination}): _transactions = transactions;
   factory _TransactionsResponse.fromJson(Map<String, dynamic> json) => _$TransactionsResponseFromJson(json);
 
- final  List<TransactionApi> _transactions;
-@override List<TransactionApi> get transactions {
+ final  List<TransactionApiModel> _transactions;
+@override List<TransactionApiModel> get transactions {
   if (_transactions is EqualUnmodifiableListView) return _transactions;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_transactions);
@@ -264,7 +264,7 @@ abstract mixin class _$TransactionsResponseCopyWith<$Res> implements $Transactio
   factory _$TransactionsResponseCopyWith(_TransactionsResponse value, $Res Function(_TransactionsResponse) _then) = __$TransactionsResponseCopyWithImpl;
 @override @useResult
 $Res call({
- List<TransactionApi> transactions, PaginationMetadata pagination
+ List<TransactionApiModel> transactions, PaginationMetadata pagination
 });
 
 
@@ -284,7 +284,7 @@ class __$TransactionsResponseCopyWithImpl<$Res>
 @override @pragma('vm:prefer-inline') $Res call({Object? transactions = null,Object? pagination = null,}) {
   return _then(_TransactionsResponse(
 transactions: null == transactions ? _self._transactions : transactions // ignore: cast_nullable_to_non_nullable
-as List<TransactionApi>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
+as List<TransactionApiModel>,pagination: null == pagination ? _self.pagination : pagination // ignore: cast_nullable_to_non_nullable
 as PaginationMetadata,
   ));
 }

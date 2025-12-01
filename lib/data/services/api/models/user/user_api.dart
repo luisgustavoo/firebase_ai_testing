@@ -4,16 +4,16 @@ part 'user_api.freezed.dart';
 part 'user_api.g.dart';
 
 @freezed
-abstract class UserApi with _$UserApi {
-  const factory UserApi({
+abstract class UserApiModel with _$UserApiModel {
+  const factory UserApiModel({
     required String id,
     required String name,
     required String email,
     required String status,
     required DateTime createdAt,
     required DateTime updatedAt,
-  }) = _UserApi;
+  }) = _UserApiModel;
 
-  factory UserApi.fromJson(Map<String, dynamic> json) =>
-      _$UserApiFromJson(json);
+  factory UserApiModel.fromJson(Map<String, dynamic> json) =>
+      _$UserApiModelFromJson(json);
 }

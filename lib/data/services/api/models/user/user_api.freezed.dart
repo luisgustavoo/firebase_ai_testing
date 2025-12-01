@@ -13,22 +13,22 @@ part of 'user_api.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$UserApi {
+mixin _$UserApiModel {
 
  String get id; String get name; String get email; String get status; DateTime get createdAt; DateTime get updatedAt;
-/// Create a copy of UserApi
+/// Create a copy of UserApiModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$UserApiCopyWith<UserApi> get copyWith => _$UserApiCopyWithImpl<UserApi>(this as UserApi, _$identity);
+$UserApiModelCopyWith<UserApiModel> get copyWith => _$UserApiModelCopyWithImpl<UserApiModel>(this as UserApiModel, _$identity);
 
-  /// Serializes this UserApi to a JSON map.
+  /// Serializes this UserApiModel to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserApi&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserApiModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,15 +37,15 @@ int get hashCode => Object.hash(runtimeType,id,name,email,status,createdAt,updat
 
 @override
 String toString() {
-  return 'UserApi(id: $id, name: $name, email: $email, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'UserApiModel(id: $id, name: $name, email: $email, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $UserApiCopyWith<$Res>  {
-  factory $UserApiCopyWith(UserApi value, $Res Function(UserApi) _then) = _$UserApiCopyWithImpl;
+abstract mixin class $UserApiModelCopyWith<$Res>  {
+  factory $UserApiModelCopyWith(UserApiModel value, $Res Function(UserApiModel) _then) = _$UserApiModelCopyWithImpl;
 @useResult
 $Res call({
  String id, String name, String email, String status, DateTime createdAt, DateTime updatedAt
@@ -56,14 +56,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$UserApiCopyWithImpl<$Res>
-    implements $UserApiCopyWith<$Res> {
-  _$UserApiCopyWithImpl(this._self, this._then);
+class _$UserApiModelCopyWithImpl<$Res>
+    implements $UserApiModelCopyWith<$Res> {
+  _$UserApiModelCopyWithImpl(this._self, this._then);
 
-  final UserApi _self;
-  final $Res Function(UserApi) _then;
+  final UserApiModel _self;
+  final $Res Function(UserApiModel) _then;
 
-/// Create a copy of UserApi
+/// Create a copy of UserApiModel
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? email = null,Object? status = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_self.copyWith(
@@ -80,8 +80,8 @@ as DateTime,
 }
 
 
-/// Adds pattern-matching-related methods to [UserApi].
-extension UserApiPatterns on UserApi {
+/// Adds pattern-matching-related methods to [UserApiModel].
+extension UserApiModelPatterns on UserApiModel {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -94,10 +94,10 @@ extension UserApiPatterns on UserApi {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UserApi value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _UserApiModel value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _UserApi() when $default != null:
+case _UserApiModel() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -116,10 +116,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UserApi value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _UserApiModel value)  $default,){
 final _that = this;
 switch (_that) {
-case _UserApi():
+case _UserApiModel():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -137,10 +137,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UserApi value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _UserApiModel value)?  $default,){
 final _that = this;
 switch (_that) {
-case _UserApi() when $default != null:
+case _UserApiModel() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -160,7 +160,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String status,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _UserApi() when $default != null:
+case _UserApiModel() when $default != null:
 return $default(_that.id,_that.name,_that.email,_that.status,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
@@ -181,7 +181,7 @@ return $default(_that.id,_that.name,_that.email,_that.status,_that.createdAt,_th
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String email,  String status,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
-case _UserApi():
+case _UserApiModel():
 return $default(_that.id,_that.name,_that.email,_that.status,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
@@ -201,7 +201,7 @@ return $default(_that.id,_that.name,_that.email,_that.status,_that.createdAt,_th
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String email,  String status,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
 switch (_that) {
-case _UserApi() when $default != null:
+case _UserApiModel() when $default != null:
 return $default(_that.id,_that.name,_that.email,_that.status,_that.createdAt,_that.updatedAt);case _:
   return null;
 
@@ -213,9 +213,9 @@ return $default(_that.id,_that.name,_that.email,_that.status,_that.createdAt,_th
 /// @nodoc
 @JsonSerializable()
 
-class _UserApi implements UserApi {
-  const _UserApi({required this.id, required this.name, required this.email, required this.status, required this.createdAt, required this.updatedAt});
-  factory _UserApi.fromJson(Map<String, dynamic> json) => _$UserApiFromJson(json);
+class _UserApiModel implements UserApiModel {
+  const _UserApiModel({required this.id, required this.name, required this.email, required this.status, required this.createdAt, required this.updatedAt});
+  factory _UserApiModel.fromJson(Map<String, dynamic> json) => _$UserApiModelFromJson(json);
 
 @override final  String id;
 @override final  String name;
@@ -224,20 +224,20 @@ class _UserApi implements UserApi {
 @override final  DateTime createdAt;
 @override final  DateTime updatedAt;
 
-/// Create a copy of UserApi
+/// Create a copy of UserApiModel
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$UserApiCopyWith<_UserApi> get copyWith => __$UserApiCopyWithImpl<_UserApi>(this, _$identity);
+_$UserApiModelCopyWith<_UserApiModel> get copyWith => __$UserApiModelCopyWithImpl<_UserApiModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$UserApiToJson(this, );
+  return _$UserApiModelToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserApi&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserApiModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.status, status) || other.status == status)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -246,15 +246,15 @@ int get hashCode => Object.hash(runtimeType,id,name,email,status,createdAt,updat
 
 @override
 String toString() {
-  return 'UserApi(id: $id, name: $name, email: $email, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'UserApiModel(id: $id, name: $name, email: $email, status: $status, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$UserApiCopyWith<$Res> implements $UserApiCopyWith<$Res> {
-  factory _$UserApiCopyWith(_UserApi value, $Res Function(_UserApi) _then) = __$UserApiCopyWithImpl;
+abstract mixin class _$UserApiModelCopyWith<$Res> implements $UserApiModelCopyWith<$Res> {
+  factory _$UserApiModelCopyWith(_UserApiModel value, $Res Function(_UserApiModel) _then) = __$UserApiModelCopyWithImpl;
 @override @useResult
 $Res call({
  String id, String name, String email, String status, DateTime createdAt, DateTime updatedAt
@@ -265,17 +265,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$UserApiCopyWithImpl<$Res>
-    implements _$UserApiCopyWith<$Res> {
-  __$UserApiCopyWithImpl(this._self, this._then);
+class __$UserApiModelCopyWithImpl<$Res>
+    implements _$UserApiModelCopyWith<$Res> {
+  __$UserApiModelCopyWithImpl(this._self, this._then);
 
-  final _UserApi _self;
-  final $Res Function(_UserApi) _then;
+  final _UserApiModel _self;
+  final $Res Function(_UserApiModel) _then;
 
-/// Create a copy of UserApi
+/// Create a copy of UserApiModel
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? email = null,Object? status = null,Object? createdAt = null,Object? updatedAt = null,}) {
-  return _then(_UserApi(
+  return _then(_UserApiModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable

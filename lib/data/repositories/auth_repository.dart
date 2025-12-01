@@ -1,7 +1,7 @@
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/api/models/login_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/login_response.dart';
-import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_request/login_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_response/login_response.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request/register_request.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/mappers/user_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/user.dart';

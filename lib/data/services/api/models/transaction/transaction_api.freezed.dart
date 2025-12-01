@@ -13,22 +13,22 @@ part of 'transaction_api.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$TransactionApi {
+mixin _$TransactionApiModel {
 
  String get id; String get userId; double get amount; String get transactionType; String get paymentType; DateTime get transactionDate; DateTime get createdAt; String? get categoryId; String? get description;
-/// Create a copy of TransactionApi
+/// Create a copy of TransactionApiModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$TransactionApiCopyWith<TransactionApi> get copyWith => _$TransactionApiCopyWithImpl<TransactionApi>(this as TransactionApi, _$identity);
+$TransactionApiModelCopyWith<TransactionApiModel> get copyWith => _$TransactionApiModelCopyWithImpl<TransactionApiModel>(this as TransactionApiModel, _$identity);
 
-  /// Serializes this TransactionApi to a JSON map.
+  /// Serializes this TransactionApiModel to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TransactionApiModel&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,15 +37,15 @@ int get hashCode => Object.hash(runtimeType,id,userId,amount,transactionType,pay
 
 @override
 String toString() {
-  return 'TransactionApi(id: $id, userId: $userId, amount: $amount, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt, categoryId: $categoryId, description: $description)';
+  return 'TransactionApiModel(id: $id, userId: $userId, amount: $amount, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt, categoryId: $categoryId, description: $description)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $TransactionApiCopyWith<$Res>  {
-  factory $TransactionApiCopyWith(TransactionApi value, $Res Function(TransactionApi) _then) = _$TransactionApiCopyWithImpl;
+abstract mixin class $TransactionApiModelCopyWith<$Res>  {
+  factory $TransactionApiModelCopyWith(TransactionApiModel value, $Res Function(TransactionApiModel) _then) = _$TransactionApiModelCopyWithImpl;
 @useResult
 $Res call({
  String id, String userId, double amount, String transactionType, String paymentType, DateTime transactionDate, DateTime createdAt, String? categoryId, String? description
@@ -56,14 +56,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$TransactionApiCopyWithImpl<$Res>
-    implements $TransactionApiCopyWith<$Res> {
-  _$TransactionApiCopyWithImpl(this._self, this._then);
+class _$TransactionApiModelCopyWithImpl<$Res>
+    implements $TransactionApiModelCopyWith<$Res> {
+  _$TransactionApiModelCopyWithImpl(this._self, this._then);
 
-  final TransactionApi _self;
-  final $Res Function(TransactionApi) _then;
+  final TransactionApiModel _self;
+  final $Res Function(TransactionApiModel) _then;
 
-/// Create a copy of TransactionApi
+/// Create a copy of TransactionApiModel
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? amount = null,Object? transactionType = null,Object? paymentType = null,Object? transactionDate = null,Object? createdAt = null,Object? categoryId = freezed,Object? description = freezed,}) {
   return _then(_self.copyWith(
@@ -83,8 +83,8 @@ as String?,
 }
 
 
-/// Adds pattern-matching-related methods to [TransactionApi].
-extension TransactionApiPatterns on TransactionApi {
+/// Adds pattern-matching-related methods to [TransactionApiModel].
+extension TransactionApiModelPatterns on TransactionApiModel {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -97,10 +97,10 @@ extension TransactionApiPatterns on TransactionApi {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TransactionApi value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TransactionApiModel value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _TransactionApi() when $default != null:
+case _TransactionApiModel() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -119,10 +119,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TransactionApi value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TransactionApiModel value)  $default,){
 final _that = this;
 switch (_that) {
-case _TransactionApi():
+case _TransactionApiModel():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -140,10 +140,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TransactionApi value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TransactionApiModel value)?  $default,){
 final _that = this;
 switch (_that) {
-case _TransactionApi() when $default != null:
+case _TransactionApiModel() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -163,7 +163,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  double amount,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt,  String? categoryId,  String? description)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _TransactionApi() when $default != null:
+case _TransactionApiModel() when $default != null:
 return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt,_that.categoryId,_that.description);case _:
   return orElse();
 
@@ -184,7 +184,7 @@ return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.p
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  double amount,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt,  String? categoryId,  String? description)  $default,) {final _that = this;
 switch (_that) {
-case _TransactionApi():
+case _TransactionApiModel():
 return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt,_that.categoryId,_that.description);case _:
   throw StateError('Unexpected subclass');
 
@@ -204,7 +204,7 @@ return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.p
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  double amount,  String transactionType,  String paymentType,  DateTime transactionDate,  DateTime createdAt,  String? categoryId,  String? description)?  $default,) {final _that = this;
 switch (_that) {
-case _TransactionApi() when $default != null:
+case _TransactionApiModel() when $default != null:
 return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.paymentType,_that.transactionDate,_that.createdAt,_that.categoryId,_that.description);case _:
   return null;
 
@@ -216,9 +216,9 @@ return $default(_that.id,_that.userId,_that.amount,_that.transactionType,_that.p
 /// @nodoc
 @JsonSerializable()
 
-class _TransactionApi implements TransactionApi {
-  const _TransactionApi({required this.id, required this.userId, required this.amount, required this.transactionType, required this.paymentType, required this.transactionDate, required this.createdAt, this.categoryId, this.description});
-  factory _TransactionApi.fromJson(Map<String, dynamic> json) => _$TransactionApiFromJson(json);
+class _TransactionApiModel implements TransactionApiModel {
+  const _TransactionApiModel({required this.id, required this.userId, required this.amount, required this.transactionType, required this.paymentType, required this.transactionDate, required this.createdAt, this.categoryId, this.description});
+  factory _TransactionApiModel.fromJson(Map<String, dynamic> json) => _$TransactionApiModelFromJson(json);
 
 @override final  String id;
 @override final  String userId;
@@ -230,20 +230,20 @@ class _TransactionApi implements TransactionApi {
 @override final  String? categoryId;
 @override final  String? description;
 
-/// Create a copy of TransactionApi
+/// Create a copy of TransactionApiModel
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$TransactionApiCopyWith<_TransactionApi> get copyWith => __$TransactionApiCopyWithImpl<_TransactionApi>(this, _$identity);
+_$TransactionApiModelCopyWith<_TransactionApiModel> get copyWith => __$TransactionApiModelCopyWithImpl<_TransactionApiModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$TransactionApiToJson(this, );
+  return _$TransactionApiModelToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TransactionApiModel&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transactionType, transactionType) || other.transactionType == transactionType)&&(identical(other.paymentType, paymentType) || other.paymentType == paymentType)&&(identical(other.transactionDate, transactionDate) || other.transactionDate == transactionDate)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.description, description) || other.description == description));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -252,15 +252,15 @@ int get hashCode => Object.hash(runtimeType,id,userId,amount,transactionType,pay
 
 @override
 String toString() {
-  return 'TransactionApi(id: $id, userId: $userId, amount: $amount, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt, categoryId: $categoryId, description: $description)';
+  return 'TransactionApiModel(id: $id, userId: $userId, amount: $amount, transactionType: $transactionType, paymentType: $paymentType, transactionDate: $transactionDate, createdAt: $createdAt, categoryId: $categoryId, description: $description)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$TransactionApiCopyWith<$Res> implements $TransactionApiCopyWith<$Res> {
-  factory _$TransactionApiCopyWith(_TransactionApi value, $Res Function(_TransactionApi) _then) = __$TransactionApiCopyWithImpl;
+abstract mixin class _$TransactionApiModelCopyWith<$Res> implements $TransactionApiModelCopyWith<$Res> {
+  factory _$TransactionApiModelCopyWith(_TransactionApiModel value, $Res Function(_TransactionApiModel) _then) = __$TransactionApiModelCopyWithImpl;
 @override @useResult
 $Res call({
  String id, String userId, double amount, String transactionType, String paymentType, DateTime transactionDate, DateTime createdAt, String? categoryId, String? description
@@ -271,17 +271,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$TransactionApiCopyWithImpl<$Res>
-    implements _$TransactionApiCopyWith<$Res> {
-  __$TransactionApiCopyWithImpl(this._self, this._then);
+class __$TransactionApiModelCopyWithImpl<$Res>
+    implements _$TransactionApiModelCopyWith<$Res> {
+  __$TransactionApiModelCopyWithImpl(this._self, this._then);
 
-  final _TransactionApi _self;
-  final $Res Function(_TransactionApi) _then;
+  final _TransactionApiModel _self;
+  final $Res Function(_TransactionApiModel) _then;
 
-/// Create a copy of TransactionApi
+/// Create a copy of TransactionApiModel
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? amount = null,Object? transactionType = null,Object? paymentType = null,Object? transactionDate = null,Object? createdAt = null,Object? categoryId = freezed,Object? description = freezed,}) {
-  return _then(_TransactionApi(
+  return _then(_TransactionApiModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable

@@ -2,15 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:firebase_ai_testing/data/services/api/models/category_api.dart';
-import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/create_transaction_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/login_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/login_response.dart';
-import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/transaction_api.dart';
-import 'package:firebase_ai_testing/data/services/api/models/transactions_response.dart';
-import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_api_model.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_request/category_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_request/login_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_response/login_response.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_response/transactions_response.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:http/http.dart' as http;
@@ -248,13 +248,13 @@ class ApiService {
 
   /// Register a new user
   /// Returns Result with the created user data as UserApi model
-  Future<Result<UserApi>> registerUser(RegisterRequest request) async {
+  Future<Result<UserApiModel>> registerUser(RegisterRequest request) async {
     try {
       final response = await _post(
         '/api/users/register',
         body: request.toJson(),
       );
-      final userApi = UserApi.fromJson(response as Map<String, dynamic>);
+      final userApi = UserApiModel.fromJson(response as Map<String, dynamic>);
       return Result.ok(userApi);
     } on ApiException catch (e) {
       return Result.error(e);
@@ -282,10 +282,10 @@ class ApiService {
   /// Get authenticated user profile
   /// Requires valid authentication token
   /// Returns Result with UserApi model
-  Future<Result<UserApi>> getUserProfile() async {
+  Future<Result<UserApiModel>> getUserProfile() async {
     try {
       final response = await _get('/api/users/me');
-      final userApi = UserApi.fromJson(response as Map<String, dynamic>);
+      final userApi = UserApiModel.fromJson(response as Map<String, dynamic>);
       return Result.ok(userApi);
     } on ApiException catch (e) {
       return Result.error(e);
@@ -298,12 +298,14 @@ class ApiService {
 
   /// Get all categories for authenticated user
   /// Returns Result with list of CategoryApi models
-  Future<Result<List<CategoryApi>>> getCategories() async {
+  Future<Result<List<CategoryApiModel>>> getCategories() async {
     try {
       final response = await _get('/api/categories');
       final categoriesJson = response as List<dynamic>;
       final categories = categoriesJson
-          .map((json) => CategoryApi.fromJson(json as Map<String, dynamic>))
+          .map(
+            (json) => CategoryApiModel.fromJson(json as Map<String, dynamic>),
+          )
           .toList();
       return Result.ok(categories);
     } on ApiException catch (e) {
@@ -315,13 +317,15 @@ class ApiService {
 
   /// Create a new category
   /// Returns Result with the created CategoryApi model
-  Future<Result<CategoryApi>> createCategory(CategoryRequest request) async {
+  Future<Result<CategoryApiModel>> createCategory(
+    CategoryRequest request,
+  ) async {
     try {
       final response = await _post(
         '/api/categories',
         body: request.toJson(),
       );
-      final categoryApi = CategoryApi.fromJson(
+      final categoryApi = CategoryApiModel.fromJson(
         response as Map<String, dynamic>,
       );
       return Result.ok(categoryApi);
@@ -334,7 +338,7 @@ class ApiService {
 
   /// Update an existing category
   /// Returns Result with the updated CategoryApi model
-  Future<Result<CategoryApi>> updateCategory(
+  Future<Result<CategoryApiModel>> updateCategory(
     String categoryId,
     CategoryRequest request,
   ) async {
@@ -343,7 +347,7 @@ class ApiService {
         '/api/categories/$categoryId',
         body: request.toJson(),
       );
-      final categoryApi = CategoryApi.fromJson(
+      final categoryApi = CategoryApiModel.fromJson(
         response as Map<String, dynamic>,
       );
       return Result.ok(categoryApi);
@@ -371,7 +375,7 @@ class ApiService {
 
   /// Create a new transaction
   /// Returns Result with the created TransactionApi model
-  Future<Result<TransactionApi>> createTransaction(
+  Future<Result<TransactionApiModel>> createTransaction(
     CreateTransactionRequest request,
   ) async {
     try {
@@ -379,7 +383,7 @@ class ApiService {
         '/api/transactions',
         body: request.toJson(),
       );
-      final transactionApi = TransactionApi.fromJson(
+      final transactionApi = TransactionApiModel.fromJson(
         response as Map<String, dynamic>,
       );
       return Result.ok(transactionApi);

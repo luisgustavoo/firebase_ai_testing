@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'category_api.dart';
+part of 'category_api_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -13,22 +13,22 @@ part of 'category_api.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$CategoryApi {
+mixin _$CategoryApiModel {
 
  String get id; String get userId; String get description; bool get isDefault; DateTime get createdAt; DateTime get updatedAt; String? get icon;
-/// Create a copy of CategoryApi
+/// Create a copy of CategoryApiModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$CategoryApiCopyWith<CategoryApi> get copyWith => _$CategoryApiCopyWithImpl<CategoryApi>(this as CategoryApi, _$identity);
+$CategoryApiModelCopyWith<CategoryApiModel> get copyWith => _$CategoryApiModelCopyWithImpl<CategoryApiModel>(this as CategoryApiModel, _$identity);
 
-  /// Serializes this CategoryApi to a JSON map.
+  /// Serializes this CategoryApiModel to a JSON map.
   Map<String, dynamic> toJson();
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.description, description) || other.description == description)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryApiModel&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.description, description) || other.description == description)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -37,15 +37,15 @@ int get hashCode => Object.hash(runtimeType,id,userId,description,isDefault,crea
 
 @override
 String toString() {
-  return 'CategoryApi(id: $id, userId: $userId, description: $description, isDefault: $isDefault, createdAt: $createdAt, updatedAt: $updatedAt, icon: $icon)';
+  return 'CategoryApiModel(id: $id, userId: $userId, description: $description, isDefault: $isDefault, createdAt: $createdAt, updatedAt: $updatedAt, icon: $icon)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $CategoryApiCopyWith<$Res>  {
-  factory $CategoryApiCopyWith(CategoryApi value, $Res Function(CategoryApi) _then) = _$CategoryApiCopyWithImpl;
+abstract mixin class $CategoryApiModelCopyWith<$Res>  {
+  factory $CategoryApiModelCopyWith(CategoryApiModel value, $Res Function(CategoryApiModel) _then) = _$CategoryApiModelCopyWithImpl;
 @useResult
 $Res call({
  String id, String userId, String description, bool isDefault, DateTime createdAt, DateTime updatedAt, String? icon
@@ -56,14 +56,14 @@ $Res call({
 
 }
 /// @nodoc
-class _$CategoryApiCopyWithImpl<$Res>
-    implements $CategoryApiCopyWith<$Res> {
-  _$CategoryApiCopyWithImpl(this._self, this._then);
+class _$CategoryApiModelCopyWithImpl<$Res>
+    implements $CategoryApiModelCopyWith<$Res> {
+  _$CategoryApiModelCopyWithImpl(this._self, this._then);
 
-  final CategoryApi _self;
-  final $Res Function(CategoryApi) _then;
+  final CategoryApiModel _self;
+  final $Res Function(CategoryApiModel) _then;
 
-/// Create a copy of CategoryApi
+/// Create a copy of CategoryApiModel
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? description = null,Object? isDefault = null,Object? createdAt = null,Object? updatedAt = null,Object? icon = freezed,}) {
   return _then(_self.copyWith(
@@ -81,8 +81,8 @@ as String?,
 }
 
 
-/// Adds pattern-matching-related methods to [CategoryApi].
-extension CategoryApiPatterns on CategoryApi {
+/// Adds pattern-matching-related methods to [CategoryApiModel].
+extension CategoryApiModelPatterns on CategoryApiModel {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -95,10 +95,10 @@ extension CategoryApiPatterns on CategoryApi {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CategoryApi value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CategoryApiModel value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _CategoryApi() when $default != null:
+case _CategoryApiModel() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -117,10 +117,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CategoryApi value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CategoryApiModel value)  $default,){
 final _that = this;
 switch (_that) {
-case _CategoryApi():
+case _CategoryApiModel():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -138,10 +138,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CategoryApi value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CategoryApiModel value)?  $default,){
 final _that = this;
 switch (_that) {
-case _CategoryApi() when $default != null:
+case _CategoryApiModel() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -161,7 +161,7 @@ return $default(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String userId,  String description,  bool isDefault,  DateTime createdAt,  DateTime updatedAt,  String? icon)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _CategoryApi() when $default != null:
+case _CategoryApiModel() when $default != null:
 return $default(_that.id,_that.userId,_that.description,_that.isDefault,_that.createdAt,_that.updatedAt,_that.icon);case _:
   return orElse();
 
@@ -182,7 +182,7 @@ return $default(_that.id,_that.userId,_that.description,_that.isDefault,_that.cr
 
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String userId,  String description,  bool isDefault,  DateTime createdAt,  DateTime updatedAt,  String? icon)  $default,) {final _that = this;
 switch (_that) {
-case _CategoryApi():
+case _CategoryApiModel():
 return $default(_that.id,_that.userId,_that.description,_that.isDefault,_that.createdAt,_that.updatedAt,_that.icon);case _:
   throw StateError('Unexpected subclass');
 
@@ -202,7 +202,7 @@ return $default(_that.id,_that.userId,_that.description,_that.isDefault,_that.cr
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String userId,  String description,  bool isDefault,  DateTime createdAt,  DateTime updatedAt,  String? icon)?  $default,) {final _that = this;
 switch (_that) {
-case _CategoryApi() when $default != null:
+case _CategoryApiModel() when $default != null:
 return $default(_that.id,_that.userId,_that.description,_that.isDefault,_that.createdAt,_that.updatedAt,_that.icon);case _:
   return null;
 
@@ -214,9 +214,9 @@ return $default(_that.id,_that.userId,_that.description,_that.isDefault,_that.cr
 /// @nodoc
 @JsonSerializable()
 
-class _CategoryApi implements CategoryApi {
-  const _CategoryApi({required this.id, required this.userId, required this.description, required this.isDefault, required this.createdAt, required this.updatedAt, this.icon});
-  factory _CategoryApi.fromJson(Map<String, dynamic> json) => _$CategoryApiFromJson(json);
+class _CategoryApiModel implements CategoryApiModel {
+  const _CategoryApiModel({required this.id, required this.userId, required this.description, required this.isDefault, required this.createdAt, required this.updatedAt, this.icon});
+  factory _CategoryApiModel.fromJson(Map<String, dynamic> json) => _$CategoryApiModelFromJson(json);
 
 @override final  String id;
 @override final  String userId;
@@ -226,20 +226,20 @@ class _CategoryApi implements CategoryApi {
 @override final  DateTime updatedAt;
 @override final  String? icon;
 
-/// Create a copy of CategoryApi
+/// Create a copy of CategoryApiModel
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$CategoryApiCopyWith<_CategoryApi> get copyWith => __$CategoryApiCopyWithImpl<_CategoryApi>(this, _$identity);
+_$CategoryApiModelCopyWith<_CategoryApiModel> get copyWith => __$CategoryApiModelCopyWithImpl<_CategoryApiModel>(this, _$identity);
 
 @override
 Map<String, dynamic> toJson() {
-  return _$CategoryApiToJson(this, );
+  return _$CategoryApiModelToJson(this, );
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryApi&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.description, description) || other.description == description)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryApiModel&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.description, description) || other.description == description)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.icon, icon) || other.icon == icon));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -248,15 +248,15 @@ int get hashCode => Object.hash(runtimeType,id,userId,description,isDefault,crea
 
 @override
 String toString() {
-  return 'CategoryApi(id: $id, userId: $userId, description: $description, isDefault: $isDefault, createdAt: $createdAt, updatedAt: $updatedAt, icon: $icon)';
+  return 'CategoryApiModel(id: $id, userId: $userId, description: $description, isDefault: $isDefault, createdAt: $createdAt, updatedAt: $updatedAt, icon: $icon)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$CategoryApiCopyWith<$Res> implements $CategoryApiCopyWith<$Res> {
-  factory _$CategoryApiCopyWith(_CategoryApi value, $Res Function(_CategoryApi) _then) = __$CategoryApiCopyWithImpl;
+abstract mixin class _$CategoryApiModelCopyWith<$Res> implements $CategoryApiModelCopyWith<$Res> {
+  factory _$CategoryApiModelCopyWith(_CategoryApiModel value, $Res Function(_CategoryApiModel) _then) = __$CategoryApiModelCopyWithImpl;
 @override @useResult
 $Res call({
  String id, String userId, String description, bool isDefault, DateTime createdAt, DateTime updatedAt, String? icon
@@ -267,17 +267,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$CategoryApiCopyWithImpl<$Res>
-    implements _$CategoryApiCopyWith<$Res> {
-  __$CategoryApiCopyWithImpl(this._self, this._then);
+class __$CategoryApiModelCopyWithImpl<$Res>
+    implements _$CategoryApiModelCopyWith<$Res> {
+  __$CategoryApiModelCopyWithImpl(this._self, this._then);
 
-  final _CategoryApi _self;
-  final $Res Function(_CategoryApi) _then;
+  final _CategoryApiModel _self;
+  final $Res Function(_CategoryApiModel) _then;
 
-/// Create a copy of CategoryApi
+/// Create a copy of CategoryApiModel
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? description = null,Object? isDefault = null,Object? createdAt = null,Object? updatedAt = null,Object? icon = freezed,}) {
-  return _then(_CategoryApi(
+  return _then(_CategoryApiModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable

@@ -6,8 +6,8 @@ part of 'transaction_api.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_TransactionApi _$TransactionApiFromJson(Map<String, dynamic> json) =>
-    _TransactionApi(
+_TransactionApiModel _$TransactionApiModelFromJson(Map<String, dynamic> json) =>
+    _TransactionApiModel(
       id: json['id'] as String,
       userId: json['user_id'] as String,
       amount: (json['amount'] as num).toDouble(),
@@ -19,15 +19,16 @@ _TransactionApi _$TransactionApiFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
     );
 
-Map<String, dynamic> _$TransactionApiToJson(_TransactionApi instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'user_id': instance.userId,
-      'amount': instance.amount,
-      'transaction_type': instance.transactionType,
-      'payment_type': instance.paymentType,
-      'transaction_date': instance.transactionDate.toIso8601String(),
-      'created_at': instance.createdAt.toIso8601String(),
-      'category_id': instance.categoryId,
-      'description': instance.description,
-    };
+Map<String, dynamic> _$TransactionApiModelToJson(
+  _TransactionApiModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'user_id': instance.userId,
+  'amount': instance.amount,
+  'transaction_type': instance.transactionType,
+  'payment_type': instance.paymentType,
+  'transaction_date': instance.transactionDate.toIso8601String(),
+  'created_at': instance.createdAt.toIso8601String(),
+  'category_id': instance.categoryId,
+  'description': instance.description,
+};

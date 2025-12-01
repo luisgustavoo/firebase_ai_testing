@@ -166,7 +166,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Note: Validation tests will be in ViewModel tests
   - _Requirements: 4.1, 5.3, 6.2, 6.3, 7.2_
 
-- [ ] 10. Implement TransactionRepository
+- [x] 10. Implement TransactionRepository
   - Create TransactionRepository with ApiService dependency
   - Implement createTransaction method (call service, transform to domain model, return Result<Transaction>)
   - Implement getTransactions method with pagination (call service, transform to domain models, return Result<TransactionsResponse>)
@@ -174,14 +174,14 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Note: Input validation and date formatting done in ViewModel layer
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 9.1, 9.3_
 
-- [ ] 10.1 Write property test for transaction operations
+- [x] 10.1 Write property test for transaction operations
   - **Property 17: Valid transaction creation succeeds**
   - **Property 23: Pagination loads next page when available**
   - **Property 24: Filters are applied to API requests**
   - **Property 25: No loading when no more pages**
   - **Validates: Requirements 8.1, 9.2, 9.3, 9.4**
 
-- [ ] 10.2 Write unit tests for TransactionRepository
+- [x] 10.2 Write unit tests for TransactionRepository
   - Test createTransaction with valid data
   - Test createTransaction with API error (400)
   - Test createTransaction with null category_id

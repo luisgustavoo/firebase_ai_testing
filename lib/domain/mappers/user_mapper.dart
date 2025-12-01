@@ -1,9 +1,9 @@
-import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
 import 'package:firebase_ai_testing/domain/models/user.dart';
 
 class UserMapper {
   /// Converts UserApi (API model) to User (domain model)
-  static User toDomain(UserApi api) {
+  static User toDomain(UserApiModel api) {
     return User(
       id: api.id,
       name: api.name,
@@ -15,8 +15,8 @@ class UserMapper {
   }
 
   /// Converts User (domain model) to UserApi (API model)
-  static UserApi toApi(User domain) {
-    return UserApi(
+  static UserApiModel toApi(User domain) {
+    return UserApiModel(
       id: domain.id,
       name: domain.name,
       email: domain.email,

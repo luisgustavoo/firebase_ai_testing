@@ -1,4 +1,4 @@
-import 'package:firebase_ai_testing/data/services/api/models/transaction_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_api.dart';
 import 'package:firebase_ai_testing/domain/mappers/transaction_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,7 +10,7 @@ void main() {
 
     group('toDomain', () {
       test('converts TransactionApi to Transaction with all fields', () {
-        final transactionApi = TransactionApi(
+        final transactionApi = TransactionApiModel(
           id: 'txn-123',
           userId: 'user-123',
           amount: 150.50,
@@ -38,7 +38,7 @@ void main() {
       test(
         'converts TransactionApi to Transaction without optional fields',
         () {
-          final transactionApi = TransactionApi(
+          final transactionApi = TransactionApiModel(
             id: 'txn-456',
             userId: 'user-123',
             amount: 50,
@@ -56,7 +56,7 @@ void main() {
       );
 
       test('converts all transaction types correctly', () {
-        final incomeApi = TransactionApi(
+        final incomeApi = TransactionApiModel(
           id: 'txn-1',
           userId: 'user-123',
           amount: 100,
@@ -66,7 +66,7 @@ void main() {
           createdAt: testDate,
         );
 
-        final expenseApi = TransactionApi(
+        final expenseApi = TransactionApiModel(
           id: 'txn-2',
           userId: 'user-123',
           amount: 100,
@@ -95,7 +95,7 @@ void main() {
         };
 
         for (final entry in paymentTypes.entries) {
-          final transactionApi = TransactionApi(
+          final transactionApi = TransactionApiModel(
             id: 'txn-test',
             userId: 'user-123',
             amount: 100,
@@ -111,7 +111,7 @@ void main() {
       });
 
       test('handles case-insensitive transaction type conversion', () {
-        final transactionApi = TransactionApi(
+        final transactionApi = TransactionApiModel(
           id: 'txn-789',
           userId: 'user-123',
           amount: 100,
@@ -126,7 +126,7 @@ void main() {
       });
 
       test('throws ArgumentError for unknown transaction type', () {
-        final transactionApi = TransactionApi(
+        final transactionApi = TransactionApiModel(
           id: 'txn-999',
           userId: 'user-123',
           amount: 100,
@@ -143,7 +143,7 @@ void main() {
       });
 
       test('throws ArgumentError for unknown payment type', () {
-        final transactionApi = TransactionApi(
+        final transactionApi = TransactionApiModel(
           id: 'txn-999',
           userId: 'user-123',
           amount: 100,
@@ -283,7 +283,7 @@ void main() {
 
     group('round-trip conversion', () {
       test('toDomain then toApi preserves data', () {
-        final originalApi = TransactionApi(
+        final originalApi = TransactionApiModel(
           id: 'txn-123',
           userId: 'user-123',
           amount: 150.50,

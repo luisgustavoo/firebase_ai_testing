@@ -1,4 +1,4 @@
-import 'package:firebase_ai_testing/data/services/api/models/category_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_api_model.dart';
 import 'package:firebase_ai_testing/domain/mappers/category_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/category.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,7 +9,7 @@ void main() {
 
     group('toDomain', () {
       test('converts CategoryApi to Category with icon', () {
-        final categoryApi = CategoryApi(
+        final categoryApi = CategoryApiModel(
           id: 'cat-123',
           userId: 'user-123',
           description: 'Food & Dining',
@@ -31,7 +31,7 @@ void main() {
       });
 
       test('converts CategoryApi to Category without icon', () {
-        final categoryApi = CategoryApi(
+        final categoryApi = CategoryApiModel(
           id: 'cat-456',
           userId: 'user-123',
           description: 'Transportation',
@@ -50,7 +50,7 @@ void main() {
       });
 
       test('converts default category correctly', () {
-        final categoryApi = CategoryApi(
+        final categoryApi = CategoryApiModel(
           id: 'cat-default',
           userId: 'system',
           description: 'Default Category',
@@ -106,7 +106,7 @@ void main() {
 
     group('round-trip conversion', () {
       test('toDomain then toApi preserves data with icon', () {
-        final originalApi = CategoryApi(
+        final originalApi = CategoryApiModel(
           id: 'cat-123',
           userId: 'user-123',
           description: 'Food & Dining',
@@ -129,7 +129,7 @@ void main() {
       });
 
       test('toDomain then toApi preserves data without icon', () {
-        final originalApi = CategoryApi(
+        final originalApi = CategoryApiModel(
           id: 'cat-456',
           userId: 'user-123',
           description: 'Transportation',

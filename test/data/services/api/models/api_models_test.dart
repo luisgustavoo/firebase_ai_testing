@@ -1,13 +1,13 @@
-import 'package:firebase_ai_testing/data/services/api/models/category_api.dart';
-import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/create_transaction_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/login_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/login_response.dart';
-import 'package:firebase_ai_testing/data/services/api/models/pagination_metadata.dart';
-import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/transaction_api.dart';
-import 'package:firebase_ai_testing/data/services/api/models/transactions_response.dart';
-import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_api_model.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_request/category_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_request/login_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_response/login_response.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/trasnaction_pagination_metadata/pagination_metadata.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_response/transactions_response.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -22,7 +22,7 @@ void main() {
         'updated_at': '2024-01-02T00:00:00.000Z',
       };
 
-      final user = UserApi.fromJson(json);
+      final user = UserApiModel.fromJson(json);
 
       expect(user.id, '123');
       expect(user.name, 'John Doe');
@@ -33,7 +33,7 @@ void main() {
     });
 
     test('toJson converts UserApi to JSON', () {
-      final user = UserApi(
+      final user = UserApiModel(
         id: '123',
         name: 'John Doe',
         email: 'john@example.com',
@@ -133,7 +133,7 @@ void main() {
     test('toJson converts LoginResponse to JSON', () {
       final response = LoginResponse(
         token: 'jwt-token-123',
-        user: UserApi(
+        user: UserApiModel(
           id: '123',
           name: 'John Doe',
           email: 'john@example.com',
@@ -163,7 +163,7 @@ void main() {
         'updated_at': '2024-01-02T00:00:00.000Z',
       };
 
-      final category = CategoryApi.fromJson(json);
+      final category = CategoryApiModel.fromJson(json);
 
       expect(category.id, 'cat-123');
       expect(category.userId, 'user-456');
@@ -185,14 +185,14 @@ void main() {
         'updated_at': '2024-01-02T00:00:00.000Z',
       };
 
-      final category = CategoryApi.fromJson(json);
+      final category = CategoryApiModel.fromJson(json);
 
       expect(category.icon, null);
       expect(category.isDefault, true);
     });
 
     test('toJson converts CategoryApi to JSON', () {
-      final category = CategoryApi(
+      final category = CategoryApiModel(
         id: 'cat-123',
         userId: 'user-456',
         description: 'Food',
@@ -263,7 +263,7 @@ void main() {
         'created_at': '2024-01-15T12:35:00.000Z',
       };
 
-      final transaction = TransactionApi.fromJson(json);
+      final transaction = TransactionApiModel.fromJson(json);
 
       expect(transaction.id, 'txn-123');
       expect(transaction.userId, 'user-456');
@@ -292,7 +292,7 @@ void main() {
         'created_at': '2024-01-15T12:35:00.000Z',
       };
 
-      final transaction = TransactionApi.fromJson(json);
+      final transaction = TransactionApiModel.fromJson(json);
 
       expect(transaction.categoryId, null);
       expect(transaction.description, null);
@@ -300,7 +300,7 @@ void main() {
     });
 
     test('toJson converts TransactionApi to JSON with ISO 8601 dates', () {
-      final transaction = TransactionApi(
+      final transaction = TransactionApiModel(
         id: 'txn-123',
         userId: 'user-456',
         categoryId: 'cat-789',
@@ -447,7 +447,7 @@ void main() {
     test('toJson converts TransactionsResponse to JSON', () {
       final response = TransactionsResponse(
         transactions: [
-          TransactionApi(
+          TransactionApiModel(
             id: 'txn-1',
             userId: 'user-1',
             categoryId: 'cat-1',
@@ -500,7 +500,7 @@ void main() {
 
     test('transaction date round-trip maintains ISO 8601 format', () {
       const originalDate = '2024-01-15T12:30:00.000Z';
-      final transaction = TransactionApi(
+      final transaction = TransactionApiModel(
         id: 'txn-1',
         userId: 'user-1',
         amount: 100,
@@ -511,7 +511,7 @@ void main() {
       );
 
       final json = transaction.toJson();
-      final roundTrip = TransactionApi.fromJson(json);
+      final roundTrip = TransactionApiModel.fromJson(json);
 
       expect(json['transaction_date'], originalDate);
       expect(roundTrip.transactionDate.toIso8601String(), originalDate);

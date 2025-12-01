@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LoginResponse {
 
- String get token; UserApi get user;
+ String get token; UserApiModel get user;
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $LoginResponseCopyWith<$Res>  {
   factory $LoginResponseCopyWith(LoginResponse value, $Res Function(LoginResponse) _then) = _$LoginResponseCopyWithImpl;
 @useResult
 $Res call({
- String token, UserApi user
+ String token, UserApiModel user
 });
 
 
-$UserApiCopyWith<$Res> get user;
+$UserApiModelCopyWith<$Res> get user;
 
 }
 /// @nodoc
@@ -69,16 +69,16 @@ class _$LoginResponseCopyWithImpl<$Res>
   return _then(_self.copyWith(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserApi,
+as UserApiModel,
   ));
 }
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$UserApiCopyWith<$Res> get user {
+$UserApiModelCopyWith<$Res> get user {
   
-  return $UserApiCopyWith<$Res>(_self.user, (value) {
+  return $UserApiModelCopyWith<$Res>(_self.user, (value) {
     return _then(_self.copyWith(user: value));
   });
 }
@@ -163,7 +163,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String token,  UserApi user)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String token,  UserApiModel user)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LoginResponse() when $default != null:
 return $default(_that.token,_that.user);case _:
@@ -184,7 +184,7 @@ return $default(_that.token,_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String token,  UserApi user)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String token,  UserApiModel user)  $default,) {final _that = this;
 switch (_that) {
 case _LoginResponse():
 return $default(_that.token,_that.user);case _:
@@ -204,7 +204,7 @@ return $default(_that.token,_that.user);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String token,  UserApi user)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String token,  UserApiModel user)?  $default,) {final _that = this;
 switch (_that) {
 case _LoginResponse() when $default != null:
 return $default(_that.token,_that.user);case _:
@@ -223,7 +223,7 @@ class _LoginResponse implements LoginResponse {
   factory _LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
 
 @override final  String token;
-@override final  UserApi user;
+@override final  UserApiModel user;
 
 /// Create a copy of LoginResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -258,11 +258,11 @@ abstract mixin class _$LoginResponseCopyWith<$Res> implements $LoginResponseCopy
   factory _$LoginResponseCopyWith(_LoginResponse value, $Res Function(_LoginResponse) _then) = __$LoginResponseCopyWithImpl;
 @override @useResult
 $Res call({
- String token, UserApi user
+ String token, UserApiModel user
 });
 
 
-@override $UserApiCopyWith<$Res> get user;
+@override $UserApiModelCopyWith<$Res> get user;
 
 }
 /// @nodoc
@@ -279,7 +279,7 @@ class __$LoginResponseCopyWithImpl<$Res>
   return _then(_LoginResponse(
 token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
 as String,user: null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserApi,
+as UserApiModel,
   ));
 }
 
@@ -287,9 +287,9 @@ as UserApi,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$UserApiCopyWith<$Res> get user {
+$UserApiModelCopyWith<$Res> get user {
   
-  return $UserApiCopyWith<$Res>(_self.user, (value) {
+  return $UserApiModelCopyWith<$Res>(_self.user, (value) {
     return _then(_self.copyWith(user: value));
   });
 }

@@ -1,10 +1,10 @@
-import 'package:firebase_ai_testing/data/services/api/models/create_transaction_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/transaction_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_api.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
 
 class TransactionMapper {
   /// Converts TransactionApi (API model) to Transaction (domain model)
-  static Transaction toDomain(TransactionApi api) {
+  static Transaction toDomain(TransactionApiModel api) {
     return Transaction(
       id: api.id,
       userId: api.userId,
@@ -19,8 +19,8 @@ class TransactionMapper {
   }
 
   /// Converts Transaction (domain model) to TransactionApi (API model)
-  static TransactionApi toApi(Transaction domain) {
-    return TransactionApi(
+  static TransactionApiModel toApi(Transaction domain) {
+    return TransactionApiModel(
       id: domain.id,
       userId: domain.userId,
       amount: domain.amount,

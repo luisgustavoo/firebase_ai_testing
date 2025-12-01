@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/api/models/category_api.dart';
-import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_api_model.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_request/category_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -39,8 +39,8 @@ void main() {
         await apiService.init();
 
         final result = await apiService.getUserProfile();
-        expect(result, isA<Ok<UserApi>>());
-        final userApi = (result as Ok<UserApi>).value;
+        expect(result, isA<Ok<UserApiModel>>());
+        final userApi = (result as Ok<UserApiModel>).value;
         expect(userApi.id, equals('123'));
         expect(userApi.name, equals('Test'));
         expect(userApi.email, equals('test@example.com'));
@@ -92,8 +92,8 @@ void main() {
           password: 'password123',
         );
         final result = await apiService.registerUser(request);
-        expect(result, isA<Ok<UserApi>>());
-        final userApi = (result as Ok<UserApi>).value;
+        expect(result, isA<Ok<UserApiModel>>());
+        final userApi = (result as Ok<UserApiModel>).value;
         expect(userApi.id, equals('123'));
         expect(userApi.name, equals('Test'));
         expect(userApi.email, equals('test@example.com'));
@@ -116,8 +116,8 @@ void main() {
 
         final request = CategoryRequest(description: 'Updated', icon: null);
         final result = await apiService.updateCategory('cat-123', request);
-        expect(result, isA<Ok<CategoryApi>>());
-        final categoryApi = (result as Ok<CategoryApi>).value;
+        expect(result, isA<Ok<CategoryApiModel>>());
+        final categoryApi = (result as Ok<CategoryApiModel>).value;
         expect(categoryApi.description, equals('Updated'));
       });
 
@@ -146,8 +146,8 @@ void main() {
         await apiService.init();
 
         final result = await apiService.getUserProfile();
-        expect(result, isA<Error<UserApi>>());
-        final error = (result as Error<UserApi>).error;
+        expect(result, isA<Error<UserApiModel>>());
+        final error = (result as Error<UserApiModel>).error;
         expect(error, isA<ApiException>());
         expect((error as ApiException).statusCode, equals(400));
         expect(error.message, contains('Invalid data'));
@@ -164,8 +164,8 @@ void main() {
           await apiService.init();
 
           final result = await apiService.getUserProfile();
-          expect(result, isA<Error<UserApi>>());
-          final error = (result as Error<UserApi>).error;
+          expect(result, isA<Error<UserApiModel>>());
+          final error = (result as Error<UserApiModel>).error;
           expect(error, isA<ApiException>());
           expect((error as ApiException).statusCode, equals(401));
           expect(
@@ -186,8 +186,8 @@ void main() {
           await apiService.init();
 
           final result = await apiService.getUserProfile();
-          expect(result, isA<Error<UserApi>>());
-          final error = (result as Error<UserApi>).error;
+          expect(result, isA<Error<UserApiModel>>());
+          final error = (result as Error<UserApiModel>).error;
           expect(error, isA<ApiException>());
           expect((error as ApiException).statusCode, equals(403));
           expect(
@@ -206,8 +206,8 @@ void main() {
         await apiService.init();
 
         final result = await apiService.getUserProfile();
-        expect(result, isA<Error<UserApi>>());
-        final error = (result as Error<UserApi>).error;
+        expect(result, isA<Error<UserApiModel>>());
+        final error = (result as Error<UserApiModel>).error;
         expect(error, isA<ApiException>());
         expect((error as ApiException).statusCode, equals(404));
         expect(error.message, equals('Recurso não encontrado'));
@@ -222,8 +222,8 @@ void main() {
         await apiService.init();
 
         final result = await apiService.getUserProfile();
-        expect(result, isA<Error<UserApi>>());
-        final error = (result as Error<UserApi>).error;
+        expect(result, isA<Error<UserApiModel>>());
+        final error = (result as Error<UserApiModel>).error;
         expect(error, isA<ApiException>());
         expect((error as ApiException).statusCode, equals(500));
         expect(
@@ -241,8 +241,8 @@ void main() {
         await apiService.init();
 
         final result = await apiService.getUserProfile();
-        expect(result, isA<Error<UserApi>>());
-        final error = (result as Error<UserApi>).error;
+        expect(result, isA<Error<UserApiModel>>());
+        final error = (result as Error<UserApiModel>).error;
         expect(error, isA<ApiException>());
         expect((error as ApiException).message, contains('Failed to parse'));
       });
@@ -259,8 +259,8 @@ void main() {
         await apiService.init();
 
         final result = await apiService.getUserProfile();
-        expect(result, isA<Error<UserApi>>());
-        final error = (result as Error<UserApi>).error;
+        expect(result, isA<Error<UserApiModel>>());
+        final error = (result as Error<UserApiModel>).error;
         expect(error, isA<ApiException>());
         expect(
           (error as ApiException).message,
@@ -279,8 +279,8 @@ void main() {
           await apiService.init();
 
           final result = await apiService.getUserProfile();
-          expect(result, isA<Error<UserApi>>());
-          final error = (result as Error<UserApi>).error;
+          expect(result, isA<Error<UserApiModel>>());
+          final error = (result as Error<UserApiModel>).error;
           expect(error, isA<ApiException>());
           expect(
             (error as ApiException).message,
@@ -300,8 +300,8 @@ void main() {
           await apiService.init();
 
           final result = await apiService.getUserProfile();
-          expect(result, isA<Error<UserApi>>());
-          final error = (result as Error<UserApi>).error;
+          expect(result, isA<Error<UserApiModel>>());
+          final error = (result as Error<UserApiModel>).error;
           expect(error, isA<ApiException>());
           expect((error as ApiException).message, contains('Erro de rede'));
         },

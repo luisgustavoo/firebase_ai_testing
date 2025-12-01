@@ -4,8 +4,8 @@ part 'transaction_api.freezed.dart';
 part 'transaction_api.g.dart';
 
 @freezed
-abstract class TransactionApi with _$TransactionApi {
-  const factory TransactionApi({
+abstract class TransactionApiModel with _$TransactionApiModel {
+  const factory TransactionApiModel({
     required String id,
     required String userId,
     required double amount,
@@ -15,8 +15,8 @@ abstract class TransactionApi with _$TransactionApi {
     required DateTime createdAt,
     String? categoryId,
     String? description,
-  }) = _TransactionApi;
+  }) = _TransactionApiModel;
 
-  factory TransactionApi.fromJson(Map<String, dynamic> json) =>
-      _$TransactionApiFromJson(json);
+  factory TransactionApiModel.fromJson(Map<String, dynamic> json) =>
+      _$TransactionApiModelFromJson(json);
 }

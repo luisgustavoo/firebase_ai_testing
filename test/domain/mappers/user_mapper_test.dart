@@ -1,4 +1,4 @@
-import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
 import 'package:firebase_ai_testing/domain/mappers/user_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,7 +9,7 @@ void main() {
 
     group('toDomain', () {
       test('converts UserApi to User with active status', () {
-        final userApi = UserApi(
+        final userApi = UserApiModel(
           id: 'user-123',
           name: 'John Doe',
           email: 'john@example.com',
@@ -29,7 +29,7 @@ void main() {
       });
 
       test('converts UserApi to User with inactive status', () {
-        final userApi = UserApi(
+        final userApi = UserApiModel(
           id: 'user-456',
           name: 'Jane Smith',
           email: 'jane@example.com',
@@ -44,7 +44,7 @@ void main() {
       });
 
       test('handles case-insensitive status conversion', () {
-        final userApi = UserApi(
+        final userApi = UserApiModel(
           id: 'user-789',
           name: 'Test User',
           email: 'test@example.com',
@@ -59,7 +59,7 @@ void main() {
       });
 
       test('throws ArgumentError for unknown status', () {
-        final userApi = UserApi(
+        final userApi = UserApiModel(
           id: 'user-999',
           name: 'Test User',
           email: 'test@example.com',
@@ -114,7 +114,7 @@ void main() {
 
     group('round-trip conversion', () {
       test('toDomain then toApi preserves data', () {
-        final originalApi = UserApi(
+        final originalApi = UserApiModel(
           id: 'user-123',
           name: 'John Doe',
           email: 'john@example.com',

@@ -10,7 +10,7 @@ _TransactionsResponse _$TransactionsResponseFromJson(
   Map<String, dynamic> json,
 ) => _TransactionsResponse(
   transactions: (json['transactions'] as List<dynamic>)
-      .map((e) => TransactionApi.fromJson(e as Map<String, dynamic>))
+      .map((e) => TransactionApiModel.fromJson(e as Map<String, dynamic>))
       .toList(),
   pagination: PaginationMetadata.fromJson(
     json['pagination'] as Map<String, dynamic>,
