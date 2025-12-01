@@ -1,7 +1,9 @@
+import 'package:firebase_ai_testing/routing/routes.dart';
 import 'package:firebase_ai_testing/ui/auth/view_models/auth_view_model.dart';
 import 'package:firebase_ai_testing/ui/core/widgets/widgets.dart';
 import 'package:firebase_ai_testing/utils/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Login screen widget
 ///
@@ -56,22 +58,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // Navigate to home on success
     if (widget.viewModel.loginCommand.completed && mounted) {
-      // TODO(routing): Navigate to home screen when routing is implemented
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Login realizado com sucesso!'),
-        ),
-      );
+      context.go(Routes.home);
     }
   }
 
   void _navigateToRegister() {
-    // TODO(routing): Navigate to register screen when routing is implemented
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Navegação para registro será implementada'),
-      ),
-    );
+    context.push(Routes.register);
   }
 
   @override

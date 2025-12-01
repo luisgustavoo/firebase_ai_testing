@@ -1,6 +1,8 @@
+import 'package:firebase_ai_testing/routing/routes.dart';
 import 'package:firebase_ai_testing/ui/core/widgets/widgets.dart';
 import 'package:firebase_ai_testing/ui/splash/view_models/splash_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Splash screen widget
 ///
@@ -42,21 +44,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToHome() {
-    // TODO(routing): Navigate to home screen when routing is implemented
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Token válido! Navegando para home...'),
-      ),
-    );
+    context.go(Routes.home);
   }
 
   void _navigateToLogin() {
-    // TODO(routing): Navigate to login screen when routing is implemented
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Sem token ou token inválido. Navegando para login...'),
-      ),
-    );
+    context.go(Routes.login);
   }
 
   @override

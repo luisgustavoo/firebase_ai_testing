@@ -9,8 +9,11 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return Center(
+      child: Semantics(
+        label: 'Carregando',
+        child: const CircularProgressIndicator(),
+      ),
     );
   }
 }

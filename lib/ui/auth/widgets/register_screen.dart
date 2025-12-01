@@ -2,6 +2,7 @@ import 'package:firebase_ai_testing/ui/auth/view_models/auth_view_model.dart';
 import 'package:firebase_ai_testing/ui/core/widgets/widgets.dart';
 import 'package:firebase_ai_testing/utils/validators.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Registration screen widget
 ///
@@ -64,13 +65,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           content: Text('Cadastro realizado com sucesso! Faça login.'),
         ),
       );
-      // TODO(routing): Navigate to login screen when routing is implemented
-      Navigator.of(context).pop();
+      context.pop();
     }
   }
 
   void _navigateToLogin() {
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   @override
