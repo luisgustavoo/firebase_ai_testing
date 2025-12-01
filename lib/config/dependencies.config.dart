@@ -24,11 +24,11 @@ import '../data/services/firebase_ai_service.dart' as _i39;
 import '../data/services/token_storage_service.dart' as _i1020;
 import '../ui/auth/logout/view_models/logout_viewmodel.dart' as _i337;
 import '../ui/auth/view_models/auth_view_model.dart' as _i934;
-import '../ui/camera_preview/view_models/camera_preview_view_model.dart'
-    as _i897;
 import '../ui/category/view_models/category_view_model.dart' as _i277;
 import '../ui/core/themes/theme_provider.dart' as _i899;
 import '../ui/home/view_models/home_viewmodel.dart' as _i152;
+import '../ui/receipt_scanner/view_models/receipt_scanner_view_model.dart'
+    as _i39;
 import '../ui/splash/view_models/splash_view_model.dart' as _i37;
 import '../ui/transaction/view_models/add_transaction_view_model.dart' as _i180;
 import '../ui/transaction/view_models/transaction_view_model.dart' as _i712;
@@ -54,10 +54,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i1020.TokenStorageService(gh<_i558.FlutterSecureStorage>()),
     );
     gh.lazySingletonAsync<_i552.ApiService>(() {
-      final i = _i552.ApiService(
-        gh<_i1020.TokenStorageService>(),
-        gh<_i519.Client>(),
-      );
+      final i = _i552.ApiService(gh<_i519.Client>());
       return i.init().then((_) => i);
     });
     gh.lazySingletonAsync<_i136.CategoryRepository>(
@@ -70,8 +67,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingletonAsync<_i977.UserRepository>(
       () async => _i977.UserRepository(await getAsync<_i552.ApiService>()),
     );
-    gh.factory<_i507.FirebaseAiRepository>(
-      () => _i507.FirebaseAiRepository(aiService: gh<_i39.FirebaseAiService>()),
+    gh.lazySingletonAsync<_i507.FirebaseAiRepository>(
+      () async => _i507.FirebaseAiRepository(
+        gh<_i39.FirebaseAiService>(),
+        await getAsync<_i552.ApiService>(),
+      )..init(),
     );
     gh.factoryAsync<_i152.HomeViewModel>(
       () async => _i152.HomeViewModel(
@@ -102,15 +102,15 @@ extension GetItInjectableX on _i174.GetIt {
       () async =>
           _i277.CategoryViewModel(await getAsync<_i136.CategoryRepository>()),
     );
-    gh.lazySingleton<_i897.CameraPreviewViewModel>(
-      () => _i897.CameraPreviewViewModel(
-        firebaseAiRepository: gh<_i507.FirebaseAiRepository>(),
-      )..init(),
-    );
     gh.factoryAsync<_i180.AddTransactionViewModel>(
       () async => _i180.AddTransactionViewModel(
         await getAsync<_i717.TransactionRepository>(),
         await getAsync<_i136.CategoryRepository>(),
+      ),
+    );
+    gh.factoryAsync<_i39.ReceiptScannerViewModel>(
+      () async => _i39.ReceiptScannerViewModel(
+        await getAsync<_i507.FirebaseAiRepository>(),
       ),
     );
     gh.factoryAsync<_i37.SplashViewModel>(

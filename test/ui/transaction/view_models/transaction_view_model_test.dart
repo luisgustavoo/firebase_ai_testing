@@ -45,8 +45,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -118,8 +119,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -200,8 +202,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -262,8 +265,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -303,8 +307,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -342,8 +347,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -390,8 +396,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -426,8 +433,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -463,8 +471,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
@@ -486,8 +495,9 @@ void main() {
         });
 
         await tokenStorage.saveToken('test_token');
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 

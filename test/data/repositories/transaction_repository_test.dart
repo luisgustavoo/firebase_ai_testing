@@ -4,7 +4,6 @@ import 'package:firebase_ai_testing/data/repositories/transaction_repository.dar
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_response/transactions_response.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -16,12 +15,9 @@ void main() {
   group('TransactionRepository Unit Tests', () {
     late TransactionRepository transactionRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     group('createTransaction', () {
@@ -60,9 +56,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final request = CreateTransactionRequest(
@@ -94,9 +90,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final request = CreateTransactionRequest(
@@ -140,9 +136,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final request = CreateTransactionRequest(
@@ -217,9 +213,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final result = await transactionRepository.getTransactions();
@@ -272,9 +268,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final result = await transactionRepository.getTransactions(
@@ -340,9 +336,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final result = await transactionRepository.getTransactions(
@@ -364,9 +360,9 @@ void main() {
           throw Exception('Network error');
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         transactionRepository = TransactionRepository(apiService);
 
         final result = await transactionRepository.getTransactions();

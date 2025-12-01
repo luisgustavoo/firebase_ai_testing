@@ -6,7 +6,6 @@ import 'package:firebase_ai_testing/data/services/api/models/category/category_a
 import 'package:firebase_ai_testing/data/services/api/models/category/category_request/category_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/register_request/register_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,12 +15,9 @@ import 'package:http/testing.dart';
 void main() {
   group('ApiService Unit Tests', () {
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     group('Endpoint Methods', () {
@@ -35,7 +31,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.getUserProfile();
@@ -57,7 +53,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         await apiService.getTransactions(
@@ -83,7 +79,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         const request = RegisterRequest(
@@ -111,7 +107,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         const request = CategoryRequest(description: 'Updated');
@@ -128,7 +124,7 @@ void main() {
           return http.Response('', 204);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.deleteCategory('cat-123');
@@ -142,7 +138,7 @@ void main() {
           return http.Response('{"message": "Invalid data"}', 400);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.getUserProfile();
@@ -160,7 +156,7 @@ void main() {
             return http.Response('{"error": "Unauthorized"}', 401);
           });
 
-          apiService = ApiService(tokenStorage, mockClient);
+          apiService = ApiService(mockClient);
           await apiService.init();
 
           final result = await apiService.getUserProfile();
@@ -182,7 +178,7 @@ void main() {
             return http.Response('{"error": "Forbidden"}', 403);
           });
 
-          apiService = ApiService(tokenStorage, mockClient);
+          apiService = ApiService(mockClient);
           await apiService.init();
 
           final result = await apiService.getUserProfile();
@@ -202,7 +198,7 @@ void main() {
           return http.Response('{"error": "Not found"}', 404);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.getUserProfile();
@@ -218,7 +214,7 @@ void main() {
           return http.Response('{"error": "Server error"}', 500);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.getUserProfile();
@@ -237,7 +233,7 @@ void main() {
           return http.Response('invalid json', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.getUserProfile();
@@ -255,7 +251,7 @@ void main() {
           throw TimeoutException('Connection timeout');
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         final result = await apiService.getUserProfile();
@@ -275,7 +271,7 @@ void main() {
             throw const SocketException('No internet');
           });
 
-          apiService = ApiService(tokenStorage, mockClient);
+          apiService = ApiService(mockClient);
           await apiService.init();
 
           final result = await apiService.getUserProfile();
@@ -296,7 +292,7 @@ void main() {
             throw Exception('Unknown error');
           });
 
-          apiService = ApiService(tokenStorage, mockClient);
+          apiService = ApiService(mockClient);
           await apiService.init();
 
           final result = await apiService.getUserProfile();
@@ -319,7 +315,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         await apiService.getTransactions();
@@ -339,7 +335,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         await apiService.getUserProfile();

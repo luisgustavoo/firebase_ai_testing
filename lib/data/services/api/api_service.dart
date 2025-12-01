@@ -11,7 +11,6 @@ import 'package:firebase_ai_testing/data/services/api/models/transaction/transac
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_response/transactions_response.dart';
 import 'package:firebase_ai_testing/data/services/api/models/user/user_api.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
@@ -27,27 +26,35 @@ class ApiException implements Exception {
   String toString() => 'ApiException: $message (status: $statusCode)';
 }
 
+/// Callback type that provides the authentication header value
+typedef AuthHeaderProvider = String? Function();
+
 /// Service that wraps REST API endpoints and exposes asynchronous response objects.
 /// This is a stateless service that only handles HTTP communication.
 /// According to Flutter architecture guidelines, services wrap external APIs
 /// and expose Future/Stream objects.
 @lazySingleton
 class ApiService {
-  ApiService(this._tokenStorage, this._httpClient);
+  ApiService(this._httpClient);
 
   static const String _baseUrl = 'http://localhost:8080';
   static const Duration _timeout = Duration(seconds: 30);
 
-  final TokenStorageService _tokenStorage;
   final http.Client _httpClient;
 
-  /// Current authentication token for requests
-  String? authToken;
+  /// Provider function that returns the current auth token
+  /// Set this to provide authentication headers for requests
+  AuthHeaderProvider? authHeaderProvider;
 
-  /// Initialize the service by loading the stored token
+  /// Initialize the service by setting up the auth header provider
   @postConstruct
   Future<void> init() async {
-    authToken = await _tokenStorage.getToken();
+    // Set up auth header provider to get token from storage
+    authHeaderProvider = () {
+      // This will be called synchronously, so we need the token to be available
+      // The repository will be responsible for keeping the token in sync
+      return null; // Will be set by repository
+    };
   }
 
   /// Build headers for requests
@@ -57,9 +64,10 @@ class ApiService {
       'Accept': 'application/json',
     };
 
-    // Add Bearer token if available
-    if (authToken != null && authToken!.isNotEmpty) {
-      headers['Authorization'] = 'Bearer $authToken';
+    // Add Bearer token if available via provider
+    final authHeader = authHeaderProvider?.call();
+    if (authHeader != null && authHeader.isNotEmpty) {
+      headers['Authorization'] = authHeader;
     }
 
     // Add any additional headers
@@ -118,13 +126,11 @@ class ApiService {
   }
 
   /// Handle 401 Unauthorized errors globally
-  /// Clears authentication token and state
+  /// Note: Token clearing should be handled by the repository layer
   Future<void> _handle401Error() async {
-    // Clear token from storage
-    await _tokenStorage.deleteToken();
-
-    // Clear token from service
-    authToken = null;
+    // 401 errors are handled by throwing an exception
+    // The repository layer is responsible for clearing tokens
+    // This keeps the service layer stateless
   }
 
   /// Map HTTP status codes to user-friendly error messages

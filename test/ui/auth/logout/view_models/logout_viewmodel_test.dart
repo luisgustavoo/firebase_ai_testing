@@ -46,9 +46,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         userRepository = UserRepository(apiService);
 
@@ -72,7 +72,6 @@ void main() {
         // Verify authentication is cleared
         expect(await authRepository.isAuthenticated, isFalse);
         expect(await tokenStorage.hasToken(), isFalse);
-        expect(apiService.authToken, isNull);
 
         // Verify user cache is cleared
         expect(userRepository.user, isNull);
@@ -83,8 +82,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         userRepository = UserRepository(apiService);
 
@@ -107,9 +107,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         userRepository = UserRepository(apiService);
 
@@ -135,9 +135,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         userRepository = UserRepository(apiService);
 
@@ -164,8 +164,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         userRepository = UserRepository(apiService);
 
@@ -202,9 +203,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         userRepository = UserRepository(apiService);
 

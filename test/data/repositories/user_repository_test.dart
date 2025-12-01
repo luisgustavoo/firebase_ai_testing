@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_ai_testing/data/repositories/user_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/user.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,12 +13,9 @@ void main() {
   group('UserRepository Unit Tests', () {
     late UserRepository userRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     group('getUser', () {
@@ -45,9 +41,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         final result = await userRepository.getUser();
@@ -60,7 +56,6 @@ void main() {
       });
 
       test('should return cached user without API call', () async {
-        const token = 'valid_token';
         var apiCallCount = 0;
 
         final mockClient = MockClient((request) async {
@@ -77,9 +72,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // First call - should fetch from API
@@ -96,8 +91,6 @@ void main() {
       });
 
       test('should handle API errors', () async {
-        const token = 'valid_token';
-
         final mockClient = MockClient((request) async {
           return http.Response(
             json.encode({'error': 'Server error'}),
@@ -105,9 +98,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         final result = await userRepository.getUser();
@@ -121,7 +114,6 @@ void main() {
 
     group('refreshUser', () {
       test('should fetch fresh data from API bypassing cache', () async {
-        const token = 'valid_token';
         var apiCallCount = 0;
 
         final mockClient = MockClient((request) async {
@@ -138,9 +130,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // First call - populate cache
@@ -159,8 +151,6 @@ void main() {
 
     group('clearUser', () {
       test('should clear cached user data', () async {
-        const token = 'valid_token';
-
         final mockClient = MockClient((request) async {
           final response = {
             'id': 'user-123',
@@ -174,9 +164,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // Populate cache
@@ -191,7 +181,6 @@ void main() {
 
     group('notifyListeners', () {
       test('should notify listeners when user data is fetched', () async {
-        const token = 'valid_token';
         var notificationCount = 0;
 
         final mockClient = MockClient((request) async {
@@ -207,9 +196,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService)
           ..addListener(() {
             notificationCount++;
@@ -220,7 +209,6 @@ void main() {
       });
 
       test('should notify listeners when cache is cleared', () async {
-        const token = 'valid_token';
         var notificationCount = 0;
 
         final mockClient = MockClient((request) async {
@@ -236,9 +224,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // Populate cache

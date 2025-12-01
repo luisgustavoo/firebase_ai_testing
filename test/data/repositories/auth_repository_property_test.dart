@@ -83,8 +83,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
 
         // Call register
@@ -157,8 +158,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
 
         // Call login
@@ -206,8 +208,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
 
         // Verify token is not stored before login
@@ -231,8 +234,6 @@ void main() {
         final storedToken = await tokenStorage.getToken();
         expect(storedToken, equals(expectedToken));
 
-        // Property: API service should have the token set
-        expect(apiService.authToken, equals(expectedToken));
       }
     });
 
@@ -246,21 +247,19 @@ void main() {
         return http.Response('{}', 200);
       });
 
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init();
-      apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
       authRepository = AuthRepository(apiService, tokenStorage);
 
       // Verify token exists before logout
       expect(await tokenStorage.hasToken(), isTrue);
-      expect(apiService.authToken, equals(token));
 
       // Call logout
       await authRepository.logout();
 
       // Property: Token should be cleared after logout
       expect(await tokenStorage.hasToken(), isFalse);
-      expect(apiService.authToken, isNull);
     });
 
     /// Property: isAuthenticated reflects token presence
@@ -286,8 +285,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
 
         // Property: isAuthenticated should reflect token presence

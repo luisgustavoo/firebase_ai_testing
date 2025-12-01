@@ -19,12 +19,25 @@ import 'package:injectable/injectable.dart';
 /// Note: User data management is handled by UserRepository.
 @lazySingleton
 class AuthRepository extends ChangeNotifier {
-  AuthRepository(this._apiService, this._tokenStorage);
+  AuthRepository(this._apiService, this._tokenStorage) {
+    _setupAuthHeaderProvider();
+  }
 
   final ApiService _apiService;
   final TokenStorageService _tokenStorage;
 
   bool? _isAuthenticated;
+  String? _currentToken;
+
+  /// Setup the auth header provider for ApiService
+  void _setupAuthHeaderProvider() {
+    _apiService.authHeaderProvider = () {
+      if (_currentToken != null && _currentToken!.isNotEmpty) {
+        return 'Bearer $_currentToken';
+      }
+      return null;
+    };
+  }
 
   /// Check if user is authenticated
   ///
@@ -91,11 +104,11 @@ class AuthRepository extends ChangeNotifier {
   Future<Result<LoginResponse>> _handleSuccessfulLogin(
     LoginResponse loginResponse,
   ) async {
-    // Store token
+    // Store token in secure storage
     await _tokenStorage.saveToken(loginResponse.token);
 
-    // Update API service token
-    _apiService.authToken = loginResponse.token;
+    // Update current token (used by authHeaderProvider)
+    _currentToken = loginResponse.token;
 
     // Set auth status
     _isAuthenticated = true;
@@ -122,15 +135,31 @@ class AuthRepository extends ChangeNotifier {
     await _clearToken();
   }
 
-  /// Clear token from storage and API service
+  /// Clear token from storage and memory
   Future<void> _clearToken() async {
     await _tokenStorage.deleteToken();
-    _apiService.authToken = null;
+
+    // Clear current token (authHeaderProvider will return null)
+    _currentToken = null;
 
     // Clear authenticated status
     _isAuthenticated = false;
 
     // Notify listeners of state change
     notifyListeners();
+  }
+
+  /// Load token from storage on app startup
+  ///
+  /// Should be called when the app starts to restore authentication state.
+  /// Returns the stored token if available.
+  Future<String?> loadStoredToken() async {
+    final token = await _tokenStorage.getToken();
+    if (token != null) {
+      _currentToken = token;
+      _isAuthenticated = true;
+      notifyListeners();
+    }
+    return token;
   }
 }

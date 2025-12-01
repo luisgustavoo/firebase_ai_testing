@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_ai_testing/data/repositories/transaction_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
 import 'package:firebase_ai_testing/ui/transaction/view_models/transaction_view_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -16,12 +15,9 @@ void main() {
     late TransactionViewModel transactionViewModel;
     late TransactionRepository transactionRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     /// **Feature: api-integration, Property 8: Loading state is shown during async operations**
@@ -76,7 +72,7 @@ void main() {
             return http.Response(json.encode(response), 200);
           });
 
-          apiService = ApiService(tokenStorage, mockClient);
+          apiService = ApiService(mockClient);
           await apiService.init();
           transactionRepository = TransactionRepository(apiService);
           transactionViewModel = TransactionViewModel(transactionRepository);
@@ -170,7 +166,7 @@ void main() {
           }
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);

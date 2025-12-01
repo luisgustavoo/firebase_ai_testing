@@ -3,18 +3,36 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_ai/firebase_ai.dart';
-import 'package:firebase_ai_testing/data/services/model/expense_model.dart';
+import 'package:firebase_ai_testing/data/services/firebase_ai_service/models/ai_extracted_expense.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 
+/// Callback type for providing categories to the AI
+/// This allows the repository layer to inject category data
+typedef CategoryProvider = Future<List<String>> Function();
+
+/// Callback type for providing recent transactions to the AI
+/// This allows the repository layer to inject transaction data for financial insights
+typedef TransactionProvider = Future<List<Map<String, dynamic>>> Function();
+
+/// Service that wraps Firebase Gemini AI API for financial assistance.
+/// This is a stateless service that only handles AI communication.
+/// According to Flutter architecture guidelines, services wrap external APIs
+/// and expose Future/Stream objects. They should not call repositories.
 @lazySingleton
 class FirebaseAiService {
-  static const String _mcpBaseUrl = 'http://192.168.0.159:8080';
-  static const String _userId = '7fb3a4cb-3b1e-4b8d-a3dd-f41741c23a05';
-  static const String _bearerToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YWZmY2FiNS0wODA2LTQxMDUtYTllOS01OWUwZTQyMTc2NDYiLCJlbWFpbCI6InRlc3RlQGV4YW1wbGUuY29tIiwiaWF0IjoxNzY0MjEwNzE4LCJleHAiOjE3NjQyOTcxMTh9.LlgfUqttybM6ZvXWIQM1oCrkUu8haP3T9jMJMaG6m1A';
+  FirebaseAiService();
+
+  late final GenerativeModel _model;
+
+  /// Provider function that returns available categories
+  /// Set by repository layer to provide category data to AI
+  CategoryProvider? categoryProvider;
+
+  /// Provider function that returns recent transactions
+  /// Set by repository layer to provide transaction history to AI
+  TransactionProvider? transactionProvider;
 
   @PostConstruct()
   void init() {
@@ -23,132 +41,189 @@ class FirebaseAiService {
           appCheck: FirebaseAppCheck.instance,
           useLimitedUseAppCheckTokens: true,
         ).generativeModel(
-          model: 'gemini-2.5-flash',
+          model: 'gemini-2.0-flash-exp',
           tools: [
             Tool.functionDeclarations([
               FunctionDeclaration(
                 'get_user_categories',
-                'Obtém as categorias de despesas cadastradas pelo usuário. Use esta função quando precisar saber quais categorias estão disponíveis para classificar uma despesa.',
+                'Obtém as categorias de despesas personalizadas do usuário. Use esta função para conhecer as categorias disponíveis e escolher a mais apropriada ao classificar uma transação.',
+                parameters: {},
+              ),
+              FunctionDeclaration(
+                'get_recent_transactions',
+                'Obtém o histórico recente de transações do usuário. Use esta função para analisar padrões de gastos, identificar oportunidades de economia, ou fornecer insights financeiros personalizados.',
                 parameters: {},
               ),
             ]),
           ],
           systemInstruction: Content.text(
             '''
-            Você é um assistente de despesas pessoais. 
-            Você recebera fotos de recibos e extratos bancários e devera extrair as seguintes informações:
-            - Nome do Estabelecimento
-            - Data da Compra (Ex: "2005-11-23")
-            - Valor da Compra (Ex: 100.5)
-            - Categoria da Despesa - Use a função get_user_categories para obter as categorias disponíveis do usuário e escolha a mais apropriada
-            - Método de Pagamento (Ex: Cartão de Crédito, Cartão de Débito, Dinheiro, Pix, Outros)
-            Forneça as informações no seguinte formato:
-            {
-              "estabelecimento": "Nome do Estabelecimento",
-              "data": "YYYY-MM-dd",
-              "valor": "Valor da Compra",
-              "categoria": "Categoria da Despesa",
-              "metodoPagamento": "Método de Pagamento"
-            }
-            OBS: Não precisa adicionar a formatação ```json 
-        ''',
+Você é um assistente financeiro pessoal inteligente especializado em gestão de despesas.
+
+## Suas Capacidades:
+
+### 1. Extração de Dados de Recibos
+Quando receber uma imagem de recibo ou nota fiscal, extraia os seguintes dados:
+
+- **amount**: Valor total da transação (número decimal, ex: 150.50)
+- **transactionType**: Tipo da transação - SEMPRE "expense" para recibos
+- **paymentType**: Método de pagamento usado:
+  - "credit_card" para Cartão de Crédito
+  - "debit_card" para Cartão de Débito  
+  - "pix" para Pix
+  - "money" para Dinheiro
+- **transactionDate**: Data da transação no formato ISO (YYYY-MM-DD)
+- **categoryId**: ID da categoria (use get_user_categories para ver as opções no formato "id:descrição" e extraia apenas o ID)
+- **description**: Descrição da transação (nome do estabelecimento/loja)
+
+### 2. Análise Financeira e Insights
+Quando solicitado, você pode:
+- Analisar padrões de gastos usando get_recent_transactions
+- Identificar categorias com maior gasto
+- Sugerir oportunidades de economia
+- Alertar sobre gastos incomuns ou excessivos
+- Fornecer resumos financeiros personalizados
+
+## Formato de Resposta para Extração:
+
+Sempre retorne os dados extraídos no seguinte formato JSON (sem marcadores de código):
+
+{
+  "amount": 150.50,
+  "transactionType": "expense",
+  "paymentType": "credit_card",
+  "transactionDate": "2024-01-15",
+  "categoryId": "id-da-categoria",
+  "description": "Nome do Estabelecimento"
+}
+
+## Diretrizes Importantes:
+- Seja preciso na extração de valores e datas
+- transactionType SEMPRE deve ser "expense" para recibos
+- paymentType deve ser exatamente: "credit_card", "debit_card", "pix", ou "money"
+- transactionDate deve estar no formato ISO (YYYY-MM-DD)
+- Use get_user_categories para obter as categorias (formato "id:descrição")
+- categoryId deve ser apenas o ID (parte antes dos ":"), não a descrição
+- Se não conseguir identificar algum campo, use null
+- Para análises financeiras, seja claro, objetivo e útil
+    ''',
           ),
         );
   }
 
-  late final GenerativeModel _model;
-
-  Future<Result<ExpenseModel>> sendImageToAi(String file) async {
+  /// Analyze receipt image and extract expense data using AI
+  /// Returns Result with AiExtractedExpense containing extracted data
+  ///
+  /// The AI may call get_user_categories during analysis.
+  /// Categories are provided via the categoryProvider callback set by repository.
+  Future<Result<AiExtractedExpense>> analyzeReceiptImage(
+    String imagePath,
+  ) async {
     try {
       const prompt = TextPart(
         'Colete os dados da despesa conforme orientação dada previamente. Busque as categorias do usuário.',
       );
 
-      final image = await File(file).readAsBytes();
+      final image = await File(imagePath).readAsBytes();
       final imagePart = InlineDataPart('image/jpeg', image);
 
       var response = await _model.generateContent([
         Content.multi([prompt, imagePart]),
       ]);
 
-      // Se a IA decidiu chamar uma função
+      // Handle AI function calls
       if (response.functionCalls.isNotEmpty) {
         final functionCall = response.functionCalls.first;
-        log('IA chamou função: ${functionCall.name}');
+        log('AI requested function: ${functionCall.name}');
 
-        // Executa a função solicitada
-        if (functionCall.name == 'get_user_categories') {
-          final categoriesResult = await getUserCategories();
+        Map<String, Object?> functionResponse;
 
-          Map<String, Object?> functionResponse;
-          switch (categoriesResult) {
-            case Ok():
-              functionResponse = {'categories': categoriesResult.value};
-            case Error():
-              functionResponse = {'error': categoriesResult.error.toString()};
-          }
-
-          // Envia o resultado da função de volta para a IA
-          response = await _model.generateContent([
-            Content.multi([prompt, imagePart]),
-            response.candidates.first.content,
-            Content.functionResponse(functionCall.name, functionResponse),
-          ]);
+        // Execute requested function
+        switch (functionCall.name) {
+          case 'get_user_categories':
+            final categories = await _getCategoriesForAi();
+            functionResponse = {'categories': categories};
+          case 'get_recent_transactions':
+            final transactions = await _getTransactionsForAi();
+            functionResponse = {'transactions': transactions};
+          default:
+            log('Unknown function call: ${functionCall.name}');
+            functionResponse = {'error': 'Unknown function'};
         }
+
+        // Send function result back to AI
+        response = await _model.generateContent([
+          Content.multi([prompt, imagePart]),
+          response.candidates.first.content,
+          Content.functionResponse(functionCall.name, functionResponse),
+        ]);
       }
 
-      if (response.text?.isEmpty ?? false) {
+      // Parse AI response
+      if (response.text?.isEmpty ?? true) {
         return Result.error(
-          Exception('Erro ao analisar imagem'),
+          Exception('Erro ao analisar imagem: resposta vazia da IA'),
         );
       }
 
-      log(response.text!);
-      final expenseModel = ExpenseModel.fromJson(
-        jsonDecode(
-              response.text!.replaceAll('```json', '').replaceAll('```', ''),
-            )
-            as Map<String, dynamic>,
+      log('AI response: ${response.text}');
+
+      // Clean and parse JSON response
+      final cleanedJson = response.text!
+          .replaceAll('```json', '')
+          .replaceAll('```', '')
+          .trim();
+
+      final extractedExpense = AiExtractedExpense.fromJson(
+        jsonDecode(cleanedJson) as Map<String, dynamic>,
       );
-      return Result.ok(expenseModel);
+
+      return Result.ok(extractedExpense);
+    } on FormatException catch (e) {
+      log('JSON parse error: $e');
+      return Result.error(
+        Exception('Erro ao processar resposta da IA: formato inválido'),
+      );
+    } on FileSystemException catch (e) {
+      log('File error: $e');
+      return Result.error(
+        Exception('Erro ao ler arquivo de imagem: ${e.message}'),
+      );
     } on Exception catch (e) {
-      return Result.error(e);
+      log('AI service error: $e');
+      return Result.error(Exception('Erro ao analisar imagem: $e'));
     }
   }
 
-  Future<Result<List<String>>> getUserCategories() async {
-    try {
-      final uri = Uri.parse('$_mcpBaseUrl/api/users/categories').replace(
-        queryParameters: {
-          'userId': _userId,
-        },
-      );
-      final response = await http.get(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $_bearerToken',
-        },
-      );
+  /// Get categories from provider for AI function calling
+  /// Returns empty list if provider is not set
+  Future<List<String>> _getCategoriesForAi() async {
+    if (categoryProvider == null) {
+      log('Warning: categoryProvider not set, returning empty list');
+      return [];
+    }
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final categories = (data['categories'] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
-        log('Categorias do usuário: $categories');
-        return Result.ok(categories);
-      } else {
-        log(
-          'Erro ao buscar categorias: ${response.statusCode} - ${response.body}',
-        );
-        return Result.error(
-          Exception('Erro ao buscar categorias: ${response.statusCode}'),
-        );
-      }
+    try {
+      return await categoryProvider!();
     } on Exception catch (e) {
-      log('Exceção ao buscar categorias: $e');
-      return Result.error(e);
+      log('Error getting categories from provider: $e');
+      return [];
+    }
+  }
+
+  /// Get transactions from provider for AI function calling
+  /// Returns empty list if provider is not set
+  Future<List<Map<String, dynamic>>> _getTransactionsForAi() async {
+    if (transactionProvider == null) {
+      log('Warning: transactionProvider not set, returning empty list');
+      return [];
+    }
+
+    try {
+      return await transactionProvider!();
+    } on Exception catch (e) {
+      log('Error getting transactions from provider: $e');
+      return [];
     }
   }
 }

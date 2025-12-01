@@ -37,7 +37,7 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
@@ -75,7 +75,7 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
@@ -116,7 +116,7 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
@@ -156,7 +156,7 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
@@ -195,7 +195,7 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
@@ -229,7 +229,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
@@ -256,7 +256,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);

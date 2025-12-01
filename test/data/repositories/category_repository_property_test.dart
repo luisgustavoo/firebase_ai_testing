@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_ai_testing/data/repositories/category_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/category.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,12 +13,9 @@ void main() {
   group('CategoryRepository Property Tests', () {
     late CategoryRepository categoryRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     /// **Feature: api-integration, Property 9: Category fetch returns all categories**
@@ -108,7 +104,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         categoryRepository = CategoryRepository(apiService);
 
@@ -197,7 +193,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         categoryRepository = CategoryRepository(apiService);
 
@@ -254,7 +250,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         categoryRepository = CategoryRepository(apiService);
 
@@ -339,7 +335,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         categoryRepository = CategoryRepository(apiService);
 
@@ -380,7 +376,7 @@ void main() {
           return http.Response('', 204);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         categoryRepository = CategoryRepository(apiService);
 
@@ -427,7 +423,7 @@ void main() {
         );
       });
 
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init();
       categoryRepository = CategoryRepository(apiService);
 
@@ -454,7 +450,7 @@ void main() {
         );
       });
 
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init();
       categoryRepository = CategoryRepository(apiService);
 
@@ -484,7 +480,7 @@ void main() {
         );
       });
 
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init();
       categoryRepository = CategoryRepository(apiService);
 
@@ -514,7 +510,7 @@ void main() {
         );
       });
 
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init();
       categoryRepository = CategoryRepository(apiService);
 
@@ -540,7 +536,7 @@ void main() {
         );
       });
 
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init();
       categoryRepository = CategoryRepository(apiService);
 

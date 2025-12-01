@@ -72,11 +72,10 @@ void main() {
         });
 
         // Create API service with the mock
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         // Set the authentication token
-        apiService.authToken = token;
 
         // Test all endpoint methods to ensure they all include the token
         await apiService.getUserProfile();
@@ -142,7 +141,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         // Don't set any token
@@ -174,11 +173,10 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         // Set empty token
-        apiService.authToken = '';
 
         await apiService.getUserProfile();
         expect(headerChecked, isTrue);
@@ -210,12 +208,12 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
 
         // Make requests with different tokens
         for (final token in tokens) {
-          apiService.authToken = token;
+          apiService.authHeaderProvider = () => 'Bearer $token';
           await apiService.getUserProfile();
         }
 
@@ -250,7 +248,7 @@ void main() {
       });
 
       // Create new API service (simulating app restart)
-      apiService = ApiService(tokenStorage, mockClient);
+      apiService = ApiService(mockClient);
       await apiService.init(); // This should load the token
 
       // Make request without explicitly setting token

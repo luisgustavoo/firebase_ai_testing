@@ -66,8 +66,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
 
@@ -116,8 +117,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
 
         // Property: Repository should recognize authentication with stored token
@@ -181,8 +183,9 @@ void main() {
           return http.Response('{}', 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         authRepository = AuthRepository(apiService, tokenStorage);
         authViewModel = AuthViewModel(authRepository);
 

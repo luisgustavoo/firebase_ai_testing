@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: () {
-              context.pushNamed(Routes.cameraPreview);
+              context.pushNamed(Routes.scanReceipt);
             },
             icon: const Icon(Icons.camera_alt),
             label: const Text('Escanear Recibo'),

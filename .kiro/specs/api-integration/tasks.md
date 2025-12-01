@@ -338,6 +338,8 @@ This implementation follows Flutter's official architecture guidelines (https://
   - _Requirements: 2.1, 2.2, 2.4, 11.4, 11.5_
 
 - [x] 20. Implement Registration screen
+
+…k jg
   - Create RegisterScreen widget
   - Add name, email, and password TextFields with validation
   - Add register FilledButton
@@ -436,9 +438,16 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Show "Session expired" message
   - _Requirements: 3.2, 12.3_
 
-- [ ] 30. Integrate with existing Firebase AI service
+- [x] 30. Integrate with existing Firebase AI service
   - Update FirebaseAIService to fetch categories from CategoryRepository
   - Update FirebaseAIService to create transactions via TransactionRepository
+  - Ensure AI-extracted data is validated before API calls
+  - _Requirements: Migration Strategy_
+
+- [x] 30.1 Integrate with existing Firebase AI service
+  - Update FirebaseAIService to fetch categories categoryProvider(return CategoryApiModel)
+  - Update FirebaseAIService to create transactions transactionProvider(return TransactionApiModel)
+  - Rewrite the FirebaseAiRepository class, adding a dependency on api_service to make calls to the getCategories(categoryProvider) and getTransactions(transactionProvider) methods.
   - Ensure AI-extracted data is validated before API calls
   - _Requirements: Migration Strategy_
 

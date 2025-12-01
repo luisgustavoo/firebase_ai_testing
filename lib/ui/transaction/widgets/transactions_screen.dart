@@ -80,9 +80,23 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddTransaction,
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            heroTag: 'scan_receipt',
+            onPressed: _navigateToScanReceipt,
+            tooltip: 'Escanear Recibo',
+            child: const Icon(Icons.camera_alt),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'add_manual',
+            onPressed: _navigateToAddTransaction,
+            tooltip: 'Adicionar Manualmente',
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
@@ -267,5 +281,9 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
 
   void _navigateToAddTransaction() {
     context.pushNamed(Routes.addTransaction);
+  }
+
+  void _navigateToScanReceipt() {
+    context.pushNamed(Routes.scanReceipt);
   }
 }

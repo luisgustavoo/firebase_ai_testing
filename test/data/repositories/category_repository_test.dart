@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_ai_testing/data/repositories/category_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/category.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,12 +13,9 @@ void main() {
   group('CategoryRepository Unit Tests', () {
     late CategoryRepository categoryRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     group('getCategories', () {
@@ -59,9 +55,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.getCategories();
@@ -107,9 +103,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.createCategory(
@@ -132,9 +128,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.createCategory(
@@ -179,9 +175,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.updateCategory(
@@ -205,9 +201,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.updateCategory(
@@ -239,9 +235,9 @@ void main() {
           return http.Response('', 204);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.deleteCategory('cat-123');
@@ -257,9 +253,9 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'test_token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         categoryRepository = CategoryRepository(apiService);
 
         final result = await categoryRepository.deleteCategory(

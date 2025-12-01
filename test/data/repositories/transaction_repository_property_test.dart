@@ -4,7 +4,6 @@ import 'package:firebase_ai_testing/data/repositories/transaction_repository.dar
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_response/transactions_response.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -16,12 +15,9 @@ void main() {
   group('TransactionRepository Property Tests', () {
     late TransactionRepository transactionRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     /// **Feature: api-integration, Property 17: Valid transaction creation succeeds**
@@ -105,7 +101,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         transactionRepository = TransactionRepository(apiService);
 
@@ -211,7 +207,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         transactionRepository = TransactionRepository(apiService);
 
@@ -305,7 +301,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         transactionRepository = TransactionRepository(apiService);
 
@@ -397,7 +393,7 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
         transactionRepository = TransactionRepository(apiService);
 

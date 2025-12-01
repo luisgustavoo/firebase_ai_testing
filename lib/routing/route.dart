@@ -1,13 +1,11 @@
 import 'package:firebase_ai_testing/config/dependencies.dart';
 import 'package:firebase_ai_testing/data/repositories/auth_repository.dart';
-import 'package:firebase_ai_testing/data/services/model/expense_model.dart';
 import 'package:firebase_ai_testing/routing/routes.dart';
 import 'package:firebase_ai_testing/ui/auth/widgets/login_screen.dart';
 import 'package:firebase_ai_testing/ui/auth/widgets/register_screen.dart';
-import 'package:firebase_ai_testing/ui/camera_preview/widget/camera_preview_screen.dart';
 import 'package:firebase_ai_testing/ui/category/category.dart';
-import 'package:firebase_ai_testing/ui/expense/widget/expense_screen.dart';
 import 'package:firebase_ai_testing/ui/home/home.dart';
+import 'package:firebase_ai_testing/ui/receipt_scanner/widgets/receipt_scanner_screen.dart';
 import 'package:firebase_ai_testing/ui/transaction/transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -47,27 +45,6 @@ class Router {
         ),
       ),
       GoRoute(
-        name: Routes.cameraPreview,
-        path: Routes.cameraPreview,
-        pageBuilder: (context, state) => _buildPageWithTransition(
-          context,
-          state,
-          CameraPreviewScreen(viewModel: getIt()),
-        ),
-      ),
-      GoRoute(
-        name: Routes.expense,
-        path: Routes.expense,
-        pageBuilder: (context, state) {
-          final expenseModel = state.extra! as ExpenseModel;
-          return _buildPageWithTransition(
-            context,
-            state,
-            ExpenseScreen(expenseModel: expenseModel),
-          );
-        },
-      ),
-      GoRoute(
         name: Routes.categories,
         path: Routes.categories,
         pageBuilder: (context, state) => _buildPageWithTransition(
@@ -92,6 +69,15 @@ class Router {
           context,
           state,
           AddTransactionScreen(viewModel: getIt()),
+        ),
+      ),
+      GoRoute(
+        name: Routes.scanReceipt,
+        path: Routes.scanReceipt,
+        pageBuilder: (context, state) => _buildPageWithTransition(
+          context,
+          state,
+          ReceiptScannerScreen(viewModel: getIt()),
         ),
       ),
     ],

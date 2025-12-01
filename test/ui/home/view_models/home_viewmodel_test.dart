@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_ai_testing/data/repositories/user_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/ui/home/view_models/home_viewmodel.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,12 +13,9 @@ void main() {
     late HomeViewModel homeViewModel;
     late UserRepository userRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     group('initialization', () {
@@ -37,9 +33,8 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);
@@ -60,9 +55,8 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);
@@ -91,9 +85,8 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);
@@ -112,9 +105,8 @@ void main() {
           );
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);
@@ -144,9 +136,8 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);
@@ -178,9 +169,8 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);
@@ -214,9 +204,8 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'valid_token';
         userRepository = UserRepository(apiService);
 
         homeViewModel = HomeViewModel(userRepository: userRepository);

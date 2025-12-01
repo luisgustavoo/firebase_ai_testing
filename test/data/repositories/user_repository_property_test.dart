@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_ai_testing/data/repositories/user_repository.dart';
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/models/user.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,12 +13,9 @@ void main() {
   group('UserRepository Property Tests', () {
     late UserRepository userRepository;
     late ApiService apiService;
-    late TokenStorageService tokenStorage;
 
     setUp(() {
       FlutterSecureStorage.setMockInitialValues({});
-      const secureStorage = FlutterSecureStorage();
-      tokenStorage = TokenStorageService(secureStorage);
     });
 
     /// **Feature: api-integration, Property 7: Authenticated requests fetch profile data**
@@ -76,9 +72,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // Call getUser
@@ -129,9 +125,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // First call
@@ -157,9 +153,8 @@ void main() {
     /// Property: Refresh bypasses cache
     /// For any cached user data, refresh should always fetch fresh data from API
     test('Property: Refresh always fetches from API', () async {
-      final testTokens = ['token1', 'token2', 'token3'];
-
-      for (final token in testTokens) {
+      // Test multiple times to ensure consistency
+      for (var i = 0; i < 3; i++) {
         var apiCallCount = 0;
 
         final mockClient = MockClient((request) async {
@@ -176,9 +171,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = token;
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // Initial fetch
@@ -222,9 +217,9 @@ void main() {
           return http.Response(json.encode(response), 200);
         });
 
-        apiService = ApiService(tokenStorage, mockClient);
+        apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authToken = 'token';
+        apiService.authHeaderProvider = () => 'Bearer test_token';
         userRepository = UserRepository(apiService);
 
         // Fetch and cache
