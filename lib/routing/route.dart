@@ -4,6 +4,7 @@ import 'package:firebase_ai_testing/routing/routes.dart';
 import 'package:firebase_ai_testing/ui/auth/widgets/login_screen.dart';
 import 'package:firebase_ai_testing/ui/auth/widgets/register_screen.dart';
 import 'package:firebase_ai_testing/ui/camera_preview/widget/camera_preview_screen.dart';
+import 'package:firebase_ai_testing/ui/category/category.dart';
 import 'package:firebase_ai_testing/ui/expense/widget/expense_screen.dart';
 import 'package:firebase_ai_testing/ui/home/home.dart';
 import 'package:go_router/go_router.dart';
@@ -48,6 +49,13 @@ class Router {
         builder: (context, state) {
           final expenseModel = state.extra! as ExpenseModel;
           return ExpenseScreen(expenseModel: expenseModel);
+        },
+      ),
+      GoRoute(
+        name: Routes.categories,
+        path: Routes.categories,
+        builder: (context, state) {
+          return CategoriesScreen(viewModel: getIt());
         },
       ),
     ],

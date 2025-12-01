@@ -225,12 +225,12 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 100));
 
         var notificationCount = 0;
-        homeViewModel.addListener(() {
-          notificationCount++;
-        });
-
-        // Dispose should remove listener
-        homeViewModel.dispose();
+        homeViewModel
+          ..addListener(() {
+            notificationCount++;
+          })
+          // Dispose should remove listener
+          ..dispose();
 
         // Trigger repository change
         await userRepository.refreshUser();

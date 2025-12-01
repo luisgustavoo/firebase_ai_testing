@@ -272,8 +272,8 @@ void main() {
       ];
 
       for (final scenario in scenarios) {
-        final hasToken = scenario['hasToken'] as bool;
-        final expected = scenario['expected'] as bool;
+        final hasToken = scenario['hasToken']!;
+        final expected = scenario['expected']!;
 
         // Setup fresh instances for each scenario
         if (hasToken) {

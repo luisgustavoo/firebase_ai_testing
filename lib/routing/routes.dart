@@ -4,4 +4,5 @@ abstract class Routes {
   static const register = '/register';
   static const cameraPreview = '/camera-preview';
   static const expense = '/expense';
+  static const categories = '/categories';
 }

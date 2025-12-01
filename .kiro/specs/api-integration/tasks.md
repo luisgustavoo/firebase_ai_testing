@@ -366,7 +366,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Use ListenableBuilder to observe AuthViewModel
   - _Requirements: 11.1, 11.3_
 
-- [ ] 23. Implement Categories screen
+- [x] 23. Implement Categories screen
   - Create CategoriesScreen widget
   - Add AppBar with "Categories" title
   - Use ListenableBuilder to observe CategoryViewModel
@@ -378,7 +378,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Show ErrorView with retry on error
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 11.4, 11.5, 11.6_
 
-- [ ] 24. Implement Add/Edit Category dialog
+- [x] 24. Implement Add/Edit Category dialog
   - Create CategoryDialog widget
   - Add description TextField with validation
   - Add icon TextField (emoji input)

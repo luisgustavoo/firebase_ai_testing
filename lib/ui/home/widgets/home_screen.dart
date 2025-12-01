@@ -36,6 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+
+    // Navigate based on selected tab
+    switch (index) {
+      case 0:
+        // Already on home
+        break;
+      case 1:
+        // Navigate to categories
+        context.pushNamed(Routes.categories);
+        break;
+      case 2:
+        // Navigate to transactions (TODO)
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Transações - Em breve')),
+        );
+        break;
+    }
   }
 
   @override
@@ -200,12 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: () {
-                  // TODO(feature): Navigate to categories screen
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Gerenciar Categorias - Em breve'),
-                    ),
-                  );
+                  context.pushNamed(Routes.categories);
                 },
                 icon: const Icon(Icons.category),
                 label: const Text('Categorias'),

@@ -210,11 +210,10 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
         apiService.authToken = token;
-        userRepository = UserRepository(apiService);
-
-        userRepository.addListener(() {
-          notificationCount++;
-        });
+        userRepository = UserRepository(apiService)
+          ..addListener(() {
+            notificationCount++;
+          });
 
         await userRepository.getUser();
         expect(notificationCount, greaterThan(0));
@@ -246,12 +245,12 @@ void main() {
         await userRepository.getUser();
 
         // Add listener after cache is populated
-        userRepository.addListener(() {
-          notificationCount++;
-        });
-
-        // Clear cache
-        userRepository.clearUser();
+        userRepository
+          ..addListener(() {
+            notificationCount++;
+          })
+          // Clear cache
+          ..clearUser();
         expect(notificationCount, equals(1));
       });
     });
