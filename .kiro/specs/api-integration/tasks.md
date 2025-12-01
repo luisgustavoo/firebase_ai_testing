@@ -348,7 +348,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Navigate to login on success
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 11.4, 11.5, 11.7_
 
-- [ ] 21. Implement auto-login on app launch
+- [x] 21. Implement auto-login on app launch
   - Update main.dart to check for stored token on launch
   - If token exists, call AuthRepository.getProfile()
   - If valid, navigate to home screen

@@ -26,6 +26,7 @@ import '../ui/camera_preview/view_models/camera_preview_view_model.dart'
     as _i897;
 import '../ui/category/view_models/category_view_model.dart' as _i277;
 import '../ui/core/themes/theme_provider.dart' as _i899;
+import '../ui/splash/view_models/splash_view_model.dart' as _i37;
 import '../ui/transaction/view_models/transaction_view_model.dart' as _i712;
 import 'dependencies.dart' as _i372;
 
@@ -78,6 +79,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factoryAsync<_i934.AuthViewModel>(
       () async => _i934.AuthViewModel(await getAsync<_i578.AuthRepository>()),
+    );
+    gh.factoryAsync<_i37.SplashViewModel>(
+      () async => _i37.SplashViewModel(await getAsync<_i578.AuthRepository>()),
     );
     gh.factoryAsync<_i277.CategoryViewModel>(
       () async =>
