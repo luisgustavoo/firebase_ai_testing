@@ -25,6 +25,7 @@ import '../ui/auth/view_models/auth_view_model.dart' as _i934;
 import '../ui/camera_preview/view_models/camera_preview_view_model.dart'
     as _i897;
 import '../ui/category/view_models/category_view_model.dart' as _i277;
+import '../ui/core/themes/theme_provider.dart' as _i899;
 import '../ui/transaction/view_models/transaction_view_model.dart' as _i712;
 import 'dependencies.dart' as _i372;
 
@@ -43,6 +44,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i39.FirebaseAiService>(
       () => _i39.FirebaseAiService()..init(),
     );
+    gh.lazySingleton<_i899.ThemeProvider>(() => _i899.ThemeProvider());
     gh.lazySingleton<_i1020.TokenStorageService>(
       () => _i1020.TokenStorageService(gh<_i558.FlutterSecureStorage>()),
     );

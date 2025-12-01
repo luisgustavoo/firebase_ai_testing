@@ -301,7 +301,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Run build_runner to generate injectable code
   - _Requirements: 10.1_
 
-- [ ] 17. Implement Material 3 theme configuration
+- [x] 17. Implement Material 3 theme configuration
   - Create ThemeProvider extending ChangeNotifier
   - Define light theme using ColorScheme.fromSeed
   - Define dark theme using ColorScheme.fromSeed
@@ -309,7 +309,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Add theme toggle functionality
   - _Requirements: 11.1, 11.2_
 
-- [ ] 17.1 Write property test for theme switching
+- [x] 17.1 Write property test for theme switching
   - **Property 27: Theme changes are reflected in UI**
   - **Validates: Requirements 11.2**
 
