@@ -1,5 +1,5 @@
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_request/category_request.dart';
 import 'package:firebase_ai_testing/domain/mappers/category_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/category.dart';
 import 'package:firebase_ai_testing/utils/result.dart';

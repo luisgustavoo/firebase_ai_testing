@@ -1,6 +1,6 @@
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
-import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
-import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category/category_request/category_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request/register_request.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
