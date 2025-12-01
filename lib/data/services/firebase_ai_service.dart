@@ -121,7 +121,9 @@ Sempre retorne os dados extraídos no seguinte formato JSON (sem marcadores de c
   ) async {
     try {
       const prompt = TextPart(
-        'Colete os dados da despesa conforme orientação dada previamente. Busque as categorias do usuário.',
+        'Analise esta imagem de recibo e extraia os dados da despesa no formato JSON especificado. '
+        'Primeiro, busque as categorias disponíveis do usuário usando get_user_categories para classificar corretamente a transação. '
+        'Identifique: valor total, data, estabelecimento, forma de pagamento e categoria mais apropriada.',
       );
 
       final image = await File(imagePath).readAsBytes();
