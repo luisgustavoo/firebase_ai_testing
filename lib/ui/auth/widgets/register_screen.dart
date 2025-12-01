@@ -3,75 +3,74 @@ import 'package:firebase_ai_testing/ui/core/widgets/widgets.dart';
 import 'package:firebase_ai_testing/utils/validators.dart';
 import 'package:flutter/material.dart';
 
-/// Login screen widget
+/// Registration screen widget
 ///
-/// Provides email and password fields with validation.
-/// Uses AuthViewModel for authentication logic.
-/// Displays loading indicator during login and error messages on failure.
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({required this.viewModel, super.key});
+/// Provides name, email and password fields with validation.
+/// Uses AuthViewModel for registration logic.
+/// Displays loading indicator during registration and error messages on failure.
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({required this.viewModel, super.key});
 
   final AuthViewModel viewModel;
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleRegister() async {
     // Validate form
     if (_formKey.currentState?.validate() != true) {
       return;
     }
 
-    // Execute login command
-    await widget.viewModel.loginCommand.execute(
-      LoginParams(
+    // Execute register command
+    await widget.viewModel.registerCommand.execute(
+      RegisterParams(
+        name: _nameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text,
       ),
     );
 
     // Check for errors
-    if (widget.viewModel.loginCommand.error && mounted) {
+    if (widget.viewModel.registerCommand.error && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(widget.viewModel.loginCommand.error.toString()),
+          content: Text(widget.viewModel.registerCommand.error.toString()),
           backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
       return;
     }
 
-    // Navigate to home on success
-    if (widget.viewModel.loginCommand.completed && mounted) {
-      // TODO: Navigate to home screen when routing is implemented
+    // Navigate to login on success
+    if (widget.viewModel.registerCommand.completed && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Login realizado com sucesso!'),
+          content: Text('Cadastro realizado com sucesso! Faça login.'),
         ),
       );
+      // TODO: Navigate to login screen when routing is implemented
+      Navigator.of(context).pop();
     }
   }
 
-  void _navigateToRegister() {
-    // TODO: Navigate to register screen when routing is implemented
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Navegação para registro será implementada'),
-      ),
-    );
+  void _navigateToLogin() {
+    Navigator.of(context).pop();
   }
 
   @override
@@ -80,6 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Criar Conta'),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -87,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: ListenableBuilder(
               listenable: widget.viewModel,
               builder: (context, child) {
-                final isLoading = widget.viewModel.loginCommand.running;
+                final isLoading = widget.viewModel.registerCommand.running;
 
                 return Form(
                   key: _formKey,
@@ -97,13 +99,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       // App logo or title
                       Icon(
-                        Icons.account_balance_wallet,
+                        Icons.person_add_outlined,
                         size: 80,
                         color: colorScheme.primary,
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Bem-vindo',
+                        'Criar Conta',
                         style: theme.textTheme.headlineMedium?.copyWith(
                           color: colorScheme.onSurface,
                           fontWeight: FontWeight.bold,
@@ -112,13 +114,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Faça login para continuar',
+                        'Preencha os dados para começar',
                         style: theme.textTheme.bodyLarge?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 48),
+
+                      // Name field
+                      CustomTextField(
+                        controller: _nameController,
+                        labelText: 'Nome',
+                        hintText: 'Seu nome completo',
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.next,
+                        prefixIcon: const Icon(Icons.person_outlined),
+                        validator: Validators.validateName,
+                        enabled: !isLoading,
+                      ),
+                      const SizedBox(height: 16),
 
                       // Email field
                       CustomTextField(
@@ -137,19 +152,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomTextField(
                         controller: _passwordController,
                         labelText: 'Senha',
-                        hintText: '••••••',
+                        hintText: 'Mínimo 6 caracteres',
                         obscureText: true,
                         textInputAction: TextInputAction.done,
                         prefixIcon: const Icon(Icons.lock_outlined),
                         validator: Validators.validatePassword,
                         enabled: !isLoading,
-                        onFieldSubmitted: (_) => _handleLogin(),
+                        onFieldSubmitted: (_) => _handleRegister(),
                       ),
                       const SizedBox(height: 24),
 
-                      // Login button
+                      // Register button
                       CustomFilledButton(
-                        onPressed: isLoading ? null : _handleLogin,
+                        onPressed: isLoading ? null : _handleRegister,
                         child: isLoading
                             ? const SizedBox(
                                 height: 20,
@@ -158,21 +173,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Text('Entrar'),
+                            : const Text('Cadastrar'),
                       ),
                       const SizedBox(height: 16),
 
-                      // Register link
+                      // Back to login link
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Não tem uma conta? ',
+                            'Já tem uma conta? ',
                             style: theme.textTheme.bodyMedium,
                           ),
                           CustomTextButton(
-                            onPressed: isLoading ? null : _navigateToRegister,
-                            child: const Text('Cadastre-se'),
+                            onPressed: isLoading ? null : _navigateToLogin,
+                            child: const Text('Fazer login'),
                           ),
                         ],
                       ),
