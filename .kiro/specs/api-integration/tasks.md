@@ -451,7 +451,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Ensure AI-extracted data is validated before API calls
   - _Requirements: Migration Strategy_
 
-- [ ] 31. Final checkpoint - End-to-end testing
+- [x] 31. Final checkpoint - End-to-end testing
   - Ensure all tests pass, ask the user if questions arise.
   - Test complete flow: register → login → create category → create transaction → view transactions
   - Test pagination with multiple pages
@@ -461,7 +461,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Test logout and re-login
   - Test auto-login on app restart
 
-- [ ] 32. Polish UI and accessibility
+- [-] 32. Polish UI and accessibility
   - Ensure all interactive elements have semantic labels
   - Verify color contrast meets WCAG AA standards
   - Test with screen reader

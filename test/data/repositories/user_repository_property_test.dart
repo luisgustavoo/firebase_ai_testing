@@ -74,7 +74,7 @@ void main() {
 
         apiService = ApiService(mockClient);
         await apiService.init();
-        apiService.authHeaderProvider = () => 'Bearer test_token';
+        apiService.authHeaderProvider = () => 'Bearer $token';
         userRepository = UserRepository(apiService);
 
         // Call getUser
