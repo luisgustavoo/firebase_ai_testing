@@ -416,7 +416,7 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Navigate back on success
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.8, 11.7_
 
-- [ ] 27. Configure routing with go_router
+- [x] 27. Configure routing with go_router
   - Define routes for all screens (login, register, home, categories, transactions, add-transaction)
   - Implement route guards (redirect to login if not authenticated)
   - Configure initial route based on authentication state
