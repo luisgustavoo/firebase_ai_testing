@@ -17,17 +17,9 @@ class CategoryViewModel extends ChangeNotifier {
   final CategoryRepository _categoryRepository;
 
   List<Category> _categories = [];
-  bool _isLoading = false;
-  String? _error;
 
   /// Current list of categories
   List<Category> get categories => _categories;
-
-  /// Whether an operation is in progress
-  bool get isLoading => _isLoading;
-
-  /// Current error message
-  String? get error => _error;
 
   late final Command0<void> loadCategoriesCommand = Command0(_loadCategories);
   late final Command1<void, CreateCategoryParams> createCategoryCommand =
@@ -42,23 +34,17 @@ class CategoryViewModel extends ChangeNotifier {
   ///
   /// Fetches categories from repository and updates the list.
   Future<Result<void>> _loadCategories() async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
-
     final result = await _categoryRepository.getCategories();
 
     return switch (result) {
       Ok(:final value) => _handleLoadSuccess(value),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
   /// Handle successful category load
   Result<void> _handleLoadSuccess(List<Category> categories) {
     _categories = categories;
-    _isLoading = false;
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -68,9 +54,6 @@ class CategoryViewModel extends ChangeNotifier {
   /// Note: Input validation should be done in UI layer (TextFormField validators).
   /// Adds the new category to the list on success.
   Future<Result<void>> _createCategory(CreateCategoryParams params) async {
-    _error = null;
-    notifyListeners();
-
     final result = await _categoryRepository.createCategory(
       params.description,
       params.icon,
@@ -78,14 +61,13 @@ class CategoryViewModel extends ChangeNotifier {
 
     return switch (result) {
       Ok(:final value) => _handleCreateSuccess(value),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
   /// Handle successful category creation
   Result<void> _handleCreateSuccess(Category category) {
     _categories = [..._categories, category];
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -95,9 +77,6 @@ class CategoryViewModel extends ChangeNotifier {
   /// Note: Input validation should be done in UI layer (TextFormField validators).
   /// Updates the category in the list on success.
   Future<Result<void>> _updateCategory(UpdateCategoryParams params) async {
-    _error = null;
-    notifyListeners();
-
     final result = await _categoryRepository.updateCategory(
       params.id,
       params.description,
@@ -106,7 +85,7 @@ class CategoryViewModel extends ChangeNotifier {
 
     return switch (result) {
       Ok(:final value) => _handleUpdateSuccess(value),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
@@ -115,7 +94,6 @@ class CategoryViewModel extends ChangeNotifier {
     _categories = _categories.map((category) {
       return category.id == updatedCategory.id ? updatedCategory : category;
     }).toList();
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -124,37 +102,19 @@ class CategoryViewModel extends ChangeNotifier {
   ///
   /// Removes the category from the list on success.
   Future<Result<void>> _deleteCategory(String id) async {
-    _error = null;
-    notifyListeners();
-
     final result = await _categoryRepository.deleteCategory(id);
 
     return switch (result) {
       Ok() => _handleDeleteSuccess(id),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
   /// Handle successful category deletion
   Result<void> _handleDeleteSuccess(String id) {
     _categories = _categories.where((category) => category.id != id).toList();
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
-  }
-
-  /// Handle error
-  Result<void> _handleError(Exception error) {
-    _isLoading = false;
-    _error = error.toString();
-    notifyListeners();
-    return Result.error(error);
-  }
-
-  /// Clear error state
-  void clearError() {
-    _error = null;
-    notifyListeners();
   }
 }
 

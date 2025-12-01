@@ -81,23 +81,23 @@ void main() {
           transactionRepository = TransactionRepository(apiService);
           transactionViewModel = TransactionViewModel(transactionRepository);
 
-          // Property: isLoading should be false initially
-          expect(transactionViewModel.isLoading, isFalse);
+          // Property: Command should not be running initially
+          expect(transactionViewModel.loadTransactionsCommand.running, isFalse);
 
           // Start async operation
           final loadFuture = transactionViewModel.loadTransactionsCommand
               .execute();
 
-          // Property: isLoading should be true during operation
+          // Property: Command should be running during operation
           // Note: We need to wait a tiny bit for the state to update
           await Future<void>.delayed(const Duration(milliseconds: 1));
-          expect(transactionViewModel.isLoading, isTrue);
+          expect(transactionViewModel.loadTransactionsCommand.running, isTrue);
 
           // Wait for completion
           await loadFuture;
 
-          // Property: isLoading should be false after completion
-          expect(transactionViewModel.isLoading, isFalse);
+          // Property: Command should not be running after completion
+          expect(transactionViewModel.loadTransactionsCommand.running, isFalse);
           expect(
             transactionViewModel.loadTransactionsCommand.completed,
             isTrue,

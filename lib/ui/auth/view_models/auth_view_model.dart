@@ -19,13 +19,9 @@ class AuthViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
 
   User? _currentUser;
-  String? _error;
 
   /// Current authenticated user
   User? get currentUser => _currentUser;
-
-  /// Current error message
-  String? get error => _error;
 
   /// Whether user is authenticated (delegates to repository)
   Future<bool> get isAuthenticated => _authRepository.isAuthenticated;
@@ -41,10 +37,6 @@ class AuthViewModel extends ChangeNotifier {
   /// Note: Input validation should be done in UI layer (TextFormField validators).
   /// Updates currentUser on success.
   Future<Result<void>> _register(RegisterParams params) async {
-    // Clear previous error
-    _error = null;
-    notifyListeners();
-
     // Call repository
     final result = await _authRepository.register(
       params.name,
@@ -54,14 +46,13 @@ class AuthViewModel extends ChangeNotifier {
 
     return switch (result) {
       Ok(:final value) => _handleRegisterSuccess(value),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
   /// Handle successful registration
   Result<void> _handleRegisterSuccess(User user) {
     _currentUser = user;
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -71,16 +62,12 @@ class AuthViewModel extends ChangeNotifier {
   /// Note: Input validation should be done in UI layer (TextFormField validators).
   /// Updates currentUser and isAuthenticated on success.
   Future<Result<void>> _login(LoginParams params) async {
-    // Clear previous error
-    _error = null;
-    notifyListeners();
-
     // Call repository
     final result = await _authRepository.login(params.email, params.password);
 
     return switch (result) {
       Ok(:final value) => _handleLoginSuccess(value.user),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
@@ -88,7 +75,6 @@ class AuthViewModel extends ChangeNotifier {
   Result<void> _handleLoginSuccess(UserApiModel userApi) {
     // Convert UserApi to User domain model using mapper
     _currentUser = UserMapper.toDomain(userApi);
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -99,22 +85,8 @@ class AuthViewModel extends ChangeNotifier {
   Future<Result<void>> _logout() async {
     await _authRepository.logout();
     _currentUser = null;
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
-  }
-
-  /// Handle error
-  Result<void> _handleError(Exception error) {
-    _error = error.toString();
-    notifyListeners();
-    return Result.error(error);
-  }
-
-  /// Clear error state
-  void clearError() {
-    _error = null;
-    notifyListeners();
   }
 }
 

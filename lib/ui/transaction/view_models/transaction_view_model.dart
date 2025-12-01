@@ -23,8 +23,6 @@ class TransactionViewModel extends ChangeNotifier {
   List<Transaction> _transactions = [];
   PaginationMetadata? _pagination;
   TransactionType? _filter;
-  bool _isLoading = false;
-  String? _error;
 
   /// Current list of transactions
   List<Transaction> get transactions => _transactions;
@@ -34,12 +32,6 @@ class TransactionViewModel extends ChangeNotifier {
 
   /// Current filter (transaction type)
   TransactionType? get filter => _filter;
-
-  /// Whether an operation is in progress
-  bool get isLoading => _isLoading;
-
-  /// Current error message
-  String? get error => _error;
 
   /// Whether there are more pages to load
   bool get hasMore => _pagination?.hasNext ?? false;
@@ -58,16 +50,13 @@ class TransactionViewModel extends ChangeNotifier {
   Future<Result<void>> _createTransaction(
     CreateTransactionParams params,
   ) async {
-    _error = null;
-    notifyListeners();
-
     final result = await _transactionRepository.createTransaction(
       params.request,
     );
 
     return switch (result) {
       Ok(:final value) => _handleCreateSuccess(value),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
@@ -75,7 +64,6 @@ class TransactionViewModel extends ChangeNotifier {
   Result<void> _handleCreateSuccess(Transaction transaction) {
     // Add new transaction to the beginning of the list
     _transactions = [transaction, ..._transactions];
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -84,10 +72,6 @@ class TransactionViewModel extends ChangeNotifier {
   ///
   /// Fetches the first page of transactions with current filter.
   Future<Result<void>> _loadTransactions() async {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
-
     final result = await _transactionRepository.getTransactions(
       type: _filter,
     );
@@ -97,7 +81,7 @@ class TransactionViewModel extends ChangeNotifier {
         value.transactions,
         value.pagination,
       ),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
@@ -112,8 +96,6 @@ class TransactionViewModel extends ChangeNotifier {
         .map(TransactionMapper.toDomain)
         .toList();
     _pagination = pagination;
-    _isLoading = false;
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -123,14 +105,10 @@ class TransactionViewModel extends ChangeNotifier {
   /// Appends the next page of transactions to the existing list.
   /// Only loads if hasMore is true.
   Future<Result<void>> _loadMore() async {
-    // Don't load if already loading or no more pages
-    if (_isLoading || !hasMore) {
+    // Don't load if no more pages
+    if (!hasMore) {
       return const Result.ok(null);
     }
-
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
 
     final nextPage = (_pagination?.page ?? 0) + 1;
 
@@ -144,7 +122,7 @@ class TransactionViewModel extends ChangeNotifier {
         value.transactions,
         value.pagination,
       ),
-      Error(:final error) => _handleError(error),
+      Error(:final error) => Result.error(error),
     };
   }
 
@@ -160,8 +138,6 @@ class TransactionViewModel extends ChangeNotifier {
         .toList();
     _transactions = [..._transactions, ...newTransactions];
     _pagination = pagination;
-    _isLoading = false;
-    _error = null;
     notifyListeners();
     return const Result.ok(null);
   }
@@ -172,21 +148,7 @@ class TransactionViewModel extends ChangeNotifier {
   Future<void> setFilter(TransactionType? filter) async {
     _filter = filter;
     notifyListeners();
-    await _loadTransactions();
-  }
-
-  /// Handle error
-  Result<void> _handleError(Exception error) {
-    _isLoading = false;
-    _error = error.toString();
-    notifyListeners();
-    return Result.error(error);
-  }
-
-  /// Clear error state
-  void clearError() {
-    _error = null;
-    notifyListeners();
+    await loadTransactionsCommand.execute();
   }
 }
 

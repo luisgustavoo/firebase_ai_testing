@@ -54,7 +54,6 @@ void main() {
         expect(authViewModel.currentUser, isNotNull);
         expect(authViewModel.currentUser!.name, equals('John Doe'));
         expect(authViewModel.currentUser!.email, equals('john@example.com'));
-        expect(authViewModel.error, isNull);
       });
     });
 
@@ -95,7 +94,6 @@ void main() {
         expect(authViewModel.currentUser!.name, equals('John Doe'));
         expect(authViewModel.currentUser!.email, equals('john@example.com'));
         expect(await authViewModel.isAuthenticated, isTrue);
-        expect(authViewModel.error, isNull);
       });
     });
 
@@ -140,7 +138,6 @@ void main() {
         expect(authViewModel.logoutCommand.completed, isTrue);
         expect(authViewModel.currentUser, isNull);
         expect(await authViewModel.isAuthenticated, isFalse);
-        expect(authViewModel.error, isNull);
       });
     });
 
@@ -244,13 +241,14 @@ void main() {
           ),
         );
 
+        // Command should be in error state
         expect(authViewModel.loginCommand.error, isTrue);
-        expect(authViewModel.error, isNotNull);
+        expect(authViewModel.loginCommand.completed, isFalse);
         expect(authViewModel.currentUser, isNull);
         expect(await authViewModel.isAuthenticated, isFalse);
       });
 
-      test('should clear error with clearError()', () async {
+      test('should clear error with clearResult()', () async {
         final mockClient = MockClient((request) async {
           return http.Response(
             json.encode({'error': 'Server error'}),
@@ -272,12 +270,13 @@ void main() {
           ),
         );
 
-        expect(authViewModel.error, isNotNull);
+        expect(authViewModel.registerCommand.error, isTrue);
 
-        // Clear error
-        authViewModel.clearError();
+        // Clear the command result
+        authViewModel.registerCommand.clearResult();
 
-        expect(authViewModel.error, isNull);
+        expect(authViewModel.registerCommand.error, isFalse);
+        expect(authViewModel.registerCommand.completed, isFalse);
       });
     });
   });

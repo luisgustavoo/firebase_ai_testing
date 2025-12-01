@@ -70,7 +70,6 @@ void main() {
           categoryViewModel.categories[1].description,
           equals('Transport'),
         );
-        expect(categoryViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -114,7 +113,6 @@ void main() {
         expect(categoryViewModel.categories, hasLength(1));
         expect(categoryViewModel.categories[0].description, equals('Shopping'));
         expect(categoryViewModel.categories[0].icon, equals('shopping'));
-        expect(categoryViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -180,7 +178,6 @@ void main() {
           equals('Groceries'),
         );
         expect(categoryViewModel.categories[0].icon, equals('shopping'));
-        expect(categoryViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -235,7 +232,6 @@ void main() {
         expect(categoryViewModel.deleteCategoryCommand.completed, isTrue);
         expect(categoryViewModel.categories, hasLength(1));
         expect(categoryViewModel.categories[0].id, equals('cat-2'));
-        expect(categoryViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -257,19 +253,23 @@ void main() {
         categoryRepository = CategoryRepository(apiService);
         categoryViewModel = CategoryViewModel(categoryRepository);
 
-        expect(categoryViewModel.isLoading, isFalse);
+        // Command should not be running initially
+        expect(categoryViewModel.loadCategoriesCommand.running, isFalse);
 
-        var wasLoading = false;
-        categoryViewModel.addListener(() {
-          if (categoryViewModel.isLoading) {
-            wasLoading = true;
+        var wasRunning = false;
+        categoryViewModel.loadCategoriesCommand.addListener(() {
+          if (categoryViewModel.loadCategoriesCommand.running) {
+            wasRunning = true;
           }
         });
 
         await categoryViewModel.loadCategoriesCommand.execute();
 
-        expect(wasLoading, isTrue);
-        expect(categoryViewModel.isLoading, isFalse);
+        // Command should have been running at some point
+        expect(wasRunning, isTrue);
+        // Command should not be running after completion
+        expect(categoryViewModel.loadCategoriesCommand.running, isFalse);
+        expect(categoryViewModel.loadCategoriesCommand.completed, isTrue);
 
         await tokenStorage.deleteToken();
       });
@@ -361,13 +361,14 @@ void main() {
 
         await categoryViewModel.loadCategoriesCommand.execute();
 
+        // Command should be in error state
         expect(categoryViewModel.loadCategoriesCommand.error, isTrue);
-        expect(categoryViewModel.error, isNotNull);
+        expect(categoryViewModel.loadCategoriesCommand.completed, isFalse);
 
         await tokenStorage.deleteToken();
       });
 
-      test('should clear error with clearError()', () async {
+      test('should clear error with clearResult()', () async {
         final mockClient = MockClient((request) async {
           return http.Response(
             json.encode({'error': 'Server error'}),
@@ -383,11 +384,13 @@ void main() {
 
         await categoryViewModel.loadCategoriesCommand.execute();
 
-        expect(categoryViewModel.error, isNotNull);
+        expect(categoryViewModel.loadCategoriesCommand.error, isTrue);
 
-        categoryViewModel.clearError();
+        // Clear the command result
+        categoryViewModel.loadCategoriesCommand.clearResult();
 
-        expect(categoryViewModel.error, isNull);
+        expect(categoryViewModel.loadCategoriesCommand.error, isFalse);
+        expect(categoryViewModel.loadCategoriesCommand.completed, isFalse);
 
         await tokenStorage.deleteToken();
       });

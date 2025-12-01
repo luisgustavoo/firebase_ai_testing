@@ -91,9 +91,6 @@ void main() {
         expect(authViewModel.currentUser!.email, equals(email));
         expect(authViewModel.currentUser!.status, equals(UserStatus.active));
 
-        // Property: No error should be present
-        expect(authViewModel.error, isNull);
-
         // Note: isAuthenticated is false after registration (no token stored)
         // User needs to login to get authenticated
         expect(await authViewModel.isAuthenticated, isFalse);

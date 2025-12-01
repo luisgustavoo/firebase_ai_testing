@@ -71,7 +71,6 @@ void main() {
           transactionViewModel.transactions[0].description,
           equals('Test transaction'),
         );
-        expect(transactionViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -134,7 +133,6 @@ void main() {
         expect(transactionViewModel.transactions[1].amount, equals(50.0));
         expect(transactionViewModel.pagination, isNotNull);
         expect(transactionViewModel.pagination!.page, equals(1));
-        expect(transactionViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -220,7 +218,6 @@ void main() {
         expect(transactionViewModel.transactions[0].id, equals('txn-1'));
         expect(transactionViewModel.transactions[1].id, equals('txn-2'));
         expect(transactionViewModel.hasMore, isFalse);
-        expect(transactionViewModel.error, isNull);
 
         await tokenStorage.deleteToken();
       });
@@ -350,19 +347,23 @@ void main() {
         transactionRepository = TransactionRepository(apiService);
         transactionViewModel = TransactionViewModel(transactionRepository);
 
-        expect(transactionViewModel.isLoading, isFalse);
+        // Command should not be running initially
+        expect(transactionViewModel.loadTransactionsCommand.running, isFalse);
 
-        var wasLoading = false;
-        transactionViewModel.addListener(() {
-          if (transactionViewModel.isLoading) {
-            wasLoading = true;
+        var wasRunning = false;
+        transactionViewModel.loadTransactionsCommand.addListener(() {
+          if (transactionViewModel.loadTransactionsCommand.running) {
+            wasRunning = true;
           }
         });
 
         await transactionViewModel.loadTransactionsCommand.execute();
 
-        expect(wasLoading, isTrue);
-        expect(transactionViewModel.isLoading, isFalse);
+        // Command should have been running at some point
+        expect(wasRunning, isTrue);
+        // Command should not be running after completion
+        expect(transactionViewModel.loadTransactionsCommand.running, isFalse);
+        expect(transactionViewModel.loadTransactionsCommand.completed, isTrue);
 
         await tokenStorage.deleteToken();
       });
@@ -469,13 +470,14 @@ void main() {
 
         await transactionViewModel.loadTransactionsCommand.execute();
 
+        // Command should be in error state
         expect(transactionViewModel.loadTransactionsCommand.error, isTrue);
-        expect(transactionViewModel.error, isNotNull);
+        expect(transactionViewModel.loadTransactionsCommand.completed, isFalse);
 
         await tokenStorage.deleteToken();
       });
 
-      test('should clear error with clearError()', () async {
+      test('should clear error with clearResult()', () async {
         final mockClient = MockClient((request) async {
           return http.Response(
             json.encode({'error': 'Server error'}),
@@ -491,11 +493,13 @@ void main() {
 
         await transactionViewModel.loadTransactionsCommand.execute();
 
-        expect(transactionViewModel.error, isNotNull);
+        expect(transactionViewModel.loadTransactionsCommand.error, isTrue);
 
-        transactionViewModel.clearError();
+        // Clear the command result
+        transactionViewModel.loadTransactionsCommand.clearResult();
 
-        expect(transactionViewModel.error, isNull);
+        expect(transactionViewModel.loadTransactionsCommand.error, isFalse);
+        expect(transactionViewModel.loadTransactionsCommand.completed, isFalse);
 
         await tokenStorage.deleteToken();
       });
