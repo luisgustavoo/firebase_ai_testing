@@ -1,4 +1,5 @@
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -54,6 +55,15 @@ void main() {
             reason: 'Authorization header must be "Bearer $token"',
           );
 
+          // Return appropriate response based on endpoint
+          if (request.url.path.contains('/categories/')) {
+            return http.Response(
+              '{"id":"cat-123","user_id":"user-1","description":"test","is_default":false,"created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            );
+          }
+
           // Return a successful response with valid UserApi data
           return http.Response(
             '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
@@ -90,7 +100,11 @@ void main() {
         );
 
         headerChecked = false;
-        await apiService.updateCategory('cat-123', {'data': 'test'});
+        final categoryRequest = CategoryRequest(
+          description: 'test',
+          icon: null,
+        );
+        await apiService.updateCategory('cat-123', categoryRequest);
         expect(
           headerChecked,
           isTrue,

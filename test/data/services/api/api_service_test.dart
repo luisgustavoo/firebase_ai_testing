@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/category_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
@@ -50,7 +52,7 @@ void main() {
           expect(request.url.queryParameters['pageSize'], equals('10'));
           expect(request.url.queryParameters['type'], equals('income'));
           return http.Response(
-            '{"transactions":[],"pagination":{"page":2,"pageSize":10,"total":0,"totalPages":0,"hasNext":false,"hasPrevious":true}}',
+            '{"transactions":[],"pagination":{"page":2,"page_size":10,"total":0,"total_pages":0,"has_next":false,"has_previous":true}}',
             200,
           );
         });
@@ -101,20 +103,22 @@ void main() {
         final mockClient = MockClient((request) async {
           expect(request.method, equals('PUT'));
           expect(request.url.path, equals('/api/categories/cat-123'));
-          expect(request.body, equals('{"description":"Updated"}'));
-          return http.Response('{"success": true}', 200);
+          expect(request.body, contains('"description":"Updated"'));
+          return http.Response(
+            '{"id":"cat-123","user_id":"user-1","description":"Updated","is_default":false,"created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final response =
-            await apiService.updateCategory(
-                  'cat-123',
-                  {'description': 'Updated'},
-                )
-                as Map<String, dynamic>;
-        expect(response, equals({'success': true}));
+        final request = CategoryRequest(description: 'Updated', icon: null);
+        final result = await apiService.updateCategory('cat-123', request);
+        expect(result, isA<Ok<CategoryApi>>());
+        final categoryApi = (result as Ok<CategoryApi>).value;
+        expect(categoryApi.description, equals('Updated'));
       });
 
       test('deleteCategory succeeds', () async {
@@ -127,8 +131,8 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final response = await apiService.deleteCategory('cat-123');
-        expect(response, isNull);
+        final result = await apiService.deleteCategory('cat-123');
+        expect(result, isA<Ok<void>>());
       });
     });
 
@@ -310,7 +314,7 @@ void main() {
           expect(request.headers['Content-Type'], equals('application/json'));
           expect(request.headers['Accept'], equals('application/json'));
           return http.Response(
-            '{"transactions":[],"pagination":{"page":1,"pageSize":20,"total":0,"totalPages":0,"hasNext":false,"hasPrevious":false}}',
+            '{"transactions":[],"pagination":{"page":1,"page_size":20,"total":0,"total_pages":0,"has_next":false,"has_previous":false}}',
             200,
           );
         });

@@ -1,5 +1,18 @@
 # Implementation Plan
 
+## Architecture Notes
+
+This implementation follows Flutter's official architecture guidelines (https://docs.flutter.dev/app-architecture):
+
+- **Service Layer**: Wraps external APIs, returns `Future<Result<T>>` with API models
+- **Repository Layer**: Transforms API models to domain models, manages data, returns `Result<DomainModel>`
+- **ViewModel Layer**: Validates user input, manages UI state, calls repositories
+- **UI Layer**: Displays data, captures user input, observes ViewModels
+
+**Important**: Input validation is done in the ViewModel layer, NOT in Repository or Service layers.
+
+---
+
 - [x] 1. Setup project dependencies and base infrastructure
   - Add new dependencies to pubspec.yaml (flutter_secure_storage, http)
   - Configure dependency injection for new services
@@ -86,22 +99,24 @@
   - _Requirements: 1.3, 5.3, 6.5, 8.2, 8.3, 8.4_
 
 - [x] 7.1 Write property test for validation
-  - **Property 2: Invalid registration data is rejected before API call**
-  - **Property 13: Short category descriptions are rejected**
-  - **Property 15: Invalid updates are prevented**
-  - **Property 18: Zero or negative amounts are rejected**
-  - **Property 19: Invalid transaction types are rejected**
-  - **Property 20: Invalid payment types are rejected**
+  - **Property 2: Invalid registration data is rejected (will be tested in ViewModel)**
+  - **Property 13: Short category descriptions are rejected (will be tested in ViewModel)**
+  - **Property 15: Invalid updates are prevented (will be tested in ViewModel)**
+  - **Property 18: Zero or negative amounts are rejected (will be tested in ViewModel)**
+  - **Property 19: Invalid transaction types are rejected (will be tested in ViewModel)**
+  - **Property 20: Invalid payment types are rejected (will be tested in ViewModel)**
+  - Note: Validators utility class tests basic validation logic
   - **Validates: Requirements 1.3, 5.3, 6.5, 8.2, 8.3, 8.4**
 
 - [x] 8. Implement AuthRepository
   - Create AuthRepository with ApiService and TokenStorageService dependencies
-  - Implement register method (validate, call service, return Result<User>)
-  - Implement login method (validate, call service, store token, return Result<LoginResponse>)
-  - Implement getProfile method (call service with auth, return Result<User>)
+  - Implement register method (call service, transform to domain model, return Result<User>)
+  - Implement login method (call service, store token, return Result<LoginResponse>)
+  - Implement getProfile method (call service, transform to domain model, return Result<User>)
   - Implement logout method (clear token, clear service token)
   - Implement isAuthenticated method (check if token exists)
   - Handle 401 errors by clearing token
+  - Note: Input validation is done in ViewModel layer, not Repository
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 12.3_
 
 - [x] 8.1 Write property test for authentication
@@ -121,16 +136,17 @@
   - Test logout clears token
   - _Requirements: 1.2, 2.2, 3.2, 12.3_
 
-- [ ] 9. Implement CategoryRepository
+- [x] 9. Implement CategoryRepository
   - Create CategoryRepository with ApiService dependency
-  - Implement getCategories method (call service, map to domain, return Result<List<Category>>)
-  - Implement createCategory method (validate, call service, map to domain, return Result<Category>)
-  - Implement updateCategory method (validate, call service, map to domain, return Result<Category>)
+  - Implement getCategories method (call service, transform to domain models, return Result<List<Category>>)
+  - Implement createCategory method (call service, transform to domain model, return Result<Category>)
+  - Implement updateCategory method (call service, transform to domain model, return Result<Category>)
   - Implement deleteCategory method (call service, return Result<void>)
   - Handle 403 (permission denied) and 404 (not found) errors
+  - Note: Input validation is done in ViewModel layer, not Repository
   - _Requirements: 4.1, 5.1, 5.3, 6.1, 6.2, 6.3, 7.1, 7.2_
 
-- [ ] 9.1 Write property test for category operations
+- [x] 9.1 Write property test for category operations
   - **Property 9: Category fetch returns all categories**
   - **Property 11: Valid category creation adds to list**
   - **Property 12: Optional icon is included when provided**
@@ -139,21 +155,23 @@
   - **Property 22: Null category_id is allowed**
   - **Validates: Requirements 4.1, 5.1, 5.2, 6.1, 7.1, 8.6**
 
-- [ ] 9.2 Write unit tests for CategoryRepository
+- [x] 9.2 Write unit tests for CategoryRepository
   - Test getCategories returns all categories
   - Test createCategory with valid data
-  - Test createCategory with short description (validation error)
+  - Test createCategory with API error (400)
   - Test updateCategory with valid data
   - Test updateCategory with permission error (403)
   - Test deleteCategory with valid id
   - Test deleteCategory with not found error (404)
+  - Note: Validation tests will be in ViewModel tests
   - _Requirements: 4.1, 5.3, 6.2, 6.3, 7.2_
 
 - [ ] 10. Implement TransactionRepository
   - Create TransactionRepository with ApiService dependency
-  - Implement createTransaction method (validate, format date, call service, map to domain, return Result<Transaction>)
-  - Implement getTransactions method with pagination (call service with query params, map to domain, return Result<TransactionsResponse>)
+  - Implement createTransaction method (call service, transform to domain model, return Result<Transaction>)
+  - Implement getTransactions method with pagination (call service, transform to domain models, return Result<TransactionsResponse>)
   - Handle pagination parameters (page, pageSize, type filter)
+  - Note: Input validation and date formatting done in ViewModel layer
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 9.1, 9.3_
 
 - [ ] 10.1 Write property test for transaction operations
@@ -165,12 +183,12 @@
 
 - [ ] 10.2 Write unit tests for TransactionRepository
   - Test createTransaction with valid data
-  - Test createTransaction with zero amount (validation error)
-  - Test createTransaction with invalid type (validation error)
+  - Test createTransaction with API error (400)
   - Test createTransaction with null category_id
   - Test getTransactions with default pagination
   - Test getTransactions with custom page size
   - Test getTransactions with type filter
+  - Note: Validation tests will be in ViewModel tests
   - _Requirements: 8.2, 8.3, 8.6, 9.1, 9.3_
 
 - [ ] 11. Checkpoint - Ensure all repository tests pass
@@ -180,12 +198,13 @@
   - Create AuthViewModel extending ChangeNotifier
   - Add currentUser property
   - Add isAuthenticated getter
-  - Implement registerCommand using Command pattern
-  - Implement loginCommand using Command pattern
+  - Implement registerCommand using Command pattern with input validation
+  - Implement loginCommand using Command pattern with input validation
   - Implement logoutCommand using Command pattern
   - Call notifyListeners after state changes
   - Handle errors and update error state
-  - _Requirements: 1.4, 2.4, 10.3_
+  - Validate user input (name, email, password) before calling repository
+  - _Requirements: 1.3, 1.4, 2.4, 10.3_
 
 - [ ] 12.1 Write property test for AuthViewModel
   - **Property 3: Successful registration stores user data**
@@ -194,7 +213,11 @@
   - **Validates: Requirements 1.4, 2.5, 4.5**
 
 - [ ] 12.2 Write unit tests for AuthViewModel
-  - Test register command updates currentUser
+  - Test register command validates input before calling repository
+  - Test register command with invalid data shows validation errors
+  - Test register command with valid data updates currentUser
+  - Test login command validates input before calling repository
+  - Test login command with invalid data shows validation errors
   - Test login command updates currentUser and isAuthenticated
   - Test logout command clears currentUser
   - Test notifyListeners is called after state changes
