@@ -44,22 +44,36 @@ lib/
    - Use `@postConstruct` or `@PostConstruct()` for initialization logic
    - Register dependencies via `configureDependencies()` in main.dart
 
-2. **ViewModels:**
+2. **Repositories (Source of Truth):**
+   - Extend `ChangeNotifier` to notify listeners of state changes
+   - Call `notifyListeners()` after state changes (login, logout, data updates)
+   - Handle business logic and data persistence
+   - Do NOT perform input validation (validation belongs in UI layer)
+
+3. **ViewModels:**
    - Extend `ChangeNotifier`
    - Use `Command` pattern from `utils/command.dart` for async operations
    - Inject repositories via constructor
+   - Coordinate between UI and repositories (thin layer)
+   - Do NOT perform input validation (validation belongs in UI layer)
    - Call `notifyListeners()` after state changes
 
-3. **Models:**
+4. **UI Layer (Validation):**
+   - Use `TextFormField` with `validator` parameter for input validation
+   - Use validators from `utils/validators.dart`
+   - Example: `validator: Validators.validateEmail`
+   - Validation happens in UI, NOT in ViewModels or Repositories
+
+5. **Models:**
    - Use `@freezed` for immutable data classes
    - Include `fromJson`/`toJson` for serialization
    - Generate with: `part 'filename.freezed.dart'` and `part 'filename.g.dart'`
 
-4. **Error Handling:**
+6. **Error Handling:**
    - Use `Result<T>` type from `utils/result.dart`
    - Pattern match with `Ok()` and `Error()` cases
 
-5. **Firebase AI Integration:**
+7. **Firebase AI Integration:**
    - Configure `GenerativeModel` with system instructions
    - Use `FunctionDeclaration` for AI function calling
    - Handle function calls in service layer before returning final response

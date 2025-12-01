@@ -6,18 +6,37 @@ import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:firebase_ai_testing/domain/mappers/user_mapper.dart';
 import 'package:firebase_ai_testing/domain/models/user.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 /// Repository for handling authentication operations
 ///
+/// Source of truth for authentication state.
+/// Extends ChangeNotifier to notify listeners of state changes.
 /// Manages user registration, login, profile fetching, and logout.
 /// Handles token storage and automatic header injection via ApiService.
 @lazySingleton
-class AuthRepository {
+class AuthRepository extends ChangeNotifier {
   AuthRepository(this._apiService, this._tokenStorage);
 
   final ApiService _apiService;
   final TokenStorageService _tokenStorage;
+
+  bool? _isAuthenticated;
+
+  /// Check if user is authenticated
+  ///
+  /// Returns cached status if available, otherwise fetches from storage.
+  Future<bool> get isAuthenticated async {
+    // Status is cached
+    if (_isAuthenticated != null) {
+      return _isAuthenticated!;
+    }
+
+    // No status cached, fetch from storage
+    _isAuthenticated = await _tokenStorage.hasToken();
+    return _isAuthenticated!;
+  }
 
   /// Register a new user account
   ///
@@ -76,6 +95,12 @@ class AuthRepository {
     // Update API service token
     _apiService.authToken = loginResponse.token;
 
+    // Set auth status
+    _isAuthenticated = true;
+
+    // Notify listeners of state change
+    notifyListeners();
+
     return Result.ok(loginResponse);
   }
 
@@ -118,16 +143,15 @@ class AuthRepository {
     await _clearToken();
   }
 
-  /// Check if user is authenticated
-  ///
-  /// Returns true if a valid token exists in storage.
-  Future<bool> isAuthenticated() async {
-    return _tokenStorage.hasToken();
-  }
-
   /// Clear token from storage and API service
   Future<void> _clearToken() async {
     await _tokenStorage.deleteToken();
     _apiService.authToken = null;
+
+    // Clear authenticated status
+    _isAuthenticated = false;
+
+    // Notify listeners of state change
+    notifyListeners();
   }
 }

@@ -1,5 +1,5 @@
-import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
 import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_api.dart';
+import 'package:firebase_ai_testing/data/services/api/models/transaction/transaction_request/create_transaction_request.dart';
 import 'package:firebase_ai_testing/domain/models/transaction.dart';
 
 class TransactionMapper {

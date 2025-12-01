@@ -267,7 +267,7 @@ void main() {
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
 
-        final isAuth = await authRepository.isAuthenticated();
+        final isAuth = await authRepository.isAuthenticated;
         expect(isAuth, isTrue);
       });
 
@@ -280,7 +280,7 @@ void main() {
         await apiService.init();
         authRepository = AuthRepository(apiService, tokenStorage);
 
-        final isAuth = await authRepository.isAuthenticated();
+        final isAuth = await authRepository.isAuthenticated;
         expect(isAuth, isFalse);
       });
     });

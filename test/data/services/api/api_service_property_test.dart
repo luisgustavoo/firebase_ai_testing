@@ -100,9 +100,8 @@ void main() {
         );
 
         headerChecked = false;
-        final categoryRequest = CategoryRequest(
+        const categoryRequest = CategoryRequest(
           description: 'test',
-          icon: null,
         );
         await apiService.updateCategory('cat-123', categoryRequest);
         expect(

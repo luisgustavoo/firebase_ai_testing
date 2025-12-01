@@ -63,10 +63,10 @@ void main() {
       ];
 
       for (final testData in testCases) {
-        final amount = testData['amount'] as double;
-        final description = testData['description'] as String;
-        final transactionType = testData['transactionType'] as String;
-        final paymentType = testData['paymentType'] as String;
+        final amount = testData['amount']! as double;
+        final description = testData['description']! as String;
+        final transactionType = testData['transactionType']! as String;
+        final paymentType = testData['paymentType']! as String;
         final categoryId = testData['categoryId'] as String?;
 
         final mockClient = MockClient((request) async {
@@ -162,10 +162,10 @@ void main() {
       ];
 
       for (final testData in testCases) {
-        final page = testData['page'] as int;
-        final pageSize = testData['pageSize'] as int;
-        final hasNext = testData['hasNext'] as bool;
-        final totalPages = testData['totalPages'] as int;
+        final page = testData['page']! as int;
+        final pageSize = testData['pageSize']! as int;
+        final hasNext = testData['hasNext']! as bool;
+        final totalPages = testData['totalPages']! as int;
 
         final mockClient = MockClient((request) async {
           // Verify the request is to the transactions endpoint
@@ -355,10 +355,10 @@ void main() {
       ];
 
       for (final testData in testCases) {
-        final page = testData['page'] as int;
-        final pageSize = testData['pageSize'] as int;
-        final hasNext = testData['hasNext'] as bool;
-        final totalPages = testData['totalPages'] as int;
+        final page = testData['page']! as int;
+        final pageSize = testData['pageSize']! as int;
+        final hasNext = testData['hasNext']! as bool;
+        final totalPages = testData['totalPages']! as int;
 
         final mockClient = MockClient((request) async {
           // Verify the request is to the transactions endpoint

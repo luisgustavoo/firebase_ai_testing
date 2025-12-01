@@ -66,7 +66,7 @@ void main() {
         transactionRepository = TransactionRepository(apiService);
 
         final request = CreateTransactionRequest(
-          amount: 150.0,
+          amount: 150,
           description: 'Grocery shopping',
           transactionType: 'expense',
           paymentType: 'credit_card',
@@ -100,7 +100,7 @@ void main() {
         transactionRepository = TransactionRepository(apiService);
 
         final request = CreateTransactionRequest(
-          amount: -50.0, // Invalid amount
+          amount: -50, // Invalid amount
           description: 'Invalid transaction',
           transactionType: 'expense',
           paymentType: 'credit_card',
@@ -146,11 +146,10 @@ void main() {
         transactionRepository = TransactionRepository(apiService);
 
         final request = CreateTransactionRequest(
-          amount: 75.0,
+          amount: 75,
           description: 'Cash payment',
           transactionType: 'expense',
           paymentType: 'money',
-          categoryId: null, // Null category is valid
           transactionDate: DateTime.now(),
         );
 

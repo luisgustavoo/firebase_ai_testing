@@ -388,19 +388,19 @@ void main() {
       authRepository = AuthRepository(apiService, tokenStorage);
 
       // Property: Should be false when no token
-      expect(await authRepository.isAuthenticated(), isFalse);
+      expect(await authRepository.isAuthenticated, isFalse);
 
       // Store a token
       await tokenStorage.saveToken('test_token');
 
       // Property: Should be true when token exists
-      expect(await authRepository.isAuthenticated(), isTrue);
+      expect(await authRepository.isAuthenticated, isTrue);
 
       // Clear token
       await tokenStorage.deleteToken();
 
       // Property: Should be false after token is cleared
-      expect(await authRepository.isAuthenticated(), isFalse);
+      expect(await authRepository.isAuthenticated, isFalse);
     });
   });
 }

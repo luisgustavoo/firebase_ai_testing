@@ -114,7 +114,7 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final request = CategoryRequest(description: 'Updated', icon: null);
+        const request = CategoryRequest(description: 'Updated');
         final result = await apiService.updateCategory('cat-123', request);
         expect(result, isA<Ok<CategoryApiModel>>());
         final categoryApi = (result as Ok<CategoryApiModel>).value;

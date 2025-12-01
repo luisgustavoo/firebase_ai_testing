@@ -191,10 +191,10 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Note: Validation tests will be in ViewModel tests
   - _Requirements: 8.2, 8.3, 8.6, 9.1, 9.3_
 
-- [ ] 11. Checkpoint - Ensure all repository tests pass
+- [x] 11. Checkpoint - Ensure all repository tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 12. Implement AuthViewModel
+- [x] 12. Implement AuthViewModel
   - Create AuthViewModel extending ChangeNotifier
   - Add currentUser property
   - Add isAuthenticated getter
@@ -206,13 +206,13 @@ This implementation follows Flutter's official architecture guidelines (https://
   - Validate user input (name, email, password) before calling repository
   - _Requirements: 1.3, 1.4, 2.4, 10.3_
 
-- [ ] 12.1 Write property test for AuthViewModel
+- [x] 12.1 Write property test for AuthViewModel
   - **Property 3: Successful registration stores user data**
   - **Property 6: Stored token enables auto-login**
   - **Property 10: UI reactively reflects data changes**
   - **Validates: Requirements 1.4, 2.5, 4.5**
 
-- [ ] 12.2 Write unit tests for AuthViewModel
+- [x] 12.2 Write unit tests for AuthViewModel
   - Test register command validates input before calling repository
   - Test register command with invalid data shows validation errors
   - Test register command with valid data updates currentUser
