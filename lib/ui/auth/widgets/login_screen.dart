@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // Navigate to home on success
     if (widget.viewModel.loginCommand.completed && mounted) {
-      // TODO: Navigate to home screen when routing is implemented
+      // TODO(routing): Navigate to home screen when routing is implemented
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Login realizado com sucesso!'),
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _navigateToRegister() {
-    // TODO: Navigate to register screen when routing is implemented
+    // TODO(routing): Navigate to register screen when routing is implemented
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Navegação para registro será implementada'),

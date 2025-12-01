@@ -1,4 +1,5 @@
 import 'package:firebase_ai_testing/data/repositories/auth_repository.dart';
+import 'package:firebase_ai_testing/data/repositories/user_repository.dart';
 import 'package:firebase_ai_testing/utils/command.dart';
 import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter/foundation.dart';
@@ -10,9 +11,10 @@ import 'package:injectable/injectable.dart';
 /// Checks for stored token and validates it with the API.
 @injectable
 class SplashViewModel extends ChangeNotifier {
-  SplashViewModel(this._authRepository);
+  SplashViewModel(this._authRepository, this._userRepository);
 
   final AuthRepository _authRepository;
+  final UserRepository _userRepository;
 
   AuthStatus _authStatus = AuthStatus.checking;
 
@@ -41,8 +43,8 @@ class SplashViewModel extends ChangeNotifier {
       return const Result.ok(null);
     }
 
-    // Token exists, validate it by fetching profile
-    final result = await _authRepository.getProfile();
+    // Token exists, validate it by fetching user profile
+    final result = await _userRepository.getUser();
 
     switch (result) {
       case Ok():

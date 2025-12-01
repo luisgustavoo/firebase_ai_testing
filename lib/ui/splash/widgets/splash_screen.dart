@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToHome() {
-    // TODO: Navigate to home screen when routing is implemented
+    // TODO(routing): Navigate to home screen when routing is implemented
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Token válido! Navegando para home...'),
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToLogin() {
-    // TODO: Navigate to login screen when routing is implemented
+    // TODO(routing): Navigate to login screen when routing is implemented
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Sem token ou token inválido. Navegando para login...'),

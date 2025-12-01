@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           content: Text('Cadastro realizado com sucesso! Faça login.'),
         ),
       );
-      // TODO: Navigate to login screen when routing is implemented
+      // TODO(routing): Navigate to login screen when routing is implemented
       Navigator.of(context).pop();
     }
   }

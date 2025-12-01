@@ -13,8 +13,10 @@ import 'package:injectable/injectable.dart';
 ///
 /// Source of truth for authentication state.
 /// Extends ChangeNotifier to notify listeners of state changes.
-/// Manages user registration, login, profile fetching, and logout.
+/// Manages user registration, login, logout, and token management.
 /// Handles token storage and automatic header injection via ApiService.
+///
+/// Note: User data management is handled by UserRepository.
 @lazySingleton
 class AuthRepository extends ChangeNotifier {
   AuthRepository(this._apiService, this._tokenStorage);
@@ -106,29 +108,6 @@ class AuthRepository extends ChangeNotifier {
 
   /// Handle login error, clearing token on 401
   Future<Result<LoginResponse>> _handleLoginError(Exception error) async {
-    // Handle 401 errors by clearing token
-    if (error is ApiException && error.statusCode == 401) {
-      await _clearToken();
-    }
-    return Result.error(error);
-  }
-
-  /// Get authenticated user profile
-  ///
-  /// Requires valid authentication token.
-  /// Returns Result<User> with user data.
-  Future<Result<User>> getProfile() async {
-    // Call API service - returns Result<UserApi>
-    final result = await _apiService.getUserProfile();
-
-    return switch (result) {
-      Ok(:final value) => Result.ok(UserMapper.toDomain(value)),
-      Error(:final error) => await _handleProfileError(error),
-    };
-  }
-
-  /// Handle profile fetch error, clearing token on 401
-  Future<Result<User>> _handleProfileError(Exception error) async {
     // Handle 401 errors by clearing token
     if (error is ApiException && error.statusCode == 401) {
       await _clearToken();
