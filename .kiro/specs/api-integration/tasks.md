@@ -94,7 +94,7 @@
   - **Property 20: Invalid payment types are rejected**
   - **Validates: Requirements 1.3, 5.3, 6.5, 8.2, 8.3, 8.4**
 
-- [-] 8. Implement AuthRepository
+- [x] 8. Implement AuthRepository
   - Create AuthRepository with ApiService and TokenStorageService dependencies
   - Implement register method (validate, call service, return Result<User>)
   - Implement login method (validate, call service, store token, return Result<LoginResponse>)
@@ -104,14 +104,14 @@
   - Handle 401 errors by clearing token
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 12.3_
 
-- [ ] 8.1 Write property test for authentication
+- [x] 8.1 Write property test for authentication
   - **Property 1: Valid registration creates user account**
   - **Property 4: Valid login returns JWT token**
   - **Property 5: Successful login persists token**
   - **Property 7: Authenticated requests fetch profile data**
   - **Validates: Requirements 1.1, 2.1, 2.3, 3.1**
 
-- [ ] 8.2 Write unit tests for AuthRepository
+- [x] 8.2 Write unit tests for AuthRepository
   - Test registration with valid data
   - Test registration with duplicate email (400 error)
   - Test login with valid credentials

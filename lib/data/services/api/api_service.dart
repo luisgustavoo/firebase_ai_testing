@@ -2,7 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_ai_testing/data/services/api/models/login_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/login_response.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
+import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 
@@ -121,7 +126,7 @@ class ApiService {
   }
 
   /// Perform GET request
-  Future<dynamic> get(
+  Future<dynamic> _get(
     String path, {
     Map<String, dynamic>? queryParams,
     Map<String, String>? headers,
@@ -156,7 +161,7 @@ class ApiService {
   }
 
   /// Perform POST request
-  Future<dynamic> post(
+  Future<dynamic> _post(
     String path, {
     dynamic body,
     Map<String, String>? headers,
@@ -183,7 +188,7 @@ class ApiService {
   }
 
   /// Perform PUT request
-  Future<dynamic> put(
+  Future<dynamic> _put(
     String path, {
     dynamic body,
     Map<String, String>? headers,
@@ -210,7 +215,7 @@ class ApiService {
   }
 
   /// Perform DELETE request
-  Future<dynamic> delete(
+  Future<dynamic> _delete(
     String path, {
     Map<String, String>? headers,
   }) async {
@@ -232,5 +237,105 @@ class ApiService {
     } catch (e) {
       throw ApiException('Erro de rede: $e');
     }
+  }
+
+  // Authentication endpoints
+
+  /// Register a new user
+  /// Returns Result with the created user data as UserApi model
+  Future<Result<UserApi>> registerUser(RegisterRequest request) async {
+    try {
+      final response = await _post(
+        '/api/users/register',
+        body: request.toJson(),
+      );
+      final userApi = UserApi.fromJson(response as Map<String, dynamic>);
+      return Result.ok(userApi);
+    } on ApiException catch (e) {
+      return Result.error(e);
+    } on Exception catch (e) {
+      return Result.error(Exception('Failed to register user: $e'));
+    }
+  }
+
+  /// Login with email and password
+  /// Returns Result with token and user data as LoginResponse model
+  Future<Result<LoginResponse>> loginUser(LoginRequest request) async {
+    try {
+      final response = await _post('/api/users/login', body: request.toJson());
+      final loginResponse = LoginResponse.fromJson(
+        response as Map<String, dynamic>,
+      );
+      return Result.ok(loginResponse);
+    } on ApiException catch (e) {
+      return Result.error(e);
+    } on Exception catch (e) {
+      return Result.error(Exception('Failed to login: $e'));
+    }
+  }
+
+  /// Get authenticated user profile
+  /// Requires valid authentication token
+  /// Returns Result with UserApi model
+  Future<Result<UserApi>> getUserProfile() async {
+    try {
+      final response = await _get('/api/users/me');
+      final userApi = UserApi.fromJson(response as Map<String, dynamic>);
+      return Result.ok(userApi);
+    } on ApiException catch (e) {
+      return Result.error(e);
+    } on Exception catch (e) {
+      return Result.error(Exception('Failed to get profile: $e'));
+    }
+  }
+
+  // Category endpoints
+
+  /// Get all categories for authenticated user
+  Future<dynamic> getCategories() async {
+    return _get('/api/categories');
+  }
+
+  /// Create a new category
+  Future<dynamic> createCategory(Map<String, dynamic> requestBody) async {
+    return _post('/api/categories', body: requestBody);
+  }
+
+  /// Update an existing category
+  Future<dynamic> updateCategory(
+    String categoryId,
+    Map<String, dynamic> requestBody,
+  ) async {
+    return _put('/api/categories/$categoryId', body: requestBody);
+  }
+
+  /// Delete a category
+  Future<dynamic> deleteCategory(String categoryId) async {
+    return _delete('/api/categories/$categoryId');
+  }
+
+  // Transaction endpoints
+
+  /// Create a new transaction
+  Future<dynamic> createTransaction(Map<String, dynamic> requestBody) async {
+    return _post('/api/transactions', body: requestBody);
+  }
+
+  /// Get transactions with pagination and optional filters
+  Future<dynamic> getTransactions({
+    int page = 1,
+    int pageSize = 20,
+    String? type,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'page': page,
+      'pageSize': pageSize,
+    };
+
+    if (type != null) {
+      queryParams['type'] = type;
+    }
+
+    return _get('/api/transactions', queryParams: queryParams);
   }
 }

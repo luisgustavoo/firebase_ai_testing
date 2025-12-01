@@ -1,4 +1,5 @@
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -53,8 +54,11 @@ void main() {
             reason: 'Authorization header must be "Bearer $token"',
           );
 
-          // Return a successful response
-          return http.Response('{"success": true}', 200);
+          // Return a successful response with valid UserApi data
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+          );
         });
 
         // Create API service with the mock
@@ -64,8 +68,8 @@ void main() {
         // Set the authentication token
         apiService.authToken = token;
 
-        // Test all HTTP methods to ensure they all include the token
-        await apiService.get('/test');
+        // Test all endpoint methods to ensure they all include the token
+        await apiService.getUserProfile();
         expect(
           headerChecked,
           isTrue,
@@ -73,7 +77,12 @@ void main() {
         );
 
         headerChecked = false;
-        await apiService.post('/test', body: {'data': 'test'});
+        const request = RegisterRequest(
+          name: 'Test',
+          email: 'test@example.com',
+          password: 'password123',
+        );
+        await apiService.registerUser(request);
         expect(
           headerChecked,
           isTrue,
@@ -81,7 +90,7 @@ void main() {
         );
 
         headerChecked = false;
-        await apiService.put('/test', body: {'data': 'test'});
+        await apiService.updateCategory('cat-123', {'data': 'test'});
         expect(
           headerChecked,
           isTrue,
@@ -89,7 +98,7 @@ void main() {
         );
 
         headerChecked = false;
-        await apiService.delete('/test');
+        await apiService.deleteCategory('cat-123');
         expect(
           headerChecked,
           isTrue,
@@ -114,14 +123,17 @@ void main() {
             reason: 'Authorization header should not be present without token',
           );
 
-          return http.Response('{"success": true}', 200);
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
         // Don't set any token
-        await apiService.get('/test');
+        await apiService.getUserProfile();
         expect(headerChecked, isTrue);
       },
     );
@@ -143,7 +155,10 @@ void main() {
                 'Authorization header should not be present for empty token',
           );
 
-          return http.Response('{"success": true}', 200);
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
@@ -152,7 +167,7 @@ void main() {
         // Set empty token
         apiService.authToken = '';
 
-        await apiService.get('/test');
+        await apiService.getUserProfile();
         expect(headerChecked, isTrue);
       },
     );
@@ -176,7 +191,10 @@ void main() {
             reason: 'Request should use the most recently set token',
           );
 
-          return http.Response('{"success": true}', 200);
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
@@ -185,7 +203,7 @@ void main() {
         // Make requests with different tokens
         for (final token in tokens) {
           apiService.authToken = token;
-          await apiService.get('/test');
+          await apiService.getUserProfile();
         }
 
         expect(requestCount, equals(tokens.length));
@@ -212,7 +230,10 @@ void main() {
           reason: 'Persisted token should be loaded and used',
         );
 
-        return http.Response('{"success": true}', 200);
+        return http.Response(
+          '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+          200,
+        );
       });
 
       // Create new API service (simulating app restart)
@@ -220,7 +241,7 @@ void main() {
       await apiService.init(); // This should load the token
 
       // Make request without explicitly setting token
-      await apiService.get('/test');
+      await apiService.getUserProfile();
       expect(headerChecked, isTrue);
     });
   });

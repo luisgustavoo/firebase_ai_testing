@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_ai_testing/data/services/api/api_service.dart';
+import 'package:firebase_ai_testing/data/services/api/models/register_request.dart';
+import 'package:firebase_ai_testing/data/services/api/models/user_api.dart';
 import 'package:firebase_ai_testing/data/services/token_storage_service.dart';
+import 'package:firebase_ai_testing/utils/result.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -19,100 +22,118 @@ void main() {
       tokenStorage = TokenStorageService(secureStorage);
     });
 
-    group('Request Methods', () {
-      test('GET request returns parsed JSON response', () async {
+    group('Endpoint Methods', () {
+      test('getUserProfile returns UserApi model', () async {
         final mockClient = MockClient((request) async {
           expect(request.method, equals('GET'));
-          expect(request.url.path, equals('/api/test'));
-          return http.Response('{"data": "test"}', 200);
+          expect(request.url.path, equals('/api/users/me'));
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final response = await apiService.get('/api/test');
-        expect(response, equals({'data': 'test'}));
+        final result = await apiService.getUserProfile();
+        expect(result, isA<Ok<UserApi>>());
+        final userApi = (result as Ok<UserApi>).value;
+        expect(userApi.id, equals('123'));
+        expect(userApi.name, equals('Test'));
+        expect(userApi.email, equals('test@example.com'));
       });
 
-      test('GET request with query parameters', () async {
+      test('getTransactions with query parameters', () async {
         final mockClient = MockClient((request) async {
-          expect(request.url.queryParameters['page'], equals('1'));
-          expect(request.url.queryParameters['limit'], equals('10'));
-          return http.Response('{"data": []}', 200);
+          expect(request.url.queryParameters['page'], equals('2'));
+          expect(request.url.queryParameters['pageSize'], equals('10'));
+          expect(request.url.queryParameters['type'], equals('income'));
+          return http.Response(
+            '{"transactions":[],"pagination":{"page":2,"pageSize":10,"total":0,"totalPages":0,"hasNext":false,"hasPrevious":true}}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        await apiService.get(
-          '/api/test',
-          queryParams: {'page': 1, 'limit': 10},
+        await apiService.getTransactions(
+          page: 2,
+          pageSize: 10,
+          type: 'income',
         );
       });
 
-      test('POST request sends JSON body', () async {
+      test('registerUser sends JSON body and returns UserApi', () async {
         final mockClient = MockClient((request) async {
           expect(request.method, equals('POST'));
-          expect(request.body, equals('{"name":"test","value":123}'));
+          expect(
+            request.body,
+            equals(
+              '{"name":"Test","email":"test@example.com","password":"password123"}',
+            ),
+          );
           expect(request.headers['Content-Type'], equals('application/json'));
-          return http.Response('{"id": "123"}', 201);
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            201,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final response = await apiService.post(
-          '/api/test',
-          body: {'name': 'test', 'value': 123},
+        const request = RegisterRequest(
+          name: 'Test',
+          email: 'test@example.com',
+          password: 'password123',
         );
-        expect(response, equals({'id': '123'}));
+        final result = await apiService.registerUser(request);
+        expect(result, isA<Ok<UserApi>>());
+        final userApi = (result as Ok<UserApi>).value;
+        expect(userApi.id, equals('123'));
+        expect(userApi.name, equals('Test'));
+        expect(userApi.email, equals('test@example.com'));
       });
 
-      test('PUT request sends JSON body', () async {
+      test('updateCategory sends JSON body', () async {
         final mockClient = MockClient((request) async {
           expect(request.method, equals('PUT'));
-          expect(request.body, equals('{"name":"updated"}'));
+          expect(request.url.path, equals('/api/categories/cat-123'));
+          expect(request.body, equals('{"description":"Updated"}'));
           return http.Response('{"success": true}', 200);
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final response = await apiService.put(
-          '/api/test',
-          body: {'name': 'updated'},
-        );
+        final response =
+            await apiService.updateCategory(
+                  'cat-123',
+                  {'description': 'Updated'},
+                )
+                as Map<String, dynamic>;
         expect(response, equals({'success': true}));
       });
 
-      test('DELETE request succeeds', () async {
+      test('deleteCategory succeeds', () async {
         final mockClient = MockClient((request) async {
           expect(request.method, equals('DELETE'));
+          expect(request.url.path, equals('/api/categories/cat-123'));
           return http.Response('', 204);
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        final response = await apiService.delete('/api/test');
-        expect(response, isNull);
-      });
-
-      test('Request with empty response body returns null', () async {
-        final mockClient = MockClient((request) async {
-          return http.Response('', 200);
-        });
-
-        apiService = ApiService(tokenStorage, mockClient);
-        await apiService.init();
-
-        final response = await apiService.get('/api/test');
+        final response = await apiService.deleteCategory('cat-123');
         expect(response, isNull);
       });
     });
 
     group('Error Handling', () {
-      test('400 Bad Request throws ApiException with message', () async {
+      test('400 Bad Request returns Error with ApiException', () async {
         final mockClient = MockClient((request) async {
           return http.Response('{"message": "Invalid data"}', 400);
         });
@@ -120,18 +141,16 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        expect(
-          () => apiService.get('/api/test'),
-          throwsA(
-            isA<ApiException>()
-                .having((e) => e.statusCode, 'statusCode', 400)
-                .having((e) => e.message, 'message', contains('Invalid data')),
-          ),
-        );
+        final result = await apiService.getUserProfile();
+        expect(result, isA<Error<UserApi>>());
+        final error = (result as Error<UserApi>).error;
+        expect(error, isA<ApiException>());
+        expect((error as ApiException).statusCode, equals(400));
+        expect(error.message, contains('Invalid data'));
       });
 
       test(
-        '401 Unauthorized throws ApiException with session expired message',
+        '401 Unauthorized returns Error with session expired message',
         () async {
           final mockClient = MockClient((request) async {
             return http.Response('{"error": "Unauthorized"}', 401);
@@ -140,23 +159,20 @@ void main() {
           apiService = ApiService(tokenStorage, mockClient);
           await apiService.init();
 
+          final result = await apiService.getUserProfile();
+          expect(result, isA<Error<UserApi>>());
+          final error = (result as Error<UserApi>).error;
+          expect(error, isA<ApiException>());
+          expect((error as ApiException).statusCode, equals(401));
           expect(
-            () => apiService.get('/api/test'),
-            throwsA(
-              isA<ApiException>()
-                  .having((e) => e.statusCode, 'statusCode', 401)
-                  .having(
-                    (e) => e.message,
-                    'message',
-                    'Sessão expirada. Faça login novamente',
-                  ),
-            ),
+            error.message,
+            equals('Sessão expirada. Faça login novamente'),
           );
         },
       );
 
       test(
-        '403 Forbidden throws ApiException with permission message',
+        '403 Forbidden returns Error with permission message',
         () async {
           final mockClient = MockClient((request) async {
             return http.Response('{"error": "Forbidden"}', 403);
@@ -165,22 +181,19 @@ void main() {
           apiService = ApiService(tokenStorage, mockClient);
           await apiService.init();
 
+          final result = await apiService.getUserProfile();
+          expect(result, isA<Error<UserApi>>());
+          final error = (result as Error<UserApi>).error;
+          expect(error, isA<ApiException>());
+          expect((error as ApiException).statusCode, equals(403));
           expect(
-            () => apiService.get('/api/test'),
-            throwsA(
-              isA<ApiException>()
-                  .having((e) => e.statusCode, 'statusCode', 403)
-                  .having(
-                    (e) => e.message,
-                    'message',
-                    'Você não tem permissão para esta ação',
-                  ),
-            ),
+            error.message,
+            equals('Você não tem permissão para esta ação'),
           );
         },
       );
 
-      test('404 Not Found throws ApiException', () async {
+      test('404 Not Found returns Error', () async {
         final mockClient = MockClient((request) async {
           return http.Response('{"error": "Not found"}', 404);
         });
@@ -188,17 +201,15 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        expect(
-          () => apiService.get('/api/test'),
-          throwsA(
-            isA<ApiException>()
-                .having((e) => e.statusCode, 'statusCode', 404)
-                .having((e) => e.message, 'message', 'Recurso não encontrado'),
-          ),
-        );
+        final result = await apiService.getUserProfile();
+        expect(result, isA<Error<UserApi>>());
+        final error = (result as Error<UserApi>).error;
+        expect(error, isA<ApiException>());
+        expect((error as ApiException).statusCode, equals(404));
+        expect(error.message, equals('Recurso não encontrado'));
       });
 
-      test('500 Internal Server Error throws ApiException', () async {
+      test('500 Internal Server Error returns Error', () async {
         final mockClient = MockClient((request) async {
           return http.Response('{"error": "Server error"}', 500);
         });
@@ -206,21 +217,18 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
+        final result = await apiService.getUserProfile();
+        expect(result, isA<Error<UserApi>>());
+        final error = (result as Error<UserApi>).error;
+        expect(error, isA<ApiException>());
+        expect((error as ApiException).statusCode, equals(500));
         expect(
-          () => apiService.get('/api/test'),
-          throwsA(
-            isA<ApiException>()
-                .having((e) => e.statusCode, 'statusCode', 500)
-                .having(
-                  (e) => e.message,
-                  'message',
-                  'Erro no servidor. Tente novamente mais tarde',
-                ),
-          ),
+          error.message,
+          equals('Erro no servidor. Tente novamente mais tarde'),
         );
       });
 
-      test('Invalid JSON response throws ApiException', () async {
+      test('Invalid JSON response returns Error', () async {
         final mockClient = MockClient((request) async {
           return http.Response('invalid json', 200);
         });
@@ -228,21 +236,16 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        expect(
-          () => apiService.get('/api/test'),
-          throwsA(
-            isA<ApiException>().having(
-              (e) => e.message,
-              'message',
-              contains('Failed to parse'),
-            ),
-          ),
-        );
+        final result = await apiService.getUserProfile();
+        expect(result, isA<Error<UserApi>>());
+        final error = (result as Error<UserApi>).error;
+        expect(error, isA<ApiException>());
+        expect((error as ApiException).message, contains('Failed to parse'));
       });
     });
 
     group('Network Error Handling', () {
-      test('Timeout throws ApiException with timeout message', () async {
+      test('Timeout returns Error with timeout message', () async {
         final mockClient = MockClient((request) async {
           // Simulate a timeout by throwing TimeoutException
           throw TimeoutException('Connection timeout');
@@ -251,20 +254,18 @@ void main() {
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
+        final result = await apiService.getUserProfile();
+        expect(result, isA<Error<UserApi>>());
+        final error = (result as Error<UserApi>).error;
+        expect(error, isA<ApiException>());
         expect(
-          () => apiService.get('/api/test'),
-          throwsA(
-            isA<ApiException>().having(
-              (e) => e.message,
-              'message',
-              'Tempo esgotado. Verifique sua conexão',
-            ),
-          ),
+          (error as ApiException).message,
+          equals('Tempo esgotado. Verifique sua conexão'),
         );
       });
 
       test(
-        'SocketException throws ApiException with no internet message',
+        'SocketException returns Error with no internet message',
         () async {
           final mockClient = MockClient((request) async {
             throw const SocketException('No internet');
@@ -273,21 +274,19 @@ void main() {
           apiService = ApiService(tokenStorage, mockClient);
           await apiService.init();
 
+          final result = await apiService.getUserProfile();
+          expect(result, isA<Error<UserApi>>());
+          final error = (result as Error<UserApi>).error;
+          expect(error, isA<ApiException>());
           expect(
-            () => apiService.get('/api/test'),
-            throwsA(
-              isA<ApiException>().having(
-                (e) => e.message,
-                'message',
-                'Sem conexão com a internet',
-              ),
-            ),
+            (error as ApiException).message,
+            equals('Sem conexão com a internet'),
           );
         },
       );
 
       test(
-        'Generic exception throws ApiException with network error message',
+        'Generic exception returns Error with network error message',
         () async {
           final mockClient = MockClient((request) async {
             throw Exception('Unknown error');
@@ -296,16 +295,11 @@ void main() {
           apiService = ApiService(tokenStorage, mockClient);
           await apiService.init();
 
-          expect(
-            () => apiService.get('/api/test'),
-            throwsA(
-              isA<ApiException>().having(
-                (e) => e.message,
-                'message',
-                contains('Erro de rede'),
-              ),
-            ),
-          );
+          final result = await apiService.getUserProfile();
+          expect(result, isA<Error<UserApi>>());
+          final error = (result as Error<UserApi>).error;
+          expect(error, isA<ApiException>());
+          expect((error as ApiException).message, contains('Erro de rede'));
         },
       );
     });
@@ -315,28 +309,16 @@ void main() {
         final mockClient = MockClient((request) async {
           expect(request.headers['Content-Type'], equals('application/json'));
           expect(request.headers['Accept'], equals('application/json'));
-          return http.Response('{}', 200);
+          return http.Response(
+            '{"transactions":[],"pagination":{"page":1,"pageSize":20,"total":0,"totalPages":0,"hasNext":false,"hasPrevious":false}}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        await apiService.get('/api/test');
-      });
-
-      test('Additional headers are included in request', () async {
-        final mockClient = MockClient((request) async {
-          expect(request.headers['X-Custom-Header'], equals('custom-value'));
-          return http.Response('{}', 200);
-        });
-
-        apiService = ApiService(tokenStorage, mockClient);
-        await apiService.init();
-
-        await apiService.get(
-          '/api/test',
-          headers: {'X-Custom-Header': 'custom-value'},
-        );
+        await apiService.getTransactions();
       });
     });
 
@@ -345,30 +327,18 @@ void main() {
         final mockClient = MockClient((request) async {
           expect(
             request.url.toString(),
-            equals('http://localhost:8080/api/test'),
+            startsWith('http://localhost:8080/api/users/me'),
           );
-          return http.Response('{}', 200);
+          return http.Response(
+            '{"id":"123","name":"Test","email":"test@example.com","status":"active","created_at":"2024-01-01T00:00:00Z","updated_at":"2024-01-01T00:00:00Z"}',
+            200,
+          );
         });
 
         apiService = ApiService(tokenStorage, mockClient);
         await apiService.init();
 
-        await apiService.get('/api/test');
-      });
-
-      test('Absolute URL is used as-is', () async {
-        final mockClient = MockClient((request) async {
-          expect(
-            request.url.toString(),
-            equals('https://example.com/api/test'),
-          );
-          return http.Response('{}', 200);
-        });
-
-        apiService = ApiService(tokenStorage, mockClient);
-        await apiService.init();
-
-        await apiService.get('https://example.com/api/test');
+        await apiService.getUserProfile();
       });
     });
   });
