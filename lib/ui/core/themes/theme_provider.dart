@@ -12,6 +12,14 @@ class ThemeProvider extends ChangeNotifier {
   /// Current theme mode
   ThemeMode get themeMode => _themeMode;
 
+  /// Set theme mode explicitly
+  set themeMode(ThemeMode mode) {
+    if (_themeMode != mode) {
+      _themeMode = mode;
+      notifyListeners();
+    }
+  }
+
   /// Whether dark mode is currently active
   bool get isDarkMode => _themeMode == ThemeMode.dark;
 
@@ -21,7 +29,6 @@ class ThemeProvider extends ChangeNotifier {
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: Colors.blue,
-        brightness: Brightness.light,
       ),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
@@ -124,33 +131,9 @@ class ThemeProvider extends ChangeNotifier {
   /// Toggle between light and dark theme
   void toggleTheme() {
     if (_themeMode == ThemeMode.light) {
-      _themeMode = ThemeMode.dark;
+      themeMode = ThemeMode.dark;
     } else {
-      _themeMode = ThemeMode.light;
+      themeMode = ThemeMode.light;
     }
-    notifyListeners();
-  }
-
-  /// Set theme mode explicitly
-  void setThemeMode(ThemeMode mode) {
-    if (_themeMode != mode) {
-      _themeMode = mode;
-      notifyListeners();
-    }
-  }
-
-  /// Set light theme
-  void setLightTheme() {
-    setThemeMode(ThemeMode.light);
-  }
-
-  /// Set dark theme
-  void setDarkTheme() {
-    setThemeMode(ThemeMode.dark);
-  }
-
-  /// Set system theme (follows device settings)
-  void setSystemTheme() {
-    setThemeMode(ThemeMode.system);
   }
 }

@@ -34,11 +34,11 @@ void main() {
 
       for (final (from, to) in transitions) {
         // Reset to initial state
-        themeProvider.setThemeMode(from);
+        themeProvider.themeMode = from;
         notificationCount = 0;
 
         // Change theme
-        themeProvider.setThemeMode(to);
+        themeProvider.themeMode = to;
 
         // Verify notification was sent
         expect(
@@ -63,12 +63,12 @@ void main() {
       final themeProvider = ThemeProvider();
       var notificationCount = 0;
 
-      themeProvider.addListener(() {
-        notificationCount++;
-      });
-
-      // Test toggle from light to dark
-      themeProvider.setLightTheme();
+      themeProvider
+        ..addListener(() {
+          notificationCount++;
+        })
+        // Test toggle from light to dark
+        ..themeMode = ThemeMode.light;
       notificationCount = 0;
 
       themeProvider.toggleTheme();
@@ -99,16 +99,16 @@ void main() {
       final themeProvider = ThemeProvider();
       var notificationCount = 0;
 
-      themeProvider.addListener(() {
-        notificationCount++;
-      });
-
-      // Set to light theme
-      themeProvider.setLightTheme();
+      themeProvider
+        ..addListener(() {
+          notificationCount++;
+        })
+        // Set to light theme
+        ..themeMode = ThemeMode.light;
       notificationCount = 0;
 
       // Set to light theme again (same value)
-      themeProvider.setLightTheme();
+      themeProvider.themeMode = ThemeMode.light;
 
       expect(
         notificationCount,
@@ -122,10 +122,9 @@ void main() {
       // **Feature: api-integration, Property 27: Theme changes are reflected in UI**
       // For any theme mode, isDarkMode should correctly reflect whether dark mode is active
 
-      final themeProvider = ThemeProvider();
-
-      // Test light mode
-      themeProvider.setLightTheme();
+      final themeProvider = ThemeProvider()
+        // Test light mode
+        ..themeMode = ThemeMode.light;
       expect(
         themeProvider.isDarkMode,
         false,
@@ -133,7 +132,7 @@ void main() {
       );
 
       // Test dark mode
-      themeProvider.setDarkTheme();
+      themeProvider.themeMode = ThemeMode.dark;
       expect(
         themeProvider.isDarkMode,
         true,
@@ -141,7 +140,7 @@ void main() {
       );
 
       // Test system mode
-      themeProvider.setSystemTheme();
+      themeProvider.themeMode = ThemeMode.system;
       expect(
         themeProvider.isDarkMode,
         false,
@@ -191,15 +190,15 @@ void main() {
         final themeProvider = ThemeProvider();
         final notifications = <ThemeMode>[];
 
-        themeProvider.addListener(() {
-          notifications.add(themeProvider.themeMode);
-        });
-
-        // Perform multiple theme changes
-        themeProvider.setLightTheme();
-        themeProvider.setDarkTheme();
-        themeProvider.setSystemTheme();
-        themeProvider.setLightTheme();
+        themeProvider
+          ..addListener(() {
+            notifications.add(themeProvider.themeMode);
+          })
+          // Perform multiple theme changes
+          ..themeMode = ThemeMode.light
+          ..themeMode = ThemeMode.dark
+          ..themeMode = ThemeMode.system
+          ..themeMode = ThemeMode.light;
 
         // Verify all notifications were received
         expect(
