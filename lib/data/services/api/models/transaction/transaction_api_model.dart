@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'transaction_api.freezed.dart';
-part 'transaction_api.g.dart';
+part 'transaction_api_model.freezed.dart';
+part 'transaction_api_model.g.dart';
 
 @freezed
 abstract class TransactionApiModel with _$TransactionApiModel {

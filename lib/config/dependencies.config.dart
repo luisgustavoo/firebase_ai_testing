@@ -20,7 +20,7 @@ import '../data/repositories/firebase_ai_repository.dart' as _i507;
 import '../data/repositories/transaction_repository.dart' as _i717;
 import '../data/repositories/user_repository.dart' as _i977;
 import '../data/services/api/api_service.dart' as _i552;
-import '../data/services/firebase_ai_service.dart' as _i39;
+import '../data/services/firebase_ai_service/firebase_ai_service.dart' as _i446;
 import '../data/services/token_storage_service.dart' as _i1020;
 import '../ui/auth/logout/view_models/logout_viewmodel.dart' as _i337;
 import '../ui/auth/view_models/auth_view_model.dart' as _i934;
@@ -46,8 +46,8 @@ extension GetItInjectableX on _i174.GetIt {
       () => thirdPartyModule.secureStorage,
     );
     gh.lazySingleton<_i519.Client>(() => thirdPartyModule.httpClient);
-    gh.lazySingleton<_i39.FirebaseAiService>(
-      () => _i39.FirebaseAiService()..init(),
+    gh.lazySingleton<_i446.FirebaseAiService>(
+      () => _i446.FirebaseAiService()..init(),
     );
     gh.lazySingleton<_i899.ThemeProvider>(() => _i899.ThemeProvider());
     gh.lazySingleton<_i1020.TokenStorageService>(
@@ -55,6 +55,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i552.ApiService>(
       () => _i552.ApiService(gh<_i519.Client>())..init(),
+    );
+    gh.lazySingleton<_i507.FirebaseAiRepository>(
+      () =>
+          _i507.FirebaseAiRepository(gh<InvalidType>(), gh<_i552.ApiService>())
+            ..init(),
     );
     gh.lazySingleton<_i136.CategoryRepository>(
       () => _i136.CategoryRepository(gh<_i552.ApiService>()),
@@ -65,11 +70,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i977.UserRepository>(
       () => _i977.UserRepository(gh<_i552.ApiService>()),
     );
-    gh.lazySingleton<_i507.FirebaseAiRepository>(
-      () => _i507.FirebaseAiRepository(
-        gh<_i39.FirebaseAiService>(),
-        gh<_i552.ApiService>(),
-      )..init(),
+    gh.factory<_i39.ReceiptScannerViewModel>(
+      () => _i39.ReceiptScannerViewModel(gh<_i507.FirebaseAiRepository>()),
     );
     gh.factory<_i277.CategoryViewModel>(
       () => _i277.CategoryViewModel(
@@ -105,9 +107,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i136.CategoryRepository>(),
         gh<_i977.UserRepository>(),
       ),
-    );
-    gh.factory<_i39.ReceiptScannerViewModel>(
-      () => _i39.ReceiptScannerViewModel(gh<_i507.FirebaseAiRepository>()),
     );
     gh.factory<_i934.AuthViewModel>(
       () => _i934.AuthViewModel(
