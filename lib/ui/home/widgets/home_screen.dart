@@ -1,4 +1,5 @@
 import 'package:firebase_ai_testing/config/dependencies.dart';
+import 'package:firebase_ai_testing/domain/models/transaction.dart';
 import 'package:firebase_ai_testing/routing/routes.dart';
 import 'package:firebase_ai_testing/ui/auth/logout/logout.dart';
 import 'package:firebase_ai_testing/ui/home/view_models/home_viewmodel.dart';
@@ -111,6 +112,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildSummaryCards() {
+    // Show loading state
+    if (widget.viewModel.loadSummaryCommand.running) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24.0),
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Receitas',
-                value: r'R$ 0,00',
+                value: widget.viewModel.formattedIncome,
                 icon: Icons.arrow_upward,
                 color: Colors.green,
               ),
@@ -133,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Despesas',
-                value: r'R$ 0,00',
+                value: widget.viewModel.formattedExpense,
                 icon: Icons.arrow_downward,
                 color: Colors.red,
               ),
@@ -143,9 +154,9 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 12),
         _buildSummaryCard(
           title: 'Saldo',
-          value: r'R$ 0,00',
+          value: widget.viewModel.formattedBalance,
           icon: Icons.account_balance_wallet,
-          color: Colors.blue,
+          color: widget.viewModel.balance >= 0 ? Colors.blue : Colors.orange,
         ),
       ],
     );
@@ -253,35 +264,97 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         const SizedBox(height: 12),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Center(
-              child: Column(
-                children: [
-                  Icon(
-                    Icons.receipt_long_outlined,
-                    size: 48,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Nenhuma transação ainda',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Adicione sua primeira transação',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        widget.viewModel.recentTransactions.isEmpty
+            ? _buildEmptyState()
+            : _buildTransactionsList(),
       ],
     );
+  }
+
+  Widget _buildEmptyState() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(
+                Icons.receipt_long_outlined,
+                size: 48,
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Nenhuma transação ainda',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Adicione sua primeira transação',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionsList() {
+    return Column(
+      children: widget.viewModel.recentTransactions
+          .map(
+            (transaction) => Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor:
+                      transaction.transactionType == TransactionType.income
+                      ? Colors.green.shade100
+                      : Colors.red.shade100,
+                  child: Icon(
+                    transaction.transactionType == TransactionType.income
+                        ? Icons.arrow_upward
+                        : Icons.arrow_downward,
+                    color: transaction.transactionType == TransactionType.income
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                ),
+                title: Text(transaction.description ?? 'Sem descrição'),
+                subtitle: Text(
+                  _formatDate(transaction.transactionDate),
+                ),
+                trailing: Text(
+                  'R\$ ${transaction.amount.toStringAsFixed(2)}',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: transaction.transactionType == TransactionType.income
+                        ? Colors.green
+                        : Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays == 0) {
+      return 'Hoje';
+    } else if (difference.inDays == 1) {
+      return 'Ontem';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} dias atrás';
+    } else {
+      return '${date.day}/${date.month}/${date.year}';
+    }
   }
 }

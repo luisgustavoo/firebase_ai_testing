@@ -77,9 +77,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i977.UserRepository>(),
       ),
     );
-    gh.factory<_i152.HomeViewModel>(
-      () => _i152.HomeViewModel(userRepository: gh<_i977.UserRepository>()),
-    );
     await gh.lazySingletonAsync<_i578.AuthRepository>(() {
       final i = _i578.AuthRepository(
         gh<_i552.ApiService>(),
@@ -95,6 +92,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i712.TransactionViewModel>(
       () => _i712.TransactionViewModel(gh<_i717.TransactionRepository>()),
+    );
+    gh.factory<_i152.HomeViewModel>(
+      () => _i152.HomeViewModel(
+        userRepository: gh<_i977.UserRepository>(),
+        transactionRepository: gh<_i717.TransactionRepository>(),
+      ),
     );
     gh.factory<_i180.AddTransactionViewModel>(
       () => _i180.AddTransactionViewModel(
