@@ -30,7 +30,10 @@ class _ReceiptScannerScreenState extends State<ReceiptScannerScreen> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: ListenableBuilder(
-        listenable: widget.viewModel,
+        listenable: Listenable.merge([
+          widget.viewModel.captureAndAnalyzeCommand,
+          widget.viewModel,
+        ]),
         builder: (context, child) {
           if (!widget.viewModel.isCameraInitialized) {
             return const Center(
@@ -153,7 +156,8 @@ class _ReceiptScannerScreenState extends State<ReceiptScannerScreen> {
         );
 
         // Navigate back to transactions screen
-        context.go('/transactions');
+        context.pop();
+        await context.pushNamed('/transactions');
       }
     } else if (widget.viewModel.captureAndAnalyzeCommand.error) {
       // Show error message

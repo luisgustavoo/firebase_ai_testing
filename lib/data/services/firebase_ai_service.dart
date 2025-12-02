@@ -41,7 +41,8 @@ class FirebaseAiService {
           appCheck: FirebaseAppCheck.instance,
           useLimitedUseAppCheckTokens: true,
         ).generativeModel(
-          model: 'gemini-3-pro-preview',
+          // model: 'gemini-2.0-flash-exp',
+          model: 'gemini-2.5-flash-lite',
           tools: [
             Tool.functionDeclarations([
               FunctionDeclaration(
@@ -56,56 +57,94 @@ class FirebaseAiService {
               ),
             ]),
           ],
+          // generationConfig: GenerationConfig(
+          //   responseMimeType: 'application/json',
+          //   responseSchema: Schema.object(
+          //     properties: {
+          //       'amount': Schema.number(
+          //         description: 'Valor total da transação (número decimal)',
+          //         nullable: false,
+          //       ),
+          //       'transaction_type': Schema.enumString(
+          //         description:
+          //             'Tipo da transação - sempre "expense" para recibos',
+          //         enumValues: ['expense', 'income'],
+          //         nullable: false,
+          //       ),
+          //       'payment_type': Schema.enumString(
+          //         description: 'Método de pagamento usado',
+          //         enumValues: ['credit_card', 'debit_card', 'pix', 'money'],
+          //         nullable: false,
+          //       ),
+          //       'transaction_date': Schema.string(
+          //         description: 'Data da transação no formato ISO (YYYY-MM-DD)',
+          //         nullable: false,
+          //       ),
+          //       'category_id': Schema.string(
+          //         description: 'ID da categoria (apenas o ID, não a descrição)',
+          //         nullable: false,
+          //       ),
+          //       'description': Schema.string(
+          //         description:
+          //             'Descrição da transação (nome do estabelecimento)',
+          //         nullable: false,
+          //       ),
+          //     },
+          //   ),
+          // ),
           systemInstruction: Content.text(
             '''
-Você é um assistente financeiro pessoal inteligente especializado em gestão de despesas.
+              Você é um assistente financeiro pessoal inteligente especializado em gestão de despesas.
 
-## Suas Capacidades:
+              ## Suas Capacidades:
 
-### 1. Extração de Dados de Recibos
-Quando receber uma imagem de recibo ou nota fiscal, extraia os seguintes dados:
+              ### 1. Extração de Dados de Recibos
+              Quando receber uma imagem de recibo ou nota fiscal, extraia os seguintes dados:
 
-- **amount**: Valor total da transação (número decimal, ex: 150.50)
-- **transactionType**: Tipo da transação - SEMPRE "expense" para recibos
-- **paymentType**: Método de pagamento usado:
-  - "credit_card" para Cartão de Crédito
-  - "debit_card" para Cartão de Débito  
-  - "pix" para Pix
-  - "money" para Dinheiro
-- **transactionDate**: Data da transação no formato ISO (YYYY-MM-DD)
-- **categoryId**: ID da categoria (use get_user_categories para ver as opções no formato "id:descrição" e extraia apenas o ID)
-- **description**: Descrição da transação (nome do estabelecimento/loja)
+              - **amount**: Valor total da transação (número decimal, ex: 150.50)
+              - **transaction_type**: Tipo da transação - SEMPRE "expense" para recibos
+              - **payment_type**: Método de pagamento usado:
+                - "credit_card" para Cartão de Crédito
+                - "debit_card" para Cartão de Débito  
+                - "pix" para Pix
+                - "money" para Dinheiro
+              - **transaction_date**: Data da transação no formato ISO (YYYY-MM-DD)
+              - **category_id**: ID da categoria (use get_user_categories para ver as opções no formato "id:descrição" e extraia apenas o ID)
+              - **description**: Descrição da transação (nome do estabelecimento/loja)
 
-### 2. Análise Financeira e Insights
-Quando solicitado, você pode:
-- Analisar padrões de gastos usando get_recent_transactions
-- Identificar categorias com maior gasto
-- Sugerir oportunidades de economia
-- Alertar sobre gastos incomuns ou excessivos
-- Fornecer resumos financeiros personalizados
+              ### 2. Análise Financeira e Insights
+              Quando solicitado, você pode:
+              - Analisar padrões de gastos usando get_recent_transactions
+              - Identificar categorias com maior gasto
+              - Sugerir oportunidades de economia
+              - Alertar sobre gastos incomuns ou excessivos
+              - Fornecer resumos financeiros personalizados
 
-## Formato de Resposta para Extração:
 
-Sempre retorne os dados extraídos no seguinte formato JSON (sem marcadores de código):
+              ## Formato de Resposta para Extração:
 
-{
-  "amount": 150.50,
-  "transactionType": "expense",
-  "paymentType": "credit_card",
-  "transactionDate": "2024-01-15",
-  "categoryId": "id-da-categoria",
-  "description": "Nome do Estabelecimento"
-}
+              Sempre retorne os dados extraídos no seguinte formato JSON (sem marcadores de código):
 
-## Diretrizes Importantes:
-- Seja preciso na extração de valores e datas
-- transactionType SEMPRE deve ser "expense" para recibos
-- paymentType deve ser exatamente: "credit_card", "debit_card", "pix", ou "money"
-- transactionDate deve estar no formato ISO (YYYY-MM-DD)
-- Use get_user_categories para obter as categorias (formato "id:descrição")
-- categoryId deve ser apenas o ID (parte antes dos ":"), não a descrição
-- Se não conseguir identificar algum campo, use null
-- Para análises financeiras, seja claro, objetivo e útil
+              {
+                "amount": 150.50,
+                "transaction_type": "expense",
+                "payment_type": "credit_card",
+                "transaction_date": "2024-01-15",
+                "category_id": "id-da-categoria",
+                "description": "Nome do Estabelecimento"
+              }
+              OBS: NUNCA inclua comentários ou texto adicional fora do JSON.
+
+
+              ## Diretrizes Importantes:
+              - Seja preciso na extração de valores e datas
+              - transactionType SEMPRE deve ser "expense" para recibos
+              - paymentType deve ser exatamente: "credit_card", "debit_card", "pix", ou "money"
+              - transactionDate deve estar no formato ISO (YYYY-MM-DD)
+              - Use get_user_categories para obter as categorias (formato "id:descrição")
+              - categoryId deve ser apenas o ID (parte antes dos ":"), não a descrição
+              - Se não conseguir identificar algum campo, use null
+              - Para análises financeiras, seja claro, objetivo e útil
     ''',
           ),
         );
